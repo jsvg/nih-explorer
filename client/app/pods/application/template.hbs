@@ -1,0 +1,31 @@
+{{! application }}
+<nav class='navbar navbar-default navbar-static-top'>
+  <div class='container'>
+
+    <div class='navbar-header'>
+      {{link-to 'NIH Funding Explorer' 'index' class='navbar-brand'}}
+    </div>
+
+    <div class='collapse navbar-collapse'>
+      {{! left }}
+      <ul class='nav navbar-nav'>
+        {{#bs-form class='navbar-form navbar-left' action=(action 'search') submitOnEnter=true}}
+          {{bs-form-element
+            controlType='text'
+            placeholder='Search NIH spending...'
+            value=searchVar}}
+        {{/bs-form}}
+      </ul>
+
+      {{! right }}
+      <ul class='nav navbar-nav navbar-right'>
+        {{#link-to 'about' tagName='li'}}<a href='#'>About</a>{{/link-to}}
+        {{#link-to 'about' tagName='li'}}<a href='#'>{{fa-icon 'heart-o' size='lg' class='text-info'}}</a>{{/link-to}}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class='container'>
+  {{liquid-outlet}}
+</main>
