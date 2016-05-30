@@ -1,6 +1,9 @@
 'use strict';
 const JSONAPISerializer = require('jsonapi-serializer').Serializer,
-      utils = require('../utils'),
+      mapper = require('../utils').reqQueryMapper,
+      mongo = require('mongodb').MongoClient,
+      schema = require('../schemas').grant,
+      config = require('../config'),
       logger = require('bragi');
 
 /* 
@@ -26,11 +29,10 @@ const aggSerializer = new JSONAPISerializer('aggregate', {
 });
 
 module.exports = function(router) {
-  router.route('/aggregate').get((req, res) => {
+  router.get('/aggregate', (req, res) => {
     const collection = req.query.field.split('.')[0],
           field = req.query.field.split('.')[1],
-          where = req.query.where,
-          search = req.query.search,
+          q = req.query.q,
           on = req.query.on || 1,
           agg = req.query.agg || '$sum';
 
@@ -46,14 +48,24 @@ module.exports = function(router) {
       }}
     ];
 
-    query[0].$match = utils.matchParser(where);
+    mapper(req.query, query[0].$match, schema);
     query[1].$group.value[agg] = on;
-    if ( search ) {
-      query.unshift({$match: { $text: { $search: search } }});
+    if ( q ) {
+      // unshift bc $text search needs to be first in aggregation pipeline
+      query.unshift({$match: { $text: { $search: q } }});
     }
 
-    // make req
+    // log out
+    logger.log('info: req query', '\n', req.query);
     logger.log('info: mongo query', '\n', query);
-    utils.mQuery(req, res, collection, query, aggSerializer);
+
+    // make req
+    mongo.connect(config.mongoUrl, (err, db) => {
+      if ( err ) { return logger.log('error: connecting to mongo'); }
+      db.collection(collection).aggregate(query, (err, docs) => {
+        if ( err ) { return logger.log('error', err); }
+        res.send(aggSerializer.serialize(docs));
+      });
+    });
   });
 };

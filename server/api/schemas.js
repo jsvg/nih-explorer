@@ -34,8 +34,6 @@ const schema = {
     studySection: { type: String },
     studySectionName: { type: String },
     supportYear: { type: Number },
-    directCostAmt: { type: Number },
-    indirectCostAmt: { type: Number },
     totalCost: { type: Number },
     activityType: { type: String }
   }

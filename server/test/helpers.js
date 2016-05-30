@@ -4,7 +4,7 @@ const re = require('superagent'),
       config = require('../api/config');
 
 function reHelper(itMsg, namespace, expectation, query) {
-  it(itMsg, (done) => {
+  it(itMsg, function(done) {
     re.get(config.apiSettings.prefix+namespace)
       .query(query)
       .end((err, res) => {

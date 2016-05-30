@@ -3,8 +3,9 @@ const jsonApiSerializer = require('fortune-json-api'),
       morgan = require('morgan'),
       logger = require('bragi');
 
+const port = process.env.PORT || 8080;
+
 const mongoUrl = 'mongodb://localhost:27017/reporter';
-//const mongoUrl = 'mongodb://jv:pw@ds025379.mlab.com:25379/nihreporter';
 
 const apiSettings = {
   prefix: 'http://localhost:8080/api/v1',
@@ -34,9 +35,12 @@ const allowPreflight = function(req, res, next) {
 
 const setupLoggers = function(app, level) {
   logger.options.groupsEnabled = true; 
-  if ( level === 0 ) {
-    logger.options.groupsDisabled = ['Verbose'];
+  if ( level === 1 ) {
+    logger.options.groupsDisabled = ['info'];
   } else if (level === 2 ) {
+    app.use(morgan('dev'));
+    logger.options.groupsDisabled = ['info: mongo query', 'info: req'];
+  } else if (level === 3 ) {
     app.use(morgan('dev'));
   }
 };
@@ -49,5 +53,5 @@ module.exports = {
   allowPreflight: allowPreflight,
   mongoUrl: mongoUrl,
   namespace: '/api/v1',
-  port: 8080
+  port: port
 };
