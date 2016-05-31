@@ -18,13 +18,13 @@ const JSONAPISerializer = require('jsonapi-serializer').Serializer,
  *
  */
 function searchSerializer(metaTotal, schema) {
-  let attrs = [];
-  for ( let key in schema ) { attrs.push(key); }
+  let schemaAttrs = [];
+  for ( let key in schema ) { schemaAttrs.push(key); }
   return new JSONAPISerializer('grant', {
-  id: '_id',
-  attributes: attrs,
-  pluralizeType: false,
-  meta: {total: metaTotal}
+    id: '_id',
+    attributes: schemaAttrs,
+    pluralizeType: false,
+    meta: {total: metaTotal}
   });
 }
 

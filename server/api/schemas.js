@@ -8,6 +8,7 @@ schema.grant = {
   awardNoticeDate: { type: Date },
   budgetStart: { type: Date },
   budgetEnd: { type: Date },
+  coreProjectNum: { type: String },
   edInstType: { type: String },
   fundingIcs: { type: String },
   fundingMechanism: { type: String },
@@ -35,7 +36,8 @@ schema.grant = {
   studySectionName: { type: String },
   supportYear: { type: Number },
   totalCost: { type: Number },
-  activityType: { type: String }
+  activityType: { type: String },
+  publicationIds: { link: 'publication', inverse: 'projects', isArray: true }
 };
 
 schema.publication = {
@@ -53,5 +55,5 @@ schema.publication = {
   pubDate: { type: String },
   title: { type: String },
   pubYear: { type: String },
-  projects: { type: String }
+  projects: { link: 'grant', inverse: 'publicationIds', isArray: true }
 };
