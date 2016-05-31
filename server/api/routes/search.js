@@ -3,7 +3,7 @@ const JSONAPISerializer = require('jsonapi-serializer').Serializer,
       mapper = require('../utils').reqQueryMapper,
       mongo = require('mongodb').MongoClient,
       config = require('../config'),
-      schema = require('../schemas').grant,
+      schema = require('../schemas'),
       logger = require('bragi');
 
 /* 
@@ -17,7 +17,7 @@ const JSONAPISerializer = require('jsonapi-serializer').Serializer,
  * <q> = search term - hits all indices
  *
  */
-function searchSerializer(metaTotal) {
+function searchSerializer(metaTotal, schema) {
   let attrs = [];
   for ( let key in schema ) { attrs.push(key); }
   return new JSONAPISerializer('grant', {
@@ -36,7 +36,7 @@ module.exports = function(router) {
     // setup query
     let query = {};
     if ( req.query.q ) { query.$text = { $search: req.query.q }; }
-    mapper(req.query, query, schema);
+    mapper(req.query, query, schema[collection]);
 
     // log out
     logger.log('info: req query', '\n', req.query);
@@ -66,7 +66,7 @@ module.exports = function(router) {
             .limit(limit)
             .toArray((err, docs) => {
               if ( err ) { return logger.log('error', err); }
-              res.send(searchSerializer(metaTotal).serialize(docs));
+              res.send(searchSerializer(metaTotal, schema[collection]).serialize(docs));
           });
         })
         .catch((err) => {

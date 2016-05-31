@@ -9,7 +9,7 @@ describe('Top-level routes loaded', function() {
 });
 
 
-describe('Grants route', function() {
+describe('Fortune.js grants route', function() {
   function ex1(res) { return expect(res.body.meta.count).to.equal(58623); }
   reHelper('has 58623 docs in response meta', '/grants', ex1);
 
@@ -25,7 +25,7 @@ describe('Grants route', function() {
 
 describe('Aggregation API', function() {
 
-  describe('Default aggregation', function() {
+  describe('Default aggregation for grants', function() {
     let query = {
       resource: 'grant',
       field: 'icName'
@@ -34,10 +34,10 @@ describe('Aggregation API', function() {
       return expect(res.body.data.length).to.equal(44),
         expect(res.body.data[0].attributes.value).to.equal(8136);
     }
-    reHelper('proper distinct items, and aggregation count', '/aggregate', ex1, query);
+    reHelper('returns 44 items, and aggregates first item to 8136', '/aggregate', ex1, query);
   });
 
-  describe('Avg agg on total cost', function() {
+  describe('Avg on total cost by icName', function() {
     let query = {
       resource: 'grant',
       field:'icName',
@@ -45,20 +45,20 @@ describe('Aggregation API', function() {
       on:'$totalCost'
     };
     function ex1(res) { return expect(res.body.data.length).to.equal(44); }
-    reHelper('only returns one item for NCI', '/aggregate', ex1, query);
+    reHelper('returns 44 items for each icName', '/aggregate', ex1, query);
   });
 
-  describe('Test agg with null filter value', function() {
+  describe('Agg with null filter value', function() {
     let query = {
       resource: 'grant',
       field: 'icName',
       icName: ''
     };
     function ex1(res) { return expect(res.body.data.length).to.equal(44); }
-    reHelper('should return same value as if icName were not a param', '/aggregate', ex1, query);
+    reHelper('ignores null filter and returns 44 items', '/aggregate', ex1, query);
   });
 
-  describe('Avg agg on total cost w for >$1MM NCI only by org state', function() {
+  describe('Avg agg on total cost where totalCost>$1MM at NCI, by org state', function() {
     let query = {
       resource: 'grant',
       field:'orgState',
@@ -71,15 +71,14 @@ describe('Aggregation API', function() {
     function ex2(res) {
       return expect(Math.ceil(res.body.data[0].attributes.value)).to.equal(581179112);
     }
-    reHelper('proper distinct items for each org state', '/aggregate', ex1, query);
-    reHelper('first value has value of 581179112', '/aggregate', ex2, query);
+    reHelper('returns 45 items for each orgState', '/aggregate', ex1, query);
+    reHelper('first item has value of 581179112', '/aggregate', ex2, query);
   });
 
-  describe('Agg w a search and complex query embedded', function() {
+  describe('Default agg with a search and complex query', function() {
     let query = {
       resource: 'grant',
       field: 'icName',
-      agg: '$sum',
       on: '$totalCost',
       orgState: ['VA','MD','MA'],
       totalCost: {'>': '1000000'},
@@ -92,23 +91,32 @@ describe('Aggregation API', function() {
     function ex2(res) {
       return expect(res.body.data[0].attributes.value).to.equal(418294512);
     }
-    reHelper('returns 15 docs total', '/aggregate', ex1, query);
-    reHelper('first doc has value of 418294512', '/aggregate', ex2, query);
+    reHelper('returns 15 items', '/aggregate', ex1, query);
+    reHelper('first result has value of 418294512', '/aggregate', ex2, query);
+  });
+
+  describe('Default aggregation for publications', function() {
+    let query = {
+      resource: 'publication',
+      field: 'journal'
+    };
+    function ex1(res) { return expect(res.body.data.length).to.equal(5352); }
+    reHelper('returns items for 5351 journals', '/aggregate', ex1, query);
   });
 });
 
 
 describe('Search API', function() {
 
-  describe('1. Blank search returns all docs', function() {
+  describe('Empty search on grants resource', function() {
     let query = {
       resource: 'grant'
     };
     function ex1(res) { return expect(res.body.meta.total).to.equal(58623); }
-    reHelper('returns all docs', '/search', ex1, query);
+    reHelper('returns all 58623 grants', '/search', ex1, query);
   });
 
-  describe('2. Retrieve >=$1MM docs for NCI by search route', function() {
+  describe('Empty search on grants, filtered to >=$1MM total cost and for NCI only', function() {
     let query = {
       resource: 'grant',
       icName: 'NATIONAL CANCER INSTITUTE',
@@ -117,20 +125,20 @@ describe('Search API', function() {
       }
     };
     function ex1(res) { return expect(res.body.meta.total).to.equal(728); }
-    reHelper('returns all docs', '/search', ex1, query);
+    reHelper('returns 728 grants', '/search', ex1, query);
   });
 
-  describe('3. Search for a term in a resource', function() {
+  describe('Search for a "pharmacology" in grants', function() {
     let query = {
       q: 'pharmacology',
       resource:'grant'
     };
     function ex1(res) { return expect(res.body.meta.total).to.equal(5476); }
-    reHelper('search returns 5476 docs', '/search', ex1, query);
+    reHelper('returns 5476 results', '/search', ex1, query);
   });
 
   // sometimes fails arbitrarily
-  describe('4. Search with all implementations of filters', function() {
+  describe('Search with all filter implementations', function() {
     let query = {
       resource: 'grant',
       q: 'cancer',
@@ -144,10 +152,10 @@ describe('Search API', function() {
       }
     };
     function ex1(res) { return expect(res.body.meta.total).to.equal(14); }
-    reHelper('search returns 911 docs', '/search', ex1, query);
+    reHelper('search returns 14 results', '/search', ex1, query);
   });
 
-  describe('5. Make sure bogus query param does not cause get consumer', function() {
+  describe('Search with bogus query params', function() {
     let query = {
       resource: 'grant',
       q: 'pharmacology',
@@ -155,7 +163,16 @@ describe('Search API', function() {
       baz: {'>': 'bing'}
     };
     function ex1(res) { return expect(res.body.meta.total).to.equal(5476); }
-    reHelper('search returns 5476 docs', '/search', ex1, query);
+    reHelper('returns 5476 results, query does not use unknown params', '/search', ex1, query);
+  });
+
+  describe('Search for "neurodegenerativity" publications', function() {
+    let query = {
+      resource: 'publication',
+      q: 'neurodegenerativity'
+    };
+    function ex1(res) { return expect(res.body.meta.total).to.equal(104); }
+    reHelper('returns 104 results', '/search', ex1, query);
   });
 });
 
