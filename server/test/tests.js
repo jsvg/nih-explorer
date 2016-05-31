@@ -112,7 +112,7 @@ describe('Search API', function() {
     let query = {
       resource: 'grant'
     };
-    function ex1(res) { return expect(res.body.meta.total).to.equal(58623); }
+    function ex1(res) { return expect(res.body.meta.count).to.equal(58623); }
     reHelper('returns all 58623 grants', '/search', ex1, query);
   });
 
@@ -124,7 +124,7 @@ describe('Search API', function() {
         '>=': '1000000'
       }
     };
-    function ex1(res) { return expect(res.body.meta.total).to.equal(728); }
+    function ex1(res) { return expect(res.body.meta.count).to.equal(728); }
     reHelper('returns 728 grants', '/search', ex1, query);
   });
 
@@ -133,7 +133,7 @@ describe('Search API', function() {
       q: 'pharmacology',
       resource:'grant'
     };
-    function ex1(res) { return expect(res.body.meta.total).to.equal(5476); }
+    function ex1(res) { return expect(res.body.meta.count).to.equal(5476); }
     reHelper('returns 5476 results', '/search', ex1, query);
   });
 
@@ -151,7 +151,7 @@ describe('Search API', function() {
         '>': '1000000'
       }
     };
-    function ex1(res) { return expect(res.body.meta.total).to.equal(14); }
+    function ex1(res) { return expect(res.body.meta.count).to.equal(14); }
     reHelper('search returns 14 results', '/search', ex1, query);
   });
 
@@ -162,7 +162,7 @@ describe('Search API', function() {
       foo: 'bar',
       baz: {'>': 'bing'}
     };
-    function ex1(res) { return expect(res.body.meta.total).to.equal(5476); }
+    function ex1(res) { return expect(res.body.meta.count).to.equal(5476); }
     reHelper('returns 5476 results, query does not use unknown params', '/search', ex1, query);
   });
 
@@ -171,8 +171,51 @@ describe('Search API', function() {
       resource: 'publication',
       q: 'neurodegenerativity'
     };
-    function ex1(res) { return expect(res.body.meta.total).to.equal(104); }
+    function ex1(res) { return expect(res.body.meta.count).to.equal(104); }
     reHelper('returns 104 results', '/search', ex1, query);
+  });
+
+  describe('Search route offset and limits', function() {
+    let query = {
+      resource: 'grant',
+      q: 'cancer',
+      limit: 5,
+      offset: 10
+    };
+    function ex1(res) { return expect(res.body.data[0].id).to.equal('9113110'); }
+    reHelper('first result has id of 9113110', '/search', ex1, query);
+    function ex2(res) { return expect(res.body.data.length).to.equal(5); }
+    reHelper('results are limited to 5 items', '/search', ex2, query);
+  });
+
+  describe('Relationships contained in results (grants -> publications)', function() {
+    let query = {
+      resource: 'grant',
+      q: 'epidemiology',
+      limit: 5,
+      offset: 4000
+    };
+    function ex1(res) {
+      return expect(res.body.data[0].relationships.publications.data.length).to.equal(0);
+    }
+    reHelper('first result has no related grants', '/search' , ex1, query);
+    function ex2(res) {
+      return expect(res.body.data[1].relationships.publications.data.length).to.equal(2);
+    }
+    reHelper('second result has two related grants', '/search' , ex2, query);
+    function ex3(res) {
+      const relatedLink = 'http://localhost:8080/api/v1/grants/8786557/publications';
+      return expect(res.body.data[1].relationships.publications.links.related)
+        .to.equal(relatedLink);
+    }
+    reHelper('second result has proper related link', '/search' , ex3, query);
+    function ex4(res) {
+      const relatedSelfLink = 'http://localhost:8080/api/v1/grants/8786557/' +
+        'relationships/publications';
+      return expect(res.body.data[1].relationships.publications.links.self)
+        .to.equal(relatedSelfLink);
+    }
+    reHelper('second result has proper related self-link', '/search' , ex4, query);
   });
 });
 

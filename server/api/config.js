@@ -4,13 +4,14 @@ const jsonApiSerializer = require('fortune-json-api'),
       logger = require('bragi');
 
 const port = process.env.PORT || 8080;
+const apiNamespace = '/api/v1';
+const apiUrl = 'http://localhost:' + port + apiNamespace;
 
 const mongoUrl = 'mongodb://localhost:27017/reporter';
 
-const apiSettings = {
-  prefix: 'http://localhost:8080/api/v1',
-  maxLimit: 20
-};
+const apiSettings = {};
+apiSettings.prefix = apiUrl;
+apiSettings.maxLimit = 20;
 
 const adapterSettings = {
   adapter: [
@@ -52,6 +53,7 @@ module.exports = {
   serializerSettings: serializerSettings,
   allowPreflight: allowPreflight,
   mongoUrl: mongoUrl,
-  namespace: '/api/v1',
+  namespace: apiNamespace,
+  url: apiUrl,
   port: port
 };
