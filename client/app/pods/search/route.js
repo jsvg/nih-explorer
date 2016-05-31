@@ -1,29 +1,21 @@
 // search
 import Ember from 'ember';
+import aggregateParser from 'client/mixins/aggregate-params-parser';
 const { Route, RSVP } = Ember;
-export default Route.extend({
+export default Route.extend(aggregateParser, {
   queryParams: {
     q: { refreshModel: true },
-    where: { refreshModel: true }
+    fundingMechanism: { refreshModel: true },
+    administeringIc: { refreshModel: true }
   },
   model(params) {
-    let searchQ = {
-      resource: 'grant',
-      q: params.q,
-      where: params.where
-    };
+    const fmParams = this.makeAggregateQueryParam(params, 'fundingMechanism'),
+          icParams = this.makeAggregateQueryParam(params, 'administeringIc');
+
     return RSVP.hash({
-      grants: this.store.query('grant', searchQ),
-      fundingMechanisms: this.store.query('aggregate', {
-        field: 'grant.fundingMechanism',
-        search: params.q,
-        where: params.where
-      }),
-      administeringIcs: this.store.query('aggregate', {
-        field: 'grant.administeringIc',
-        search: params.q,
-        where: params.where
-      }),
+      grants: this.store.query('grant', params),
+      fundingMechanisms: this.store.query('aggregate', fmParams),
+      administeringIcs: this.store.query('aggregate', icParams)
     });
   },
 

@@ -8,9 +8,10 @@ export default Controller.extend({
   actions: {
     search() {
       this.transitionToRoute('search', {
-        queryParams: {q: get(this, 'searchVar')}
+        queryParams: {q: get(this, 'searchVar'), resource: 'grant'}
       }).then(() => {
-        get(this,'searchCtrlr').set('where', null);
+        // reset filters
+        //get(this,'searchCtrlr');
       });
     }
   }

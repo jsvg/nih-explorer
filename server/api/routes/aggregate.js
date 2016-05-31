@@ -30,8 +30,8 @@ const aggSerializer = new JSONAPISerializer('aggregate', {
 
 module.exports = function(router) {
   router.get('/aggregate', (req, res) => {
-    const collection = req.query.field.split('.')[0],
-          field = req.query.field.split('.')[1],
+    const collection = req.query.resource,
+          field = req.query.field,
           q = req.query.q,
           on = req.query.on || 1,
           agg = req.query.agg || '$sum';

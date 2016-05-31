@@ -10,10 +10,16 @@ module.exports = {
    */
   reqQueryMapper(reqQuery, query, schema) {
     for ( let key in reqQuery ) {
+      /* three checks to make sure that:
+       * 1. the loop key is not a prototype prop of reqQuery 
+       * 2. the key exists in the schema, t/f is actionable
+       * 3. the key is not null
+       */
       if ( !reqQuery.hasOwnProperty(key) ) { continue; }
       if ( !schema.hasOwnProperty(key) ) { continue; }
-      let val = reqQuery[key];
+      if ( !reqQuery[key] ) { continue; }
 
+      let val = reqQuery[key];
       if ( Array.isArray(val) ) {
         query[key] = {$in: val};
       } else if ( typeof val === 'object' ) {

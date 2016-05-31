@@ -27,7 +27,8 @@ describe('Aggregation API', function() {
 
   describe('Default aggregation', function() {
     let query = {
-      field: 'grant.icName'
+      resource: 'grant',
+      field: 'icName'
     };
     function ex1(res) {
       return expect(res.body.data.length).to.equal(44),
@@ -38,7 +39,8 @@ describe('Aggregation API', function() {
 
   describe('Avg agg on total cost', function() {
     let query = {
-      field:'grant.icName',
+      resource: 'grant',
+      field:'icName',
       agg:'$avg',
       on:'$totalCost'
     };
@@ -46,9 +48,20 @@ describe('Aggregation API', function() {
     reHelper('only returns one item for NCI', '/aggregate', ex1, query);
   });
 
+  describe('Test agg with null filter value', function() {
+    let query = {
+      resource: 'grant',
+      field: 'icName',
+      icName: ''
+    };
+    function ex1(res) { return expect(res.body.data.length).to.equal(44); }
+    reHelper('should return same value as if icName were not a param', '/aggregate', ex1, query);
+  });
+
   describe('Avg agg on total cost w for >$1MM NCI only by org state', function() {
     let query = {
-      field:'grant.orgState',
+      resource: 'grant',
+      field:'orgState',
       agg:'$sum',
       on:'$totalCost',
       icName: 'NATIONAL CANCER INSTITUTE',
@@ -64,7 +77,8 @@ describe('Aggregation API', function() {
 
   describe('Agg w a search and complex query embedded', function() {
     let query = {
-      field: 'grant.icName',
+      resource: 'grant',
+      field: 'icName',
       agg: '$sum',
       on: '$totalCost',
       orgState: ['VA','MD','MA'],

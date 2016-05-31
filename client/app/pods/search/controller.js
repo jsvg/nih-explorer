@@ -1,26 +1,17 @@
 // search
 import Ember from 'ember';
-const { Controller, get, isEmpty } = Ember;
+const { Controller, set } = Ember;
 export default Controller.extend({
-  queryParams: ['q', 'where'],
+  queryParams: ['resource', 'q', 'administeringIc', 'fundingMechanism'],
+  resource: 'grant',
   q: null,
-  where: {},
+  administeringIc: null,
+  fundingMechanism: null,
 
   actions: {
-    update() {
-      const filterFields = ['fundingMechanism','administeringIc'];
-      let where = {};
-      filterFields.forEach((field) => {
-        let obj = get(this,field);
-        if ( !isEmpty(obj) ) {
-          where[field] = obj.getEach('id');
-        }
-      });
-
-      let query = {};
-      query.q = get(this, 'q');
-      query.where = where;
-      this.transitionToRoute({queryParams: query});
+    filterSelection(target, vals) {
+      let setTo = vals ? vals.get('id') : null;
+      set(this, target, setTo);
     }
   }
 });

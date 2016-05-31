@@ -1,5 +1,7 @@
 {{! search }}
 <div class='container-fluid'>
+
+  {{! info top row }}
   <div id='info' class='row'>
     <div class='col-md-12'>
       <div class='pull-left'><strong class='text-success'>Search: {{q}}</strong></div>
@@ -50,42 +52,37 @@
       <div class='row'>
         <div class='col-md-12'>
           <h5>Funding Mechanism</h5>
-          {{#power-select-multiple
+          {{#power-select
+            allowClear=true
             dropdownClass="slide-fade"
             options=model.fundingMechanisms
             placeholder='Select funding mechanisms'
-            selected=fundingMechanism
-            onchange=(action (mut fundingMechanism))
+            selected=(find-by model.fundingMechanisms 'id' fundingMechanism)
+            onchange=(action 'filterSelection' 'fundingMechanism')
             as |mech|
           }}
-            {{mech.id}} ({{mech.value}})
-          {{/power-select-multiple}}
+            <strong>{{mech.id}} <span class='badge'>{{mech.value}}</span></strong>
+          {{/power-select}}
         </div>
       </div>
 
       <div class='row'>
         <div class='col-md-12'>
           <h5>Admin IC</h5>
-          {{#power-select-multiple
+          {{#power-select
+            allowClear=true
             dropdownClass="slide-fade"
             options=model.administeringIcs
             placeholder='Select funding mechanisms'
-            selected=administeringIc
-            onchange=(action (mut administeringIc))
+            selected=(find-by model.administeringIcs 'id' administeringIc)
+            onchange=(action 'filterSelection' 'administeringIc')
             as |ic|
           }}
-            {{ic.id}} ({{ic.value}})
-          {{/power-select-multiple}}
+            <strong>{{ic.id}} <span class='badge'>{{ic.value}}</span></strong>
+          {{/power-select}}
         </div>
       </div>
 
-      <div class='row'>
-        <div class='col-md-12 text-center'>
-          {{#bs-button type='primary' size='xs' action='update'}}
-            Update
-          {{/bs-button}}
-        </div>
-      </div>
     </div>
 
   </div>
