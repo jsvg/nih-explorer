@@ -1,5 +1,6 @@
 'use strict';
 const JSONAPISerializer = require('jsonapi-serializer').Serializer,
+      stringify = require('querystring').stringify,
       mapper = require('../utils').reqQueryMapper,
       mongo = require('mongodb').MongoClient,
       pluralize = require('pluralize'),
@@ -20,27 +21,44 @@ const JSONAPISerializer = require('jsonapi-serializer').Serializer,
  * <offset> = for pagination
  *
  */
-function searchSerializer(metaTotal, resource, schema) {
+function searchSerializer(metaTotal, resource, schema, query) {
+  let baseUrl = [config.apiUrl, pluralize(resource)].join('/');
   let jsonApiConfig = {
     id: '_id',
     pluralizeType: false,
     meta: { count: metaTotal },
+    topLevelLinks: {
+      self() { return baseUrl; }
+    },
     dataLinks: {
       self(item) {
-        return [config.url, pluralize(resource), item._id].join('/');
-      },
-      /*
-       * pagination todo
-       * first() {}
-       * next() {}
-       * prev() {}
-       * last() {}
-       */
+        return [baseUrl, item._id].join('/');
+      }
     }
   };
 
+  // add pagination links
+  const limit = parseInt(query.limit) || config.apiSettings.maxLimit,
+        offset = parseInt(query.offset) || 0,
+        total = metaTotal;
+
+  jsonApiConfig.topLevelLinks.info1 = limit;
+  jsonApiConfig.topLevelLinks.info2 = offset;
+  jsonApiConfig.topLevelLinks.info3 = total;
+
+  if ( offset ) {
+    jsonApiConfig.topLevelLinks.prev = [baseUrl, stringify(query)].join('/');
+  } 
+  if ( offset < total ) {
+    jsonApiConfig.topLevelLinks.next = [baseUrl, stringify(query)].join('/');
+  }
+
+  jsonApiConfig.topLevelLinks.first = [baseUrl, stringify(query)].join('/');
+  jsonApiConfig.topLevelLinks.last = [baseUrl, stringify(query)].join('/');
+
   let schemaAttrs = [];
   for ( let key in schema ) {
+    if ( !schema.hasOwnProperty(key) ) { continue; }
     // map all schema attrs to an array
     schemaAttrs.push(key);
 
@@ -55,10 +73,10 @@ function searchSerializer(metaTotal, resource, schema) {
         // create relationships links
         relationshipLinks: {
           related(record, current, parent) { // jshint ignore:line
-            return [config.url, pluralize(parent.type), parent.id, key].join('/');
+            return [baseUrl, parent.id, key].join('/');
           },
           self(record, current, parent) { // jshint ignore:line
-            return [config.url, pluralize(parent.type), parent.id, 'relationships', key].join('/');
+            return [baseUrl, parent.id, 'relationships', key].join('/');
           }
         }
       };
@@ -72,8 +90,8 @@ function searchSerializer(metaTotal, resource, schema) {
 module.exports = function(router) {
   router.get('/search', (req, res) => {
     const collection = req.query.resource || '',
-          offset = Number(req.query.offset) || 0,
-          limit = Number(req.query.limit) || 10;
+          offset = parseInt(req.query.offset) || 0,
+          limit = parseInt(req.query.limit) || config.apiSettings.maxLimit;
 
     // setup query
     let query = {};
@@ -109,7 +127,9 @@ module.exports = function(router) {
             .skip(offset)
             .toArray((err, docs) => {
               if ( err ) { return logger.log('error', err); }
-              res.send(searchSerializer(metaTotal, collection, schema[collection]).serialize(docs));
+              res
+                .send(searchSerializer(metaTotal, collection, schema[collection], req.query)
+                .serialize(docs));
           });
         })
         .catch((err) => {

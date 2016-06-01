@@ -18,8 +18,8 @@ require('./routes/search')(router);
  */
 config.setupLoggers(app, 3);
 app.use(config.allowPreflight);
-app.use(config.namespace, router);
-app.use(config.namespace, fortune.net.http(store, config.serializerSettings));
+app.use(config.apiNamespace, router);
+app.use(config.apiNamespace, fortune.net.http(store, config.serializerSettings));
 
 /*
  * Catch 404 and forward to error handler

@@ -1,0 +1,11 @@
+{
+  "globals": {
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "quotes": "single"
+  }
+}

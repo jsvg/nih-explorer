@@ -1,32 +1,35 @@
+'use strict';
 const jsonApiSerializer = require('fortune-json-api'),
       mongodbAdapter = require('fortune-mongodb'),
       morgan = require('morgan'),
       logger = require('bragi');
 
-const port = process.env.PORT || 8080;
-const apiNamespace = '/api/v1';
-const apiUrl = 'http://localhost:' + port + apiNamespace;
+let config = module.exports = {};
 
-const mongoUrl = 'mongodb://localhost:27017/reporter';
+config.port = process.env.PORT || 8080;
+config.apiNamespace = '/api/v1';
+config.apiUrl = 'http://localhost:' + config.port + config.apiNamespace;
 
-const apiSettings = {};
-apiSettings.prefix = apiUrl;
-apiSettings.maxLimit = 20;
+config.mongoUrl = 'mongodb://localhost:27017/reporter';
 
-const adapterSettings = {
+config.apiSettings = {};
+config.apiSettings.prefix = config.apiUrl;
+config.apiSettings.maxLimit = 10;
+
+config.adapterSettings = {
   adapter: [
   mongodbAdapter,
-  { url: mongoUrl }
+  { url: config.mongoUrl }
   ]
 };
 
-const serializerSettings = {
+config.serializerSettings = {
   serializers: [
-    [ jsonApiSerializer,  apiSettings ]
+    [ jsonApiSerializer,  config.apiSettings ]
   ]
 };
 
-const allowPreflight = function(req, res, next) {
+config.allowPreflight = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -34,7 +37,7 @@ const allowPreflight = function(req, res, next) {
     'OPTIONS' === req.method ? res.sendStatus(200) : next();
 };
 
-const setupLoggers = function(app, level) {
+config.setupLoggers = function(app, level) {
   logger.options.groupsEnabled = true; 
   if ( level === 1 ) {
     logger.options.groupsDisabled = ['info'];
@@ -44,16 +47,4 @@ const setupLoggers = function(app, level) {
   } else if (level === 3 ) {
     app.use(morgan('dev'));
   }
-};
-
-module.exports = {
-  setupLoggers: setupLoggers,
-  apiSettings: apiSettings,
-  adapterSettings: adapterSettings,
-  serializerSettings: serializerSettings,
-  allowPreflight: allowPreflight,
-  mongoUrl: mongoUrl,
-  namespace: apiNamespace,
-  url: apiUrl,
-  port: port
 };
