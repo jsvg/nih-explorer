@@ -2,11 +2,12 @@
 import Ember from 'ember';
 const { Controller, set } = Ember;
 export default Controller.extend({
-  queryParams: ['resource', 'q', 'administeringIc', 'fundingMechanism'],
+  queryParams: ['resource', 'q', 'icName', 'fundingMechanism', 'activity'],
   resource: 'grant',
   q: null,
-  administeringIc: null,
+  icName: null,
   fundingMechanism: null,
+  activity: null,
 
   actions: {
     filterSelection(target, vals) {

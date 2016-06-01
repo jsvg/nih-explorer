@@ -37,7 +37,8 @@ function searchSerializer(metaTotal, resource, schema, query) {
     }
   };
 
-  // add pagination links
+  // add pagination links - TODO
+  /*
   const limit = parseInt(query.limit) || config.apiSettings.maxLimit,
         offset = parseInt(query.offset) || 0,
         total = metaTotal;
@@ -55,6 +56,7 @@ function searchSerializer(metaTotal, resource, schema, query) {
 
   jsonApiConfig.topLevelLinks.first = [baseUrl, stringify(query)].join('/');
   jsonApiConfig.topLevelLinks.last = [baseUrl, stringify(query)].join('/');
+  */
 
   let schemaAttrs = [];
   for ( let key in schema ) {

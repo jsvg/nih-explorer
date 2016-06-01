@@ -5,7 +5,7 @@
   <div id='info' class='row'>
     <div class='col-md-12'>
       <div class='pull-left'><strong class='text-success'>Search: {{q}}</strong></div>
-      <div class='pull-right'><strong class='text-info'>Results: {parse meta}</strong></div>
+      <div class='pull-right'><strong class='text-info'>Results: {{format-item meta.count 'cleanNum'}}</strong></div>
     </div>
   </div>
 
@@ -15,30 +15,28 @@
     <div id='table' class='col-md-9'>
       <table class='table table-hover'>
         <thead>
-          <th>Title</th>
+          <th>Project Title</th>
           <th>Organization</th>
-          <th>Funding Mechanism / Activtiy</th>
-          <th>Admin/Funding IC</th>
-          <th>PIs</th>
-          <th>Support Year</th>
-          <th>Award Date</th>
-          <th>Total Cost</th>
+          <th>Admin IC</th>
+          <th>Mechanism</th>
+          <th>Activity</th>
+          <th>Duration</th>
+          <th>Awarded</th>
+          <th>Cost</th>
+          <th>Publications</th>
         </thead>
         <tbody>
           {{#each model.grants as |m|}}
             <tr>
               <td>{{m.projectTitle}}</td>
-              <td>{{m.orgName}}</td>
-              <td>{{m.fundingMechanism}} / {{m.activity}}</td>
-              <td>{{m.administeringIc}} / {{m.icName}}</td>
-              <td>
-                {{#each m.piNames as |pi|}}
-                  {{pi}}
-                {{/each}}
-              </td>
-              <td>{{m.supportYear}}</td>
-              <td>{{m.awardNoticeDate}}</td>
-              <td>{{m.totalCost}}</td>
+              <td>{{format-item m.orgName 'title'}}</td>
+              <td>{{format-item m.icName 'title'}}</td>
+              <td>{{format-item m.fundingMechanism 'title'}}</td>
+              <td>{{m.activity}}</td>
+              <td>{{m.supportYear}}Yr</td>
+              <td>{{moment-format m.awardNoticeDate 'MM/DD/YY'}}</td>
+              <td>{{format-item m.totalCost 'currency'}}</td>
+              <td>{{m.pubCount}}</td>
             </tr>
           {{/each}}
         </tbody>
@@ -61,24 +59,41 @@
             onchange=(action 'filterSelection' 'fundingMechanism')
             as |mech|
           }}
-            <strong>{{mech.id}} <span class='badge'>{{mech.value}}</span></strong>
+            <strong>{{format-item mech.id 'title'}} <span class='badge'>{{format-item mech.value 'cleanNum'}}</span></strong>
           {{/power-select}}
         </div>
       </div>
 
       <div class='row'>
         <div class='col-md-12'>
-          <h5>Admin IC</h5>
+          <h5>Administrative IC</h5>
           {{#power-select
             allowClear=true
             dropdownClass="slide-fade"
-            options=model.administeringIcs
+            options=model.icNames
             placeholder='Select funding mechanisms'
-            selected=(find-by model.administeringIcs 'id' administeringIc)
-            onchange=(action 'filterSelection' 'administeringIc')
+            selected=(find-by model.icNames 'id' icName)
+            onchange=(action 'filterSelection' 'icName')
             as |ic|
           }}
-            <strong>{{ic.id}} <span class='badge'>{{ic.value}}</span></strong>
+            <strong>{{format-item ic.id 'title'}} <span class='badge'>{{format-item ic.value 'cleanNum'}}</span></strong>
+          {{/power-select}}
+        </div>
+      </div>
+
+      <div class='row'>
+        <div class='col-md-12'>
+          <h5>Activity</h5>
+          {{#power-select
+            allowClear=true
+            dropdownClass="slide-fade"
+            options=model.activities
+            placeholder='Select activity code'
+            selected=(find-by model.activities 'id' activity)
+            onchange=(action 'filterSelection' 'activity')
+            as |activity|
+          }}
+            <strong>{{activity.id}} <span class='badge'>{{format-item activity.value 'cleanNum'}}</span></strong>
           {{/power-select}}
         </div>
       </div>

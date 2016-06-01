@@ -6,19 +6,29 @@ export default Route.extend(aggregateParser, {
   queryParams: {
     q: { refreshModel: true },
     fundingMechanism: { refreshModel: true },
-    administeringIc: { refreshModel: true }
+    icName: { refreshModel: true },
+    activity: { refreshModel: true }
   },
+  meta: null,
   model(params) {
     const fmParams = this.makeAggregateQueryParam(params, 'fundingMechanism'),
-          icParams = this.makeAggregateQueryParam(params, 'administeringIc');
+          icParams = this.makeAggregateQueryParam(params, 'icName'),
+          activityParams = this.makeAggregateQueryParam(params, 'activity');
 
     return RSVP.hash({
-      grants: this.store.query('grant', params),
+      grants: this.store.query('grant', params).then((result) => {
+        this.set('meta', result.get('meta'));
+        return result;
+      }),
       fundingMechanisms: this.store.query('aggregate', fmParams),
-      administeringIcs: this.store.query('aggregate', icParams)
+      icNames: this.store.query('aggregate', icParams),
+      activities: this.store.query('aggregate', activityParams)
     });
   },
-
+  setupController(controller, model) {
+    controller.set('meta', this.get('meta'));
+    this._super(controller, model);
+  }
   /*
   // only primitives and arrays supported for query params,
   // so override route hooks

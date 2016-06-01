@@ -1,5 +1,8 @@
+import Ember from 'ember';
+const { computed } = Ember;
 import Model from 'ember-data/model';
 import attr from 'ember-data/attr';
+import { hasMany } from 'ember-data/relationships';
 import {
   fragmentArray,
   array
@@ -44,4 +47,8 @@ export default Model.extend({
   projectTerms: array(),
   piIds: array(),
   piNames: array(),
+  publications: hasMany('publication'),
+  pubCount: computed('publications', function() {
+    return this.get('publications.length');
+  })
 });
