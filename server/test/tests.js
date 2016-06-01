@@ -1,6 +1,7 @@
 'use strict';
 const reHelper = require('./helpers').reHelper,
-      expect = require('chai').expect;
+      expect = require('chai').expect,
+      url = require('url');
 
 
 describe('Top-level routes loaded', function() {
@@ -217,6 +218,79 @@ describe('Search API', function() {
     }
     reHelper('second result has proper related self-link', '/search' , ex4, query);
   });
+
+  describe('Pagination tests', function() {
+    describe('Default limit search and one page of results has no pagination links', function() {
+      let query = {
+        resource: 'grant',
+        q: 'petrol'
+      };
+      function ex1(res) { return expect(res.body.meta.count).to.be.below(10); }
+      function ex2(res) { return expect(res.body.links).to.have.all.keys(['self']); }
+      reHelper('result set is one page only', '/search', ex1, query);
+      reHelper('meta result only has self key', '/search', ex2, query);
+    });
+    describe('First page of many-paged search has all but prev pagination links', function () {
+      let query = {
+        resource: 'grant',
+        q: 'cancer'
+      };
+      function ex1(res) { return expect(res.body.meta.count).to.be.above(10); }
+      function ex2(res) {
+        return expect(res.body.links).to.have.all.keys(['self','last','next']);
+      }
+      reHelper('result set is many pages', '/search', ex1, query);
+      reHelper('meta result has self, first, last, next keys', '/search', ex2, query);
+    });
+    describe('Middle page of many-paged search has all pagination links', function () {
+      let query = {
+        resource: 'grant',
+        q: 'cancer',
+        offset: 500
+      };
+      function ex1(res) { return expect(res.body.meta.count).to.be.above(10); }
+      function ex2(res) {
+        return expect(res.body.links).to.have.all.keys(['self','first','last','prev','next']);
+      }
+      reHelper('result set is many pages', '/search', ex1, query);
+      reHelper('meta result has all paginatio keys', '/search', ex2, query);
+    });
+    describe('Last page of many-paged search has all but prev pagination links', function () {
+      let query = {
+        resource: 'publication',
+        q: 'cancer',
+        offset: 7630
+      };
+      function ex1(res) { return expect(res.body.meta.count).to.be.above(10); }
+      function ex2(res) {
+        return expect(res.body.links).to.have.all.keys(['self','first','prev']);
+      }
+      reHelper('result set is many pages', '/search', ex1, query);
+      reHelper('meta result has self, first, last, prev keys', '/search', ex2, query);
+    });
+    describe('Complex pagination with custom limit and filters', function() {
+      let query = {
+        resource: 'grant',
+        q: 'cancer',
+        icName: 'NATIONAL CANCER INSTITUTE',
+        'totalCost[>]': '1000000',
+        limit: '5',
+        offset: '10'
+      };
+      function ex1(res) {
+        const next = url.parse(res.body.links.next, true).query,
+              prev = url.parse(res.body.links.prev, true).query;
+        return expect(res.body.links).to.have.all.keys(['self','first','prev','next','last']),
+               expect(next.icName).to.equal('NATIONAL CANCER INSTITUTE'),
+               expect(next['totalCost[>]']).to.equal('1000000'),
+               expect(next.limit).to.equal('5'),
+               expect(next.offset).to.equal('15'),
+               expect(prev.offset).to.equal('5');
+      }
+      reHelper('result set maintains query params through pagination links', '/search', ex1, query);
+    });
+  });
+
 });
 
 // ember test

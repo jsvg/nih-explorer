@@ -29,6 +29,10 @@ config.serializerSettings = {
   ]
 };
 
+/*
+ * Ember data makes preflight requests
+ * therefore options method must be available
+ */
 config.allowPreflight = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH');
@@ -37,6 +41,12 @@ config.allowPreflight = function(req, res, next) {
     'OPTIONS' === req.method ? res.sendStatus(200) : next();
 };
 
+/*
+ * Logger levels (increasing levels of verbosity):
+ * 1. BDD output from tests, bragi warn and error output
+ * 2. Morgan req output, bragi warn, error, info output
+ * 3. Morgan req, all bragi
+ */
 config.setupLoggers = function(app, level) {
   logger.options.groupsEnabled = true; 
   if ( level === 1 ) {

@@ -1,8 +1,8 @@
 'use strict';
 const JSONAPISerializer = require('jsonapi-serializer').Serializer,
-      stringify = require('querystring').stringify,
       mapper = require('../utils').reqQueryMapper,
       mongo = require('mongodb').MongoClient,
+      stringify = require('qs').stringify,
       pluralize = require('pluralize'),
       schema = require('../schemas'),
       config = require('../config'),
@@ -21,14 +21,18 @@ const JSONAPISerializer = require('jsonapi-serializer').Serializer,
  * <offset> = for pagination
  *
  */
-function searchSerializer(metaTotal, resource, schema, query) {
-  let baseUrl = [config.apiUrl, pluralize(resource)].join('/');
+function searchSerializer(metaTotal, schema, query) {
+  const baseUrl = [config.apiUrl, pluralize(query.resource)].join('/');
   let jsonApiConfig = {
     id: '_id',
     pluralizeType: false,
-    meta: { count: metaTotal },
+    meta: {
+      count: metaTotal
+    },
     topLevelLinks: {
-      self() { return baseUrl; }
+      self() {
+        return baseUrl;
+      }
     },
     dataLinks: {
       self(item) {
@@ -37,27 +41,46 @@ function searchSerializer(metaTotal, resource, schema, query) {
     }
   };
 
-  // add pagination links - TODO
   /*
+   * Pagination conditional flow used to 
+   * only display available pagination links
+   *
+   * Two gotchas here:
+   * 1) Objects need to be cloned with Object.assign
+   *    since basic assignment provides references
+   * 2) Node's stringify fn only provides shallow encoding,
+   *    so qs library required
+   */
   const limit = parseInt(query.limit) || config.apiSettings.maxLimit,
         offset = parseInt(query.offset) || 0,
-        total = metaTotal;
+        total = metaTotal,
+        firstQuery = Object.assign({}, query),
+        lastQuery = Object.assign({}, query),
+        prevQuery = Object.assign({}, query),
+        nextQuery = Object.assign({}, query);
 
-  jsonApiConfig.topLevelLinks.info1 = limit;
-  jsonApiConfig.topLevelLinks.info2 = offset;
-  jsonApiConfig.topLevelLinks.info3 = total;
+  delete firstQuery.offset;
+  lastQuery.offset = total - (total % limit);
+  prevQuery.offset = offset - limit;
+  nextQuery.offset = offset + limit;
 
-  if ( offset ) {
-    jsonApiConfig.topLevelLinks.prev = [baseUrl, stringify(query)].join('/');
-  } 
-  if ( offset < total ) {
-    jsonApiConfig.topLevelLinks.next = [baseUrl, stringify(query)].join('/');
+  if ( offset + limit < total ) {
+    jsonApiConfig.topLevelLinks.next = config.apiUrl + '/search?' + stringify(nextQuery);
+    jsonApiConfig.topLevelLinks.last = config.apiUrl + '/search?' + stringify(lastQuery);
+    if ( offset > 0 ) {
+      jsonApiConfig.topLevelLinks.prev = config.apiUrl + '/search?' + stringify(prevQuery);
+      jsonApiConfig.topLevelLinks.first = config.apiUrl + '/search?' + stringify(firstQuery);
+    }
+  } else if ( limit < total ) {
+    jsonApiConfig.topLevelLinks.prev = config.apiUrl + '/search?' + stringify(prevQuery);
+    jsonApiConfig.topLevelLinks.first = config.apiUrl + '/search?' + stringify(firstQuery);
   }
 
-  jsonApiConfig.topLevelLinks.first = [baseUrl, stringify(query)].join('/');
-  jsonApiConfig.topLevelLinks.last = [baseUrl, stringify(query)].join('/');
-  */
-
+  /*
+   * Dynamically construct attributes based on
+   * resource schema definition, to include
+   * logic for relationships
+   */
   let schemaAttrs = [];
   for ( let key in schema ) {
     if ( !schema.hasOwnProperty(key) ) { continue; }
@@ -109,7 +132,7 @@ module.exports = function(router) {
       if ( err ) { return logger.log('error', err); }
 
       /*
-       * promise to get total number of results
+       * Promise to get total number of results
        * then metaTotal passed into find() result 
        * to be serialized into response
        */
@@ -130,7 +153,7 @@ module.exports = function(router) {
             .toArray((err, docs) => {
               if ( err ) { return logger.log('error', err); }
               res
-                .send(searchSerializer(metaTotal, collection, schema[collection], req.query)
+                .send(searchSerializer(metaTotal, schema[collection], req.query)
                 .serialize(docs));
           });
         })
