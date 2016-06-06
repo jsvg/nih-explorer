@@ -14,15 +14,23 @@ module.exports = {
        * 1. the loop key is not a prototype prop of reqQuery 
        * 2. the key exists in the schema, t/f is actionable
        * 3. the key is not null
+       * 4. the key's value is not an empty object
        */
       if ( !reqQuery.hasOwnProperty(key) ) { continue; }
       if ( !schema.hasOwnProperty(key) ) { continue; }
       if ( !reqQuery[key] ) { continue; }
+      if ( !Object.keys(reqQuery[key]).length ) { continue; }
 
+      // extract val w/ key
       let val = reqQuery[key];
+
+      // logic for array case
       if ( Array.isArray(val) ) {
         query[key] = {$in: val};
+
+      // logic for object case
       } else if ( typeof val === 'object' ) {
+        // map FE query cmd to DB equivalents
         const map = {
           '>': '$gt',
           '>=': '$gte',
@@ -32,8 +40,12 @@ module.exports = {
           '!': '$ne'
         };
 
+        // redefine object key
         let mongoOperator = {};
         for ( let objKey in val ) {
+          // skip checks
+          if ( !val.hasOwnProperty(objKey) ) { continue; }
+          if ( !val[objKey] ) { continue; }
           // check if field is date based on schema
           let schemaType = schema[key].type.name;
           if ( schemaType === 'Date' ) {
@@ -44,12 +56,14 @@ module.exports = {
             mongoOperator[map[objKey]] = val[objKey];
           }
         }
-
         query[key] = mongoOperator;
+
+      // primitives case
       } else {
         query[key] = val;
       }
     }
+
     return query;
   }
 };

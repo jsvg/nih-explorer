@@ -1,14 +1,42 @@
 {{! search }}
 <div class='container-fluid'>
 
+{{totalCost}} / {{minCost}}
+
   {{! info top row }}
   <div id='info' class='row'>
     <div class='col-md-12'>
-      <div class='pull-left'><strong class='text-success'>Search: {{q}}</strong></div>
+      <div class='pull-left'><div class='tag'>Search: {{q}}</div></div>
       <div class='pull-right'><strong class='text-info'>Results: {{format-item meta.count 'cleanNum'}}</strong></div>
     </div>
   </div>
 
+  {{! viz section }}
+  <div class='row'>
+    {{! funding mech chart}}
+    <div class='col-md-4 text-center'>
+      
+    </div>
+
+    {{! activity ic chart}}
+    <div class='col-md-4 text-center'>
+      {{!c3-viz
+        data=activityChartData
+        axis=c3Axis
+        legend=c3Legend
+        tooltip=c3Tooltip
+        padding=c3Padding
+        color=color
+      }}
+    </div>
+
+    {{! admin ic chart}}
+    <div class='col-md-4 text-center'>
+      
+    </div>
+  </div>
+
+  {{! table and filters section }}
   <div class='row'>
 
     {{! table }}
@@ -27,26 +55,39 @@
         </thead>
         <tbody>
           {{#each model.grants as |m|}}
-            <tr>
-              <td>{{m.projectTitle}}</td>
-              <td>{{format-item m.orgName 'title'}}</td>
-              <td>{{format-item m.icName 'title'}}</td>
-              <td>{{format-item m.fundingMechanism 'title'}}</td>
-              <td>{{m.activity}}</td>
-              <td>{{m.supportYear}}Yr</td>
-              <td>{{moment-format m.awardNoticeDate 'MM/DD/YY'}}</td>
-              <td>{{format-item m.totalCost 'currency'}}</td>
-              <td>{{m.pubCount}}</td>
+            <tr {{action 'showModal' m}}>
+              <td><div>{{m.projectTitle}}</div></td>
+              <td><div>{{format-item m.orgName 'title'}}</div></td>
+              <td><div>{{format-item m.icName 'title'}}</div></td>
+              <td><div>{{format-item m.fundingMechanism 'title'}}</div></td>
+              <td><div>{{m.activity}}</div></td>
+              <td><div>{{#if m.supportYear}}{{m.supportYear}}Yr{{else}}-{{/if}}</div></td>
+              <td><div>{{moment-format m.awardNoticeDate 'MM/DD/YY'}}</div></td>
+              <td><div>{{format-item m.totalCost 'currency'}}</div></td>
+              <td><div>{{m.pubCount}}</div></td>
             </tr>
           {{/each}}
         </tbody>
       </table>
+      {{! pagination footer }}
+      <tfoot class='pull-right'>
+        <tr>
+          <td colspan='6'>
+            <div>
+              {{#bs-button-group}}
+                {{#bs-button class='paginationButton' type='primary' size='xs' disabled=(not (eq meta.pagination.first 0)) action='paginator' value=meta.pagination.prev}}Prev{{/bs-button}}
+                {{#bs-button class='paginationButton' type='primary' size='xs' disabled=(not meta.pagination.next) action='paginator' value=meta.pagination.next}}Next{{/bs-button}}
+              {{/bs-button-group}}
+            </div>
+          </td>
+        </tr>
+      </tfoot>
     </div>
 
-    {{! filter }}
+    {{! filters }}
     <div id='filter' class='col-md-3'>
       <div class='row text-center'><strong>Filters</strong></div>
-      
+      {{! funding mech filter }}
       <div class='row'>
         <div class='col-md-12'>
           <h5>Funding Mechanism</h5>
@@ -59,11 +100,11 @@
             onchange=(action 'filterSelection' 'fundingMechanism')
             as |mech|
           }}
-            <strong>{{format-item mech.id 'title'}} <span class='badge'>{{format-item mech.value 'cleanNum'}}</span></strong>
+            {{format-item mech.id 'title'}} <span class='badge'>{{format-item mech.value 'cleanNum'}}</span>
           {{/power-select}}
         </div>
       </div>
-
+      {{! admin ic filter }}
       <div class='row'>
         <div class='col-md-12'>
           <h5>Administrative IC</h5>
@@ -76,11 +117,11 @@
             onchange=(action 'filterSelection' 'icName')
             as |ic|
           }}
-            <strong>{{format-item ic.id 'title'}} <span class='badge'>{{format-item ic.value 'cleanNum'}}</span></strong>
+            {{format-item ic.id 'title'}} <span class='badge'>{{format-item ic.value 'cleanNum'}}</span>
           {{/power-select}}
         </div>
       </div>
-
+      {{! activity filter }}
       <div class='row'>
         <div class='col-md-12'>
           <h5>Activity</h5>
@@ -93,12 +134,156 @@
             onchange=(action 'filterSelection' 'activity')
             as |activity|
           }}
-            <strong>{{activity.id}} <span class='badge'>{{format-item activity.value 'cleanNum'}}</span></strong>
+            {{activity.id}} <span class='badge'>{{format-item activity.value 'cleanNum'}}</span>
           {{/power-select}}
         </div>
       </div>
+      {{! country filter }}
+      <div class='row'>
+        <div class='col-md-12'>
+          <h5>Organization Country</h5>
+          {{#power-select
+            allowClear=true
+            dropdownClass="slide-fade"
+            options=model.countries
+            placeholder='Select organization country'
+            selected=(find-by model.countries 'id' orgCountry)
+            onchange=(action 'filterSelection' 'orgCountry')
+            as |orgCountry|
+          }}
+            {{format-item orgCountry.id 'title'}} <span class='badge'>{{format-item orgCountry.value 'cleanNum'}}</span>
+          {{/power-select}}
+        </div>
+      </div>
+      {{! total cost filter }}
+      <div class='row'>
+        <div class='col-md-12'>
+          <h5>Grant Total Cost</h5>
+          <div class='totalCostInputs'>
+            {{input placeholder='Min' value=minCost enter=(action 'setMinCost' minCost)}}
+            {{input placeholder='Max' value=maxCost enter=(action 'setMaxCost' maxCost)}}
+          </div>
+        </div>
+      </div>
+
+      {{! CREATE OUTLINKS TO http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4592450/ }}
 
     </div>
 
   </div>
 </div>
+
+
+{{! modal time }}
+{{#bs-modal open=isShowingModal header=false body=false footer=false}}
+  {{#bs-modal-header}}<div class='modal-title modalTitle'>{{modalGrant.projectTitle}}</div>{{/bs-modal-header}}
+  {{#bs-modal-body}}
+    <div class='container-fluid'>
+      {{! grant meta }}
+      <div class='modalSectionTitle'>Meta Info</div>
+      <div class='well well-sm'>
+        {{! admin ic, mechanism }}
+        <div class='row'>
+          <div class='col-md-6 text-left'><small><strong>Admin IC: </strong>{{#if modalGrant.icName}}{{format-item modalGrant.icName 'title'}}{{else}}N/A{{/if}}</small></div>
+          <div class='col-md-6 text-right'><small><strong>Mechanism: </strong>{{#if modalGrant.icName}}{{format-item modalGrant.fundingMechanism 'title'}}{{else}}N/A{{/if}}</small></div>
+        </div>
+        {{! id, funding, activity }}
+        <div class='row'>
+          <div class='col-md-4 text-left'><small><strong>ID: </strong>{{modalGrant.id}}</small></div>
+          <div class='col-md-4 text-center'><small><strong>Funding: </strong>{{#if modalGrant.totalCost}}{{format-item modalGrant.totalCost 'currency'}}{{else}}N/A{{/if}}</small></div>
+          <div class='col-md-4 text-right'><small><strong>Activity: </strong>{{modalGrant.activity}}</small></div>
+        </div>
+      </div>
+      {{! org info }}
+      <div class='modalSectionTitle'>Details</div>
+      <div class='well lrgWell pre-scrollable'>
+        <div class='row'>
+          {{! org and spending cats }}
+          <div class='col-md-6'>
+            {{! org info }}
+            <div class='modalSubSection'>
+              <div class='modalSubSectionTitle'>Organization Information</div>
+              <small><strong>Name (DUNS): </strong>
+                {{#if modalGrant.orgName}}
+                  {{format-item modalGrant.orgName 'title'}}
+                  {{#if modalGrant.orgDuns}}({{modalGrant.orgDuns}}){{/if}}
+                {{else}}N/A{{/if}}
+              </small><br>
+              <small><strong>Type: </strong>{{#if modalGrant.edInstType}}{{format-item modalGrant.edInstType 'title'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Department: </strong>{{#if modalGrant.orgDept}}{{format-item modalGrant.orgDept 'title'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Country: </strong>{{#if modalGrant.orgCountry}}{{format-item modalGrant.orgCountry 'title'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>State: </strong>{{#if modalGrant.orgState}}{{format-item modalGrant.orgState 'upper'}}{{else}}N/A{{/if}}</small><br>
+            </div>
+            {{! spending cat info }}
+            <div class='modalSubSection'>
+              <div class='modalSubSectionTitle'>Spending Categories (RCDC)</div>
+              <div>
+                <ul class='noIndent'>
+                  {{#each modalGrant.nihSpendingCats as |cat|}}
+                    {{#if cat}}<li><small>{{format-item cat 'title'}}</small></li>{{/if}}
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+          {{! date and researchers }}
+          <div class='col-md-6'>
+            {{! date info }}
+            <div class='modalSubSection'>
+              <div class='modalSubSectionTitle'>Dates</div>
+              <small><strong>Award Notice: </strong>{{#if modalGrant.awardNoticeDate}}{{moment-format modalGrant.awardNoticeDate 'MM/DD/YY'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Budget Start: </strong>{{#if modalGrant.budgetStart}}{{moment-format modalGrant.budgetStart 'MM/DD/YY'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Budget End: </strong>{{#if modalGrant.budgetEnd}}{{moment-format modalGrant.budgetEnd 'MM/DD/YY'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Project Start: </strong>{{#if modalGrant.projectStart}}{{moment-format modalGrant.projectStart 'MM/DD/YY'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Project End: </strong>{{#if modalGrant.projectEnd}}{{moment-format modalGrant.projectEnd 'MM/DD/YY'}}{{else}}N/A{{/if}}</small><br>
+              <small><strong>Support Year: </strong>{{#if modalGrant.supportYear}}{{modalGrant.supportYear}}{{else}}N/A{{/if}}</small><br>
+            </div>
+            {{! researcher info }}
+            <div class='modalSubSection'>
+              <div class='modalSubSectionTitle'>Researchers</div>
+              <div>
+                <ul class='noIndent'>
+                  {{#each modalGrant.piNames as |pi|}}
+                    {{#if pi}}<li><small>{{format-item pi 'title'}}</small></li>{{/if}}
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='row'>
+          {{! PHR narrative }}
+          <div class='col-md-12'>
+            <div class='modalSubSection'>
+              <div class='modalSubSectionTitle'>PHR Narrative</div>
+              <small><p>{{modalGrant.phr}}</p></small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{! publications }}
+      <div class='row'>
+        <div class='col-md-12'>
+          <div class='modalSectionTitle'>Publications</div>
+            {{#if modalGrant.publications}}
+              <div class='well well-sm pre-scrollable'>
+                <ul class='noIndent'>
+                  {{#each modalGrant.publications as |pub|}}
+                    {{#if pub}}
+                      <li>
+                        <small>{{format-item pub.title 'title'}} <em>({{format-item pub.journal 'title'}})</em></small> 
+                        {{fa-icon 'file-text-o' click=(action 'goToPubMed' pub.id)}}
+                      </li>
+                    {{/if}}
+                  {{/each}}
+                </ul>
+              </div>
+            {{else}}
+              <div>No publications</div>
+            {{/if}}
+        </div>
+      </div>
+
+    </div>
+  {{/bs-modal-body}}
+{{/bs-modal}}

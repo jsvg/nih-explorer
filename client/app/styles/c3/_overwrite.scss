@@ -1,0 +1,28 @@
+
+.c3-tooltip {
+  background: rgba($tooltip-bg, 0.8);
+  @include box-shadow(none);
+  @include opacity($tooltip-opacity);
+
+  td {
+    background: transparent;
+    border: 0;
+    color: $tooltip-color;
+    font-size: $font-size-base;
+    padding: 5px 10px;
+  }
+
+  th {
+    background: transparent;
+    font-size: $font-size-base;
+    padding: 5px 10px 0;
+  }
+
+  tr {
+    border: 0;
+    + tr > td {
+      border-top: 2px solid $brand-primary;
+      padding-top: 1px;
+    }
+  }
+}

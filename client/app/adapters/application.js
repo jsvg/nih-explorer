@@ -16,7 +16,7 @@ export default JSONAPIAdapter.extend({
   },
 
   ajax(url, type, options) {
-    const log = true;
+    const log = false;
     if ( log ) {
       console.log('+AJAX: ', type, url, options.data);
     }

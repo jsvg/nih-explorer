@@ -120,7 +120,9 @@ module.exports = function(router) {
 
     // setup query
     let query = {};
-    if ( req.query.q ) { query.$text = { $search: req.query.q }; }
+    if ( req.query.q ) {
+      query.$text = { $search: req.query.q };
+    }
     mapper(req.query, query, schema[collection]);
 
     // log out

@@ -12,7 +12,7 @@ function test() {
       .once('error', () => {
         logger.log('warn: error bubbled to gulp test task');
       });
-  }, 1000)
+  }, 1000);
 }
 
 gulp.task('nodemon', (cb) => {

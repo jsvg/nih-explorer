@@ -11,7 +11,13 @@ export default Controller.extend({
         queryParams: {q: get(this, 'searchVar'), resource: 'grant'}
       }).then(() => {
         // reset filters
-        //get(this,'searchCtrlr');
+        let searchParams = get(this,'searchCtrlr');
+        this.set('searchVar', null);
+        searchParams.set('offset', 0);
+        searchParams.set('activity', null);
+        searchParams.set('icName', null);
+        searchParams.set('fundingMechanism', null);
+        searchParams.set('orgCountry', null);
       });
     }
   }

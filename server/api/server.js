@@ -16,7 +16,7 @@ require('./routes/search')(router);
 /*
  * Middleware
  */
-config.setupLoggers(app, 2);
+config.setupLoggers(app, 3);
 app.use(config.allowPreflight);
 app.use(config.apiNamespace, router);
 app.use(config.apiNamespace, fortune.net.http(store, config.serializerSettings));
@@ -25,7 +25,7 @@ app.use(config.apiNamespace, fortune.net.http(store, config.serializerSettings))
  * Catch 404 and forward to error handler
  */
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
