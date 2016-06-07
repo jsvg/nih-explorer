@@ -1,31 +1,33 @@
 // search
 import Ember from 'ember';
-const { Controller, computed, get, set } = Ember;
+const { Controller, inject, computed, get, set, $ } = Ember;
 export default Controller.extend({
-  queryParams: ['resource','q','orgCountry','icName','totalCost',
+  queryParams: ['resource','q','orgCountry','icName',
                 'fundingMechanism','activity','offset'],
   resource: 'grant',
   q: null,
   icName: null,
-  totalCost: null,
   fundingMechanism: null,
   activity: null,
   orgCountry: null,
   offset: 0,
 
-  // relatively ineffective way to populate inputs
-  /*
-  minCost: computed('totalCost', function() {
-    return parseInt(JSON.parse(this.get('totalCost'))['>']) || null;
-  }),
-  maxCost: computed('totalCost', function() {
-    return parseInt(JSON.parse(this.get('totalCost'))['<']) || null;
-  }),
-  */
-
   // modal properties
   isShowingModal: false,
   modalGrant: null,
+
+  // stat properties
+  aggregator: inject.service(),
+  avgForQuery: computed('q','icName','fundingMechanism','activity','orgCountry', function() {
+    console.log('fire0');
+    let x= null;
+    get(this, 'aggregator').aggregate().then((cities) => {
+      //this.set('cities', cities);
+      //return cities;
+      x = cities;
+    });
+    return x;
+  }),
 
   // c3 properties
   activityChartData: computed('model.activities', function() {
@@ -69,34 +71,36 @@ export default Controller.extend({
   },
 
   actions: {
-    showDetails(id) {
-      this.transitionToRoute('grants.grant', {grant_id: id});
-    },
-
+    /* line-item product modals */
     showModal(grant) {
       set(this, 'modalGrant', grant);
       this.toggleProperty('isShowingModal');
     },
 
+    /* used to dynamically out-link in modals */
     goToPubMed(pmid) {
       let url = 'http://www.ncbi.nlm.nih.gov/pubmed/' + pmid;
       window.open(url);
     },
 
+    /* generalized action for updating query
+     * param based on filter
+     */
     filterSelection(target, vals) {
       let setTo = vals ? vals.get('id') : null;
+      // changing a filter returns to first page
+      if ( get(this, 'offset') > 0 ) {
+        set(this, 'offset', 0);
+      }
       set(this, target, setTo);
     },
 
-    setMaxCost(cost) {
-      set(this, 'totalCost', {'<': cost});
-    },
-    setMinCost(cost) {
-      set(this, 'totalCost', {'>': cost});
-    },
-
+    /* pagination function used by table
+     * reset by filterSelection()
+     */
     paginator(n) {
       set(this, 'offset', Number(n));
+      $('html, body').animate({ scrollTop: 0 });
     }
   }
 });

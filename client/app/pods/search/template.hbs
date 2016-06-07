@@ -1,13 +1,32 @@
 {{! search }}
 <div class='container-fluid'>
 
-{{totalCost}} / {{minCost}}
-
   {{! info top row }}
   <div id='info' class='row'>
     <div class='col-md-12'>
-      <div class='pull-left'><div class='tag'>Search: {{q}}</div></div>
-      <div class='pull-right'><strong class='text-info'>Results: {{format-item meta.count 'cleanNum'}}</strong></div>
+      <div class='col-md-8 pull-left'>
+        <div class='tag'>Current search: <strong>{{q}}</strong></div>
+      </div>
+      <div class='col-md-4 pull-right'>
+        <div class='col-md-4 text-center'>
+          <strong class='text-info'>
+            {{format-item meta.count 'cleanNum'}}<br>
+            Grants
+          </strong>
+        </div>
+        <div class='col-md-4 text-center'>
+          <strong class='text-info'>
+            {{!format-item model.sumForQuery.firstObject.value 'currency'}}<br>
+            Total Cost
+          </strong>
+        </div>
+        <div class='col-md-4 text-center'>
+          <strong class='text-info'>
+            {{avgForQuery}}<br>
+            Avg. Cost
+          </strong>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -153,16 +172,6 @@
           }}
             {{format-item orgCountry.id 'title'}} <span class='badge'>{{format-item orgCountry.value 'cleanNum'}}</span>
           {{/power-select}}
-        </div>
-      </div>
-      {{! total cost filter }}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>Grant Total Cost</h5>
-          <div class='totalCostInputs'>
-            {{input placeholder='Min' value=minCost enter=(action 'setMinCost' minCost)}}
-            {{input placeholder='Max' value=maxCost enter=(action 'setMaxCost' maxCost)}}
-          </div>
         </div>
       </div>
 
