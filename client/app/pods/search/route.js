@@ -11,7 +11,7 @@ export default Route.extend(queryParamsHandler, {
     offset: { refreshModel: true },
     orgCountry: { refreshModel: true }
   },
-  meta: null,
+
   model(params) {
     // validate params
     params = this.remapParams(params);
@@ -46,5 +46,4 @@ export default Route.extend(queryParamsHandler, {
     controller.set('meta', this.get('meta'));
     this._super(controller, model);
   }
-
 });

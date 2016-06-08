@@ -1,3 +1,4 @@
+$accent: rgba($brand-primary, 0.5);
 /*-- Chart --*/
 .c3 svg {
   font: $font-size-small $font-family-base;
@@ -88,7 +89,7 @@
 
 /*-- Region --*/
 .c3-region {
-  fill: steelblue;
+  fill: $accent;
   fill-opacity: 0.1;
 }
 

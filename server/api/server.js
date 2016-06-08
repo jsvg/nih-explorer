@@ -16,7 +16,7 @@ require('./routes/search')(router);
 /*
  * Middleware
  */
-config.setupLoggers(app, 3);
+config.setupLoggers(app, 2);
 app.use(config.allowPreflight);
 app.use(config.apiNamespace, router);
 app.use(config.apiNamespace, fortune.net.http(store, config.serializerSettings));

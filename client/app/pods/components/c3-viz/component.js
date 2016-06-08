@@ -72,12 +72,16 @@ export default Component.extend({
    * Component lifecycle hooks to control rendering actions
    ***/
 
-  didInsertElement() {
+  didReceiveAttrs() {
     // if DOM is not ready when component is inserted,
     // rendering issues can occur
     // t/f use 'afterRender' property to ensure
     // state readiness
-    run.scheduleOnce('afterRender', this, this._setupc3);
+    try {
+      run.scheduleOnce('afterRender', this, this._setupc3);
+    } catch(err) {
+      console.log(err);
+    }
   },
 
   didUpdateAttrs() {

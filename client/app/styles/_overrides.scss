@@ -15,12 +15,12 @@ $gray:                   #777 !default;
 $gray-light:             #808080 !default;
 $gray-lighter:           #ddd !default;
 
-$brand-primary:         steelblue !default;
-$brand-success:         #469408 !default;
+$brand-primary:         #4e5d6c !default;
+$brand-success:         #00a65a !default;
 $brand-info:            #9B479F !default;
-$brand-warning:         #D9230F !default;
+$brand-warning:         #d9534f !default;
 $brand-danger:          #D9831F !default;
-
+$brand:                 lighten($brand-primary, 1%) !default; //darken(#800000, 3%) !default;
 
 //== Power Select
 
@@ -90,7 +90,7 @@ $ember-power-select-multiple-option-padding: 0 4px !default;
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               #FCFCFC !default;
+$body-bg:               lighten(#ecf0f5, 4%); // override of #FCFCFC !default;
 //** Global text color on `<body>`.
 $text-color:            $gray-dark !default;
 
@@ -264,7 +264,7 @@ $input-border-radius-large:      $border-radius-large !default;
 $input-border-radius-small:      $border-radius-small !default;
 
 //** Border color for inputs on focus
-$input-border-focus:             $brand-primary !default;
+$input-border-focus:             rgba($brand, 0.5); // override of $brand-primary !default;
 
 //** Placeholder text color
 $input-color-placeholder:        $gray-lighter !default;

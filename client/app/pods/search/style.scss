@@ -1,12 +1,13 @@
 
 #info {
-  // search
+  // current search
   .pull-left {
     font-size: 13px;
+    padding-top: 5px;
   }
   // number of results: 
   .pull-right {
-    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   .col-md-12 {
@@ -16,51 +17,18 @@
   padding-bottom: 30px;
 }
 
-th, td {
-  padding: 0 5px 0 5px;
-}
-
 #filter {
-}
-
-.modalTitle {
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 1.1;
-  font-variant: small-caps;
-}
-
-.modalSectionTitle {
-  font-size: 15px;
-  font-weight: bold;
-  font-variant: small-caps;
-}
-
-.modalSubSectionTitle {
-  font-size: 14px;
-  font-weight: bold;
-  padding-bottom: 5px;
-  border-bottom: 1px solid lightgray;
-}
-
-.modalSubSection {
-  margin-bottom: 15px;
-}
-
-ul.noIndent {
-    margin-left: 5px;
-    margin-right: 0px;
-    padding-left: 10px;
-    padding-right: 0px;
-}
-.modal-dialog {
-  width: 600px;
-}
-.well {
-  padding-top: 10px;
-}
-.lrgWell {
-  min-height: 400px;
+  .current-view {
+    .title {
+      margin-top: 15px;
+    }
+    .item {
+      margin-top: 5px;
+      button {
+        min-width: 100px;
+      }
+    }
+  }
 }
 
 // search tag

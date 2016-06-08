@@ -61,7 +61,7 @@ module.exports = function(router) {
 
     // make req
     mongo.connect(config.mongoUrl, (err, db) => {
-      if ( err ) { return logger.log('error: connecting to mongo'); }
+      if ( err ) { return logger.log('error: connecting to mongo', err); }
       db.collection(collection).aggregate(query, (err, docs) => {
         if ( err ) { return logger.log('error', err); }
         res.send(aggSerializer.serialize(docs));
