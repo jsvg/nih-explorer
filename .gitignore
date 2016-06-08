@@ -1,0 +1,20 @@
+## Client
+# compiled output
+client/dist
+client/tmp
+# dependencies
+client/node_modules
+client/bower_components
+# misc
+client/.sass-cache
+client/connect.lock
+client/coverage/*
+client/libpeerconnection.log
+client/npm-debug.log
+client/testem.log
+
+## Server
+server/node_modules
+
+## ETL
+reporter-etl/.ipynb_checkpoints

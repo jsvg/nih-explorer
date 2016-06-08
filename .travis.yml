@@ -1,3 +1,4 @@
+---
 language: node_js
 node_js:
   - "4"
@@ -7,16 +8,16 @@ sudo: false
 cache:
   directories:
     - node_modules
-    - bower_components
 
 before_install:
-  - "cd client"
-  - "npm config set spin false"
-  - "npm install -g npm@^2"
+  - cd client
+  - npm config set spin false
+  - npm install -g bower
+  - bower --version
+  - npm install phantomjs-prebuilt
+  - phantomjs --version
 
 install:
-  - npm install -g bower
-  - npm install -g phantomjs-prebuilt
   - npm install
   - bower install
 
