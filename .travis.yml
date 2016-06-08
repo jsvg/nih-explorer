@@ -9,6 +9,7 @@ cache:
     - node_modules
 
 before_install:
+  - cd client
   - npm config set spin false
   - npm install -g bower
   - npm install phantomjs-prebuilt
@@ -19,6 +20,3 @@ install:
 
 script:
   - npm test
-
-before_install: 
-  - cd client
