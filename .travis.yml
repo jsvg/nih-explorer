@@ -7,14 +7,16 @@ sudo: false
 cache:
   directories:
     - node_modules
+    - bower_components
 
 before_install:
-  - cd client
-  - npm config set spin false
-  - npm install -g bower
-  - npm install phantomjs-prebuilt
+  - "cd client"
+  - "npm config set spin false"
+  - "npm install -g npm@^2"
 
 install:
+  - npm install -g bower
+  - npm install -g phantomjs-prebuilt
   - npm install
   - bower install
 
