@@ -8,6 +8,9 @@ Consists of three components:
 * A Node.js server wired up to mongo that spits out data in an API complient with the [{json:api}](jsonapi.org) spec
 * An Ember.js web app to provide an ambitious means of exploring of the funding data
 
+### Demo
+![](http://g.recordit.co/Gw4Lg54pUZ.gif)
+
 ### Server
 __Goal__: Provide a {json:api} compliant REST API
 
