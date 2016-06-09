@@ -15,6 +15,7 @@ client/testem.log
 
 ## Server
 server/node_modules
+server/npm-debug.log
 
 ## ETL
 reporter-etl/.ipynb_checkpoints
