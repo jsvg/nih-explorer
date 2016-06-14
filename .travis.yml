@@ -11,8 +11,10 @@ cache:
   - node_modules
   - bower_components
 before_install:
+  # setup global dependencies
   - npm install -g bower
   - npm install -g ember-cli
+  # ETL
   - "mongo --eval 'db.runCommand({setParameter: 1, textSearchEnabled: true})' admin"
   - cd reporter-etl
   - sudo apt-get update
@@ -25,15 +27,15 @@ before_install:
   - conda info -a
   - conda create -q -n test-environment python="2.7" pymongo pandas xlrd
   - source activate test-environment
-install:
   - python buildDB.py install
-  - cd ../server
-  - npm install
+install:
+  # client build
   - cd ../client
   - npm install
   - bower install
   - ember build --environment=production --output-path=../server/public
-before_script:
+  # server build
   - cd ../server
+  - npm install
 script:
   - npm test
