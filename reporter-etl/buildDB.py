@@ -24,7 +24,7 @@ df15grants = pd.read_excel('RePORTER_PRJ_C_FY2015.xlsx').drop(['DIRECT_COST_AMT'
 dfLinks = df15links.copy()
 dfPubs = df15pubs.copy()
 df = df15grants.copy()
-
+print 'DFs loaded'
 
 # Grants model: Non-referential, compound doc approach
 
@@ -128,10 +128,10 @@ def reMapEmptyPubIds(pubIds):
         return pubIds
 df['publications'] = df.publications.map(reMapEmptyPubIds)
 
-
+print 'Prepped to load grant - df shape', df.shape
 loadDF(df.fillna(''), 'grant', local)
 
-
+print 'Creating grant index'
 # create weighted index
 local.grant.create_index([('$**', 'text')], weights={
         'projectTerms': 15,
@@ -141,7 +141,7 @@ local.grant.create_index([('$**', 'text')], weights={
         'orgName': 5,
         'phr': 2
     })
-
+print 'Created'
 
 # Pubs model: Non-referential, compound doc approach
 dfGrantLink = df.groupby('coreProjectNum')['_id'].agg(lambda x: x.tolist())
@@ -187,12 +187,16 @@ dfPubs = dfPubs.drop('page', axis=1)
 # across FY10-FY15, there is one duplicate
 dfPubs = dfPubs.drop_duplicates('_id')
 
+print 'Prepped to load publications - dfPubs shape', dfPubs.shape
 loadDF(dfPubs, 'publication', local)
 
 # create weighted index
+print 'Creating pubs index'
 local.publication.create_index([('$**', 'text')], weights={
         'title': 15,
         'journal': 10,
         'journalAbbr': 10,
         'author': 5
     })
+print 'Created'
+print 'ETL Complete'
