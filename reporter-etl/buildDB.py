@@ -133,14 +133,14 @@ loadDF(df.fillna(''), 'grant', local)
 
 print 'Creating grant index'
 # create weighted index
-local.grant.create_index([('$**', 'text')], weights={
-        'projectTerms': 15,
-        'projectTitle': 10,
-        'nihSpendingCats': 10,
-        'icName': 5,
-        'orgName': 5,
-        'phr': 2
-    })
+#local.grant.create_index([('$**', 'text')], weights={
+#        'projectTerms': 15,
+#        'projectTitle': 10,
+#        'nihSpendingCats': 10,
+#        'icName': 5,
+#        'orgName': 5,
+#        'phr': 2
+#    })
 print 'Created'
 
 # Pubs model: Non-referential, compound doc approach
@@ -192,11 +192,11 @@ loadDF(dfPubs, 'publication', local)
 
 # create weighted index
 print 'Creating pubs index'
-local.publication.create_index([('$**', 'text')], weights={
-        'title': 15,
-        'journal': 10,
-        'journalAbbr': 10,
-        'author': 5
-    })
+#local.publication.create_index([('$**', 'text')], weights={
+#        'title': 15,
+#        'journal': 10,
+#        'journalAbbr': 10,
+#        'author': 5
+#    })
 print 'Created'
 print 'ETL Complete'
