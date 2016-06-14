@@ -60,9 +60,9 @@ export default Mixin.create({
     tmpParams.resource = resource || 'grant';
 
     // for aggregations beyond counting:
-    if ( aggOn ) { tmpParams.field = aggOn; }
-    if ( method ) { tmpParams.agg = method; }
-    if ( methodOn ) { tmpParams.on = methodOn; }
+    if ( aggOn ) { tmpParams.aggBy = aggOn; }
+    if ( method ) { tmpParams.aggMethod = method; }
+    if ( methodOn ) { tmpParams.aggOn = methodOn; }
 
     // build out tmpParams object with valid qp terms
     for ( let key in params ) {

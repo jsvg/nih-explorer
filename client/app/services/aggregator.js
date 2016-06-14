@@ -5,7 +5,7 @@ export default Service.extend({
 
   aggregate(params) {
     return new RSVP.Promise((resolve) => {
-      get(this, 'ajax').request('/aggregate', {
+      get(this, 'ajax').request('/grant', {
         method: 'GET',
         data: params
       }).then(result => {

@@ -9,9 +9,9 @@ export default JSONAPIAdapter.extend({
   // for case where search term (q) is provided to query
   // against grant model
   urlForQuery(query, modelName) {
-    if ( modelName === 'grant' ) {
-      return `${this.urlPrefix()}/search`;
-    }
+    //if ( modelName === 'grant' ) {
+    //  return `${this.urlPrefix()}/search`;
+    //}
     return this._super(...arguments);
   },
 

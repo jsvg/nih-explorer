@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "0.0.1",
-  "description": "Implementation of Fortune.js server, compatible with JSON:API spec.",
+  "description": "REST API server for nih-explorer, compatible with JSON:API spec.",
   "keywords": [
     "jsonapi",
     "json:api",
@@ -21,15 +21,17 @@
     "node": "*"
   },
   "dependencies": {
+    "async": "^2.0.0-rc.6",
     "bragi": "^0.1.3",
+    "compression": "^1.6.2",
     "express": "^4.13.4",
     "fortune": "^3.4.5",
     "fortune-json-api": "^2.0.3",
     "fortune-mongodb": "^1.1.2",
+    "inflection": "^1.10.0",
     "jsonapi-serializer": "^3.0.1",
     "mongodb": "^2.1.16",
     "morgan": "^1.7.0",
-    "pluralize": "^2.0.0",
     "qs": "^6.2.0"
   },
   "devDependencies": {

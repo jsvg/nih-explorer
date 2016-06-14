@@ -4,8 +4,8 @@
 
 A web application for exploring NIH funding activity.
 Consists of three components:
-* Python-based scripts for loading [NIH Exporter Data](exporter.nih.gov) into a mongo DB server (localhost used for example)
-* A Node.js server wired up to mongo that spits out data in an API complient with the [{json:api}](jsonapi.org) spec
+* Python-based scripts for loading [NIH Exporter Data](exporter.nih.gov) into a Mongo DB server (localhost used for example)
+* A Node.js server wired up to a MongoDB instance that provides data in a RESFful API compliant with the [{json:api}](jsonapi.org) spec
 * An Ember.js web app to provide an ambitious means of exploring of the funding data
 
 ### Demo
@@ -14,22 +14,24 @@ Consists of three components:
 ### Server
 __Goal__: Provide a {json:api} compliant REST API
 
-__Major tech components__
-* Node / Express: server setup
-* Fortune: basic auto-configured resource routes
-* JSON-Serializer: for custom routes (search, aggregate)
+__Tech Components__
+* [Node](https://nodejs.org/en/) / [Express](expressjs.com): server setup
+* [JSON-Serializer](https://github.com/SeyZ/jsonapi-serializer): for complex aggregation and search functional routes
+* [Fortune](fortunejs.com): auto-generated resource routes, configured to comply to {json:api}
+* Basic load testing with [artillary.io](https://artillery.io) (results [here](http://htmlpreview.github.com/?https://github.com/jsvg/nih-explorer/blob/master/server/loadtest/report.html))
 
 ### Client
 __Goal__: Provide an interface rich with interactive data visualizations and complex but intuitive UI faceting
 
-__Major tech components__
-* Ember: framework
-* C3: quick highly configurable charts
+__Tech Components__
+* [Ember](http://emberjs.com/): MV* framework
+* [C3](c3js.org): quick highly configurable charts
+* [Bootstrap](https://github.com/twbs/bootstrap-sass): SASS-modified version of bootstrap
 
 ### ETL
 __Goal__: Clean and restructure inherently messy public NIH funding data, and load into a mongo db instance
 
-__Major tech components__
-* Pandas: data wrangling library, essential to anything data-related
-* ipython Notebook: web browser-based python IDE
-* pymongo: mongo driver to allow mass data loading into mongo
+__Tech Components__
+* [Pandas](http://pandas.pydata.org/): data wrangling library, essential to anything data-related
+* [ipython Notebook](https://ipython.org/notebook.html): web browser-based python IDE
+* [pymongo](https://api.mongodb.com/python/current/): mongo driver to allow mass data loading into mongo

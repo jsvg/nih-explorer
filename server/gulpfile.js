@@ -9,8 +9,8 @@ function test() {
   setTimeout(() => {
     gulp.src('test/tests.js', {read: false})
       .pipe(mocha({reporter: 'spec', ui: 'bdd'}))
-      .once('error', () => {
-        logger.log('warn: error bubbled to gulp test task');
+      .once('error', (err) => {
+        logger.log('warn: error bubbled to gulp test task', err);
       });
   }, 1000);
 }
@@ -24,11 +24,11 @@ gulp.task('nodemon', (cb) => {
       if (!started) {
         cb();
         started = true;
-        test();
+        //test();
       }
     }).on('restart', () => {
       setTimeout(() => {
-        test();
+        //test();
         gulp.src('api/server.js')
           .pipe(livereload());
       }, 1000);

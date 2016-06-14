@@ -30,10 +30,10 @@ export default Route.extend(queryParamsHandler, {
       }),
 
       // for filters
-      fundingMechanisms: get(this, 'store').query('aggregate', fmParams),
-      icNames: get(this, 'store').query('aggregate', icParams),
-      activities: get(this, 'store').query('aggregate', activityParams),
-      countries: get(this, 'store').query('aggregate', countryParams)
+      fundingMechanisms: get(this, 'store').query('grant', fmParams),
+      icNames: get(this, 'store').query('grant', icParams),
+      activities: get(this, 'store').query('grant', activityParams),
+      countries: get(this, 'store').query('grant', countryParams)
     });
   },
 

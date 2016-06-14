@@ -1,0 +1,38 @@
+# see https://artillery.io/
+config:
+  target: 'http://localhost:8080'
+  phases:
+    - duration: 5
+      arrivalRate: 15
+      name: 'Burst'
+    - duration: 300
+      arrivalRate: 5
+      rampTo: 10
+      name: 'Ramp'
+  variables:
+    randomSearchTerms: ['cancer', 'genetics', 'pharmacology', 'heart', 'lung', 'blood', 'stress', 'sleep']
+    randomCostsGt: ['gt1E2', 'gte1E6', 'gt1.5E6', 'gte1.251E6']
+    randomCostsLt: ['lt2E2', 'lte2E6', 'lt2.5E6', 'lte2.251E6']
+    randomAgg: ['icName', 'activity', 'fundingMechanism']
+
+scenarios:
+  - name: 'Grants high-level'
+    weight: 2
+    flow:
+    - get:
+        url: "/api/v1/grants"
+  - name: 'Pubs high-level'
+    weight: 1
+    flow:
+    - get:
+        url: "/api/v1/publications"
+  - name: 'Grants searched'
+    weight: 3
+    flow:
+    - get:
+        url: "/api/v1/grants?q={{randomSearchTerms}}&totalCost={{randomCostsGt}}&totalCost={{randomCostsLt}}"
+  - name: 'Grants filtered and aggd'
+    weight: 3
+    flow:
+    - get:
+        url: "/api/v1/grants?q={{randomSearchTerms}}&aggBy={{randomAgg}}"

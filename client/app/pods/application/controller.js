@@ -4,6 +4,7 @@ const { Controller, inject, get } = Ember;
 export default Controller.extend({
   // to reset filters on search route
   searchCtrlr: inject.controller('search'),
+  ajax: inject.service(),
   
   actions: {
     search() {
