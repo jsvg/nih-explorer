@@ -23,17 +23,39 @@
 #
 #script:
 #  - npm test
-
+sudo: required
 language: node_js
 node_js:
   - "4"
 services:
   - mongodb
+python:
+  - "2.7"
 cache:
   directories:
   - node_modules
 before_install:
-  - cd server
+  # Get python
+  - cd reporter-etl
+  - sudo apt-get -y install python3-pip python-dev
+  - sudo pip3 install -U setuptools
+  - sudo pip3 install -U virtualenvwrapper
+  - python3 -V
+  - pip3 -V
+  # Miniconda
+  - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+  # Load mongo
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy scipy matplotlib nose dateutil pandas statsmodels
+  - python buildDB.py
+  # Go to server
+  - cd ../server
 before_script:
   - npm prune
 script:
