@@ -1,0 +1,16 @@
+th, td {
+  padding: 0 5px 0 5px;
+}
+
+
+.paginationButton {
+  margin-bottom: 40px;
+  background-color: white !important;
+  color: gray !important;
+  background-image: none;
+  border: 1px solid lightgray !important;
+  &:hover {
+    background-color: rgba(lightblue, 0.01) !important;
+    color: white !important;
+  }
+}

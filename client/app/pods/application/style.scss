@@ -10,25 +10,28 @@ $inputcolor: #999999;
     letter-spacing: 1px;
   }
 
+  .navbar-brand {
+    &:hover {
+      color: white;
+    }
+  }
+
+  // navbar search
   input {
     margin-top: 2px;
     height: 30px;
     border-radius: 0;
     background-color: $body-bg;
   }
-
   input::-webkit-input-placeholder {
     color: $inputcolor !important;
   }
-   
   input:-moz-placeholder {
     color: $inputcolor !important;  
   }
-   
   input::-moz-placeholder {
     color: $inputcolor !important;  
-  }
-   
+  }   
   input:-ms-input-placeholder {  
     color: $inputcolor !important;  
   }

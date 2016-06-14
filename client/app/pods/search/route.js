@@ -1,8 +1,7 @@
-// search - should become an abstract route
+// search
 import Ember from 'ember';
-import queryParamsHandler from 'client/mixins/query-params-handler';
-const { Route, RSVP, get, set } = Ember;
-export default Route.extend(queryParamsHandler, {
+const { Route, RSVP: {hash}, get, set } = Ember;
+export default Route.extend({
   queryParams: {
     q: { refreshModel: true },
     fundingMechanism: { refreshModel: true },
@@ -13,27 +12,11 @@ export default Route.extend(queryParamsHandler, {
   },
 
   model(params) {
-    // validate params
-    params = this.remapParams(params);
-
-    // refactor params for aggregation routes
-    const fmParams = this.makeAggregateQueryParam(params, 'fundingMechanism'),
-          icParams = this.makeAggregateQueryParam(params, 'icName'),
-          activityParams = this.makeAggregateQueryParam(params, 'activity'),
-          countryParams = this.makeAggregateQueryParam(params, 'orgCountry');
-
-    return RSVP.hash({
-      // table data
+    return hash({
       grants: get(this, 'store').query('grant', params).then(result => {
         set(this, 'meta', result.get('meta'));
         return result;
-      }),
-
-      // for filters
-      fundingMechanisms: get(this, 'store').query('grant', fmParams),
-      icNames: get(this, 'store').query('grant', icParams),
-      activities: get(this, 'store').query('grant', activityParams),
-      countries: get(this, 'store').query('grant', countryParams)
+      })
     });
   },
 

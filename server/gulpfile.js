@@ -19,7 +19,7 @@ gulp.task('nodemon', (cb) => {
   let started = false;
   livereload.listen();
   return nodemon({
-    script: 'api/server.js',
+    script: 'app.js',
     }).on('start', () => {
       if (!started) {
         cb();
@@ -29,7 +29,7 @@ gulp.task('nodemon', (cb) => {
     }).on('restart', () => {
       setTimeout(() => {
         //test();
-        gulp.src('api/server.js')
+        gulp.src('app.js')
           .pipe(livereload());
       }, 1000);
     });

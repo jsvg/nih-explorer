@@ -1,0 +1,42 @@
+<div id='table'>
+  <table class='table table-hover'>
+    <thead>
+      <th>Project Title</th>
+      <th>Organization</th>
+      <th>Admin IC</th>
+      <th>Mechanism</th>
+      <th>Activity</th>
+      <th>Duration</th>
+      <th>Awarded</th>
+      <th>Cost</th>
+      <th>Publications</th>
+    </thead>
+    <tbody>
+      {{#each grants as |grant|}}
+        <tr {{action (action selectGrant grant)}}>
+          <td><div>{{grant.projectTitle}}</div></td>
+          <td><div>{{format-item grant.orgName 'title'}}</div></td>
+          <td><div>{{format-item grant.icName 'title'}}</div></td>
+          <td><div>{{format-item grant.fundingMechanism 'title'}}</div></td>
+          <td><div>{{grant.activity}}</div></td>
+          <td><div>{{#if grant.supportYear}}{{grant.supportYear}}Yr{{else}}-{{/if}}</div></td>
+          <td><div>{{#if grant.awardNoticeDate}}{{moment-format grant.awardNoticeDate 'MM/DD/YY'}}{{else}}-{{/if}}</div></td>
+          <td><div>{{format-item grant.totalCost 'currency'}}</div></td>
+          <td><div>{{grant.pubCount}}</div></td>
+        </tr>
+      {{/each}}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan='9'>
+          <div class='pull-right'>
+            {{#bs-button-group}}
+              {{#bs-button class='paginationButton' type='primary' size='xs' disabled=(not (eq paginationData.first 0)) action=(action pageButtonClick) value=paginationData.prev}}Prev{{/bs-button}}
+              {{#bs-button class='paginationButton' type='primary' size='xs' disabled=(not paginationData.next) action=(action pageButtonClick) value=paginationData.next}}Next{{/bs-button}}
+            {{/bs-button-group}}
+          </div>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

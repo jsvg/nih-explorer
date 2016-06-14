@@ -26,20 +26,5 @@ export default JSONAPISerializer.extend({
     }
     
     return normalized;
-  },
-
-  /*
-   * Handle cases where aggregate query returns
-   * null result (id = "")
-   */
-  normalizeQueryResponse(...args) {
-    // get payload
-    let data = args[2].data;
-    for ( let i of data ) {
-      if ( i.id === '' ) {
-        i.id = 'N/A';
-      }
-    }
-    return this._super(...args);
   }
 });

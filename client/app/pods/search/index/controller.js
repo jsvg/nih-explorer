@@ -1,12 +1,11 @@
 import Ember from 'ember';
-const { Controller, set, computed, inject, $ } = Ember;
+const { Controller, set, computed: { reads }, inject: { controller }, $ } = Ember;
 export default Controller.extend({
-  searchController: inject.controller('search'),
-  meta: computed.reads('searchController.meta'),
+  searchController: controller('search'),
+  pagination: reads('searchController.meta.pagination'),
 
-  // modal properties
   isShowingModal: false,
-  modalGrant: null,
+
   actions: {
     /* line-item product modals */
     showModal(grant) {
@@ -14,13 +13,8 @@ export default Controller.extend({
       this.toggleProperty('isShowingModal');
     },
 
-    /* used to dynamically out-link in modals */
-    goToPubMed(pmid) {
-      const url = `http://www.ncbi.nlm.nih.gov/pubmed/${pmid}`;
-      window.open(url);
-    },
-
-    /* pagination function used by table
+    /**
+     * pagination function used by table
      * reset by filterSelection()
      */
     paginator(n) {

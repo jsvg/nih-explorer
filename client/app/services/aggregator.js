@@ -1,15 +1,15 @@
 import Ember from 'ember';
-const { Service, inject, get, RSVP } = Ember;
+const { Service, inject: {service} , get, RSVP: {Promise} } = Ember;
 export default Service.extend({
-  ajax: inject.service(),
+  ajax: service(),
 
-  aggregate(params) {
-    return new RSVP.Promise((resolve) => {
-      get(this, 'ajax').request('/grant', {
+  aggregate(resource, params) {
+    return new Promise((resolve) => {
+      get(this, 'ajax').request(resource, {
         method: 'GET',
         data: params
       }).then(result => {
-        if ( !params.hasOwnProperty('field') ) {
+        if ( params.aggBy === 'count' ) {
           resolve(result.data[0].attributes.value);
         } else {
           resolve(result.data);

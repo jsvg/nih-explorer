@@ -17,6 +17,7 @@ client/testem.log
 server/node_modules
 server/npm-debug.log
 server/artillery_report*
+server/public
 
 ## ETL
 reporter-etl/.ipynb_checkpoints

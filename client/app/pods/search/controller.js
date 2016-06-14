@@ -3,9 +3,7 @@ import Ember from 'ember';
 const { Controller, computed, get, getProperties, set } = Ember;
 export default Controller.extend({
   /* query params */
-  queryParams: ['resource','q','orgCountry','icName',
-                'fundingMechanism','activity','offset'],
-  resource: 'grant',
+  queryParams: ['q','orgCountry','icName','fundingMechanism','activity','offset'],
   q: null,
   icName: null,
   fundingMechanism: null,
@@ -13,44 +11,48 @@ export default Controller.extend({
   orgCountry: null,
   offset: 0,
 
-  /* params for getting current data statistics */
-  filterBase: computed('q','icName','fundingMechanism','activity','orgCountry', function() {
+  /**
+   * CPs for generating aggregation params for
+   * data-stat components
+   * aggParamsBase also used to inform filter values
+   */
+  aggParamBase: computed('q','icName','fundingMechanism','activity','orgCountry', function() {
     const filters = getProperties(this, 'q', 'icName', 'fundingMechanism', 'activity', 'orgCountry');
     return Object.freeze(filters);
   }),
-  grantCountParams: computed('filterBase', function() {
-    const filterBase = get(this, 'filterBase');
-    return Object.assign({resource: 'grant'}, filterBase);
+  grantCountParams: computed('aggParamBase', function() {
+    const aggParamBase = get(this, 'aggParamBase');
+    return Object.assign({aggBy: 'count'}, aggParamBase);
   }),
-  sumCostParams: computed('filterBase', function() {
-    const filterBase = get(this, 'filterBase');
+  sumCostParams: computed('aggParamBase', function() {
+    const aggParamBase = get(this, 'aggParamBase');
     return Object.assign({
-      resource: 'grant',
-      agg: '$sum',
-      on: '$totalCost'
-    }, filterBase);
+      aggBy: 'count',
+      aggMethod: 'sum',
+      aggOn: 'totalCost'
+    }, aggParamBase);
   }),
-  avgCostParams: computed('filterBase', function() {
-    const filterBase = get(this, 'filterBase');
+  avgCostParams: computed('aggParamBase', function() {
+    const aggParamBase = get(this, 'aggParamBase');
     return Object.assign({
-      resource: 'grant',
-      agg: '$avg',
-      on: '$totalCost'
-    }, filterBase);
+      aggBy: 'count',
+      aggMethod: 'avg',
+      aggOn: 'totalCost'
+    }, aggParamBase);
   }),
-  stdCostParams: computed('filterBase', function() {
-    const filterBase = get(this, 'filterBase');
+  stdCostParams: computed('aggParamBase', function() {
+    const aggParamBase = get(this, 'aggParamBase');
     return Object.assign({
-      resource: 'grant',
-      agg: '$stdDevSamp',
-      on: '$totalCost'
-    }, filterBase);
+      aggBy: 'count',
+      aggMethod: 'stdDevSamp',
+      aggOn: 'totalCost'
+    }, aggParamBase);
   }),
 
   actions: {
     /* generalized action for updating query param based on filter */
-    filterSelection(target, vals) {
-      let setTo = vals ? vals.get('id') : null;
+    filterSelection(target, val) {
+      const setTo = val ? val.id : null;
       // changing a filter returns to first page
       if ( get(this, 'offset') > 0 ) {
         set(this, 'offset', 0);

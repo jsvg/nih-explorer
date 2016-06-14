@@ -1,0 +1,11 @@
+{{#power-select
+  allowClear=true
+  dropdownClass='slide-fade'
+  options=results
+  placeholder=placeholder
+  selected=(find-by results 'id' selectedValue)
+  onchange=(action changeAction)
+  as |result|
+}}
+  {{format-item result.id 'title'}} <span class='badge'>{{format-item result.attributes.value 'cleanNum'}}</span>
+{{/power-select}}

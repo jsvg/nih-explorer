@@ -37,8 +37,6 @@ export default Model.extend({
   studySection: attr('string'),
   studySectionName: attr('string'),
   supportYear: attr('string'),
-  directCostAmt: attr('string'),
-  indirectCostAmt: attr('string'),
   totalCost: attr('string'),
   activityType: attr('string'),
   // nested attrs

@@ -36,7 +36,7 @@ module.exports = {
     supportYear: { type: Number },
     totalCost: { type: Number },
     activityType: { type: String },
-    publications: { link: 'publication', inverse: 'grants', isArray: true }
+    publications: { link: 'publication', inverse: 'projects', isArray: true }
   },
 
   publication: {
@@ -54,6 +54,6 @@ module.exports = {
     pubDate: { type: String },
     title: { type: String },
     pubYear: { type: String },
-    grants: { link: 'grant', inverse: 'publications', isArray: true }
+    projects: { link: 'grant', inverse: 'publications', isArray: true }
   }
 };

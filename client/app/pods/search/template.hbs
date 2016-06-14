@@ -19,6 +19,7 @@
             descriptor='Grant Count'
             resultFormat='cleanNum'
             params=grantCountParams
+            resource='grants'
           }}
         </div>
         <div class='col-md-3'>
@@ -26,6 +27,7 @@
             descriptor='Sum Cost'
             resultFormat='currency'
             params=sumCostParams
+            resource='grants'
           }}
         </div>
         <div class='col-md-3'>
@@ -33,6 +35,7 @@
             descriptor='Avg Cost'
             resultFormat='currency'
             params=avgCostParams
+            resource='grants'
           }}
         </div>
         <div class='col-md-3'>
@@ -40,6 +43,7 @@
             descriptor='Cost Std. Dev.'
             resultFormat='currency'
             params=stdCostParams
+            resource='grants'
           }}
         </div>
       </div>
@@ -49,7 +53,7 @@
   {{! table and filters section }}
   <div class='row'>
 
-    {{! outlet for child routes }}
+    {{! outlet for child routes: TABLE & VIZ }}
     <div class='col-md-9'>
       {{outlet}}
     </div>
@@ -57,72 +61,60 @@
     {{! filters }}
     <div id='filter' class='col-md-3'>
       <div class='row text-center'><strong>Filters</strong></div>
-      {{! funding mech filter }}
+      {{! filter fundingMechanism}}
       <div class='row'>
         <div class='col-md-12'>
           <h5>Funding Mechanism</h5>
-          {{#power-select
-            allowClear=true
-            dropdownClass="slide-fade"
-            options=model.fundingMechanisms
-            placeholder='Select funding mechanisms'
-            selected=(find-by model.fundingMechanisms 'id' fundingMechanism)
-            onchange=(action 'filterSelection' 'fundingMechanism')
-            as |mech|
+          {{data-filter
+            resource='grants'
+            filterAttr='fundingMechanism'
+            placeholder='Select funding mechanism'
+            currentParams=aggParamBase
+            selectedValue=fundingMechanism
+            changeAction=(action 'filterSelection' 'fundingMechanism')
           }}
-            {{format-item mech.id 'title'}} <span class='badge'>{{format-item mech.value 'cleanNum'}}</span>
-          {{/power-select}}
         </div>
       </div>
-      {{! admin ic filter }}
+      {{! filter activity }}
       <div class='row'>
         <div class='col-md-12'>
-          <h5>Administrative IC</h5>
-          {{#power-select
-            allowClear=true
-            dropdownClass="slide-fade"
-            options=model.icNames
-            placeholder='Select funding mechanisms'
-            selected=(find-by model.icNames 'id' icName)
-            onchange=(action 'filterSelection' 'icName')
-            as |ic|
-          }}
-            {{format-item ic.id 'title'}} <span class='badge'>{{format-item ic.value 'cleanNum'}}</span>
-          {{/power-select}}
-        </div>
-      </div>
-      {{! activity filter }}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>Activity</h5>
-          {{#power-select
-            allowClear=true
-            dropdownClass="slide-fade"
-            options=model.activities
+          <h5>Activity Code</h5>
+          {{data-filter
+            resource='grants'
+            filterAttr='activity'
             placeholder='Select activity code'
-            selected=(find-by model.activities 'id' activity)
-            onchange=(action 'filterSelection' 'activity')
-            as |activity|
+            currentParams=aggParamBase
+            selectedValue=activity
+            changeAction=(action 'filterSelection' 'activity')
           }}
-            {{activity.id}} <span class='badge'>{{format-item activity.value 'cleanNum'}}</span>
-          {{/power-select}}
         </div>
       </div>
-      {{! country filter }}
+      {{! filter icName }}
+      <div class='row'>
+        <div class='col-md-12'>
+          <h5>Administering I/C</h5>
+          {{data-filter
+            resource='grants'
+            filterAttr='icName'
+            placeholder='Select I/C'
+            currentParams=aggParamBase
+            selectedValue=icName
+            changeAction=(action 'filterSelection' 'icName')
+          }}
+        </div>
+      </div>
+      {{! filter orgCountry }}
       <div class='row'>
         <div class='col-md-12'>
           <h5>Organization Country</h5>
-          {{#power-select
-            allowClear=true
-            dropdownClass="slide-fade"
-            options=model.countries
+          {{data-filter
+            resource='grants'
+            filterAttr='orgCountry'
             placeholder='Select organization country'
-            selected=(find-by model.countries 'id' orgCountry)
-            onchange=(action 'filterSelection' 'orgCountry')
-            as |orgCountry|
+            currentParams=aggParamBase
+            selectedValue=orgCountry
+            changeAction=(action 'filterSelection' 'orgCountry')
           }}
-            {{format-item orgCountry.id 'title'}} <span class='badge'>{{format-item orgCountry.value 'cleanNum'}}</span>
-          {{/power-select}}
         </div>
       </div>
       {{! view switch buttons }}

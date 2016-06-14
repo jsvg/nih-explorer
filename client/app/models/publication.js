@@ -17,5 +17,5 @@ export default Model.extend({
   pubDate: attr('string'),
   title: attr('string'),
   pubYear: attr('number'),
-  grants: hasMany('grant')
+  projects: hasMany('grant')
 });

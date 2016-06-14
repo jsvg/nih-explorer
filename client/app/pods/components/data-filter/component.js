@@ -2,18 +2,17 @@ import Ember from 'ember';
 const { Component, inject: { service }, get, set } = Ember;
 export default Component.extend({
   aggregator: service(),
-  
-  statVal: null,
-  resource: null,
 
   didReceiveAttrs() {
     const api = get(this, 'aggregator'),
           resource = get(this, 'resource'),
-          params = get(this, 'params');
+          aggBy = get(this, 'filterAttr'),
+          currentParams = get(this, 'currentParams');
 
-    api.aggregate(resource, params).then(val => {
+    const params = Object.assign({ aggBy }, currentParams);
+    api.aggregate(resource, params).then(result => {
       if ( !this.isDestroyed ) {
-        set(this, 'statVal', val);
+        set(this, 'results', result);
       }
     });
   }

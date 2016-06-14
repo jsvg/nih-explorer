@@ -49,34 +49,3 @@
   color: #333;
   font-size: 13px;
 }
-
-.badge {
-  background-color: white;
-  height: 15px;
-  line-height: 0.75;
-  color: black;
-  margin-bottom: 5px;
-  border: 1px solid gray;
-  border-radius: 2px;
-  font-size: 10px;
-}
-
-.ember-power-select-selected-item {
-  position: absolute;
-  max-width: 200px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.paginationButton {
-  margin-bottom: 40px;
-  background-color: white !important;
-  color: gray !important;
-  background-image: none;
-  border: 1px solid lightgray !important;
-  &:hover {
-    background-color: rgba(lightblue, 0.01) !important;
-    color: white !important;
-  }
-}

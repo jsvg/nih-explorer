@@ -1,19 +1,21 @@
 // application
 import Ember from 'ember';
-const { Controller, inject, get } = Ember;
+const { Controller, inject: {controller}, get, set } = Ember;
 export default Controller.extend({
-  // to reset filters on search route
-  searchCtrlr: inject.controller('search'),
-  ajax: inject.service(),
-  
+  /**
+   * Operations responsible for reseting state of search route
+   * when conducting a new query on the search bar param
+   */
+  searchCtrlr: controller('search'),
   actions: {
     search() {
-      this.transitionToRoute('search', {
-        queryParams: {q: get(this, 'searchVar'), resource: 'grant'}
-      }).then(() => {
+      const q = get(this, 'searchVar'),
+            params = { queryParams: { q } };
+
+      this.transitionToRoute('search', params).then(() => {
         // reset filters
         let searchParams = get(this,'searchCtrlr');
-        this.set('searchVar', null);
+        set(this, 'searchVar', null);
         searchParams.set('offset', 0);
         searchParams.set('activity', null);
         searchParams.set('icName', null);

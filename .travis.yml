@@ -9,7 +9,10 @@ python:
 cache:
   directories:
   - node_modules
+  - bower_components
 before_install:
+  - npm install -g bower
+  - npm install -g ember-cli
   - "mongo --eval 'db.runCommand({setParameter: 1, textSearchEnabled: true})' admin"
   - cd reporter-etl
   - sudo apt-get update
@@ -24,9 +27,13 @@ before_install:
   - source activate test-environment
 install:
   - python buildDB.py install
+  - cd ../server
+  - npm install
+  - cd ../client
+  - npm install
+  - bower install
+  - ember build --environment=production --output-path=../server/public
 before_script:
   - cd ../server
-  - npm prune
-  - npm install
 script:
   - npm test
