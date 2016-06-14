@@ -10,7 +10,6 @@ cache:
   directories:
   - node_modules
 before_install:
-  - mongod --setParameter textSearchEnabled=true
   - cd reporter-etl
   - sudo apt-get update
   - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
