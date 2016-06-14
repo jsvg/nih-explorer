@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jsvg/nih-explorer.svg?branch=master)](https://travis-ci.org/jsvg/nih-explorer)
+[![Dependency Status](https://gemnasium.com/badges/github.com/jsvg/nih-explorer.svg)](https://gemnasium.com/github.com/jsvg/nih-explorer)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab5f17f922864a5b99da9c455b3fa8a0)](https://www.codacy.com/app/vangiessen_julian/nih-explorer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsvg/nih-explorer&amp;utm_campaign=Badge_Grade)
 
 # NIH Explorer
