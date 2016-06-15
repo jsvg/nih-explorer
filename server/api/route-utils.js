@@ -91,7 +91,7 @@ const serializer = function(metaTotal, resource, schema, query) {
   }
 
   jsonApiConfig.attributes = schemaAttrs;
-  return new JSONAPISerializer('grant', jsonApiConfig);
+  return new JSONAPISerializer(resource, jsonApiConfig);
 };
 
 const aggSerializer = new JSONAPISerializer('aggregation', {

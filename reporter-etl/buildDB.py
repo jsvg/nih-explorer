@@ -199,7 +199,6 @@ dfPubs['authors'] = dfPubs.authors\
     .map(termSplitter)
 
 dfPubs['issn'] = dfPubs.issn.map(str)
-dfPubs['_id'] = dfPubs.page.map(str)
 dfPubs = dfPubs.drop('page', axis=1)
 
 # across FY10-FY15, there is one duplicate
