@@ -4,6 +4,9 @@ export default Service.extend({
   ajax: service(),
 
   aggregate(resource, params) {
+    if ( !params.q ) {
+      delete params.q;
+    }
     return new Promise((resolve) => {
       get(this, 'ajax').request(resource, {
         method: 'GET',

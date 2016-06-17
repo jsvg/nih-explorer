@@ -8,8 +8,9 @@
         <div class='tag'>
           {{#if q}}
             Current search: <strong>{{q}}</strong>
+            <span class='ember-power-select-clear-btn search-clear-btn' {{action 'clearSearch'}}>×</span>
           {{else}}
-            all grants in view
+            No active search - all grants in view
           {{/if}}
         </div>
       </div>
@@ -115,6 +116,20 @@
             currentParams=aggParamBase
             selectedValue=orgCountry
             changeAction=(action 'filterSelection' 'orgCountry')
+          }}
+        </div>
+      </div>
+      {{! filter nihSpendingCats }}
+      <div class='row'>
+        <div class='col-md-12'>
+          <h5>NIH Spending Categories (RCDC)</h5>
+          {{data-filter
+            resource='grants'
+            filterAttr='nihSpendingCats'
+            placeholder='Select an RCDC code'
+            currentParams=aggParamBase
+            selectedValue=nihSpendingCats
+            changeAction=(action 'filterSelection' 'nihSpendingCats')
           }}
         </div>
       </div>

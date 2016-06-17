@@ -50,8 +50,11 @@ module.exports = new Router().get('/:resource', (req, res) => {
    * Handling agg methods
    * Only execute on aggs if all three properties are present
    * - aggBy: what field to group by: or if it equals COUNT, then count it
-   * - aggMethod: count, avg, sum, std, max, min (todo: unique)
+   * - aggMethod: count, avg, sum, std, max, min
    * - aggOn: what field to execute aggMethod across
+   *
+   * If aggregation occurs on a nested item, 
+   * $unwind is pushed into aggregationParams
    */
   if ( reqQueryParams.hasOwnProperty('aggBy') ) {
     const aggMap = {$group: {}},
@@ -63,6 +66,11 @@ module.exports = new Router().get('/:resource', (req, res) => {
     // check for proper aggBy param
     const aggBy = schemas[resource].hasOwnProperty(reqQueryParams.aggBy) ?
       '$'+reqQueryParams.aggBy : 'total';
+
+    // add $unwind if grouping on array
+    if ( aggBy!== 'total' && schemas[resource][reqQueryParams.aggBy].type.name === 'Array' ) {
+      aggregationParams.push({$unwind: aggBy});
+    }
 
     aggMap.$group._id = aggBy;
     aggMap.$group.value = {};

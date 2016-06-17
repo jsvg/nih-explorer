@@ -20,7 +20,7 @@ $brand-success:         #00a65a !default;
 $brand-info:            #9B479F !default;
 $brand-warning:         #d9534f !default;
 $brand-danger:          #D9831F !default;
-$brand:                 lighten($brand-primary, 1%) !default; //darken(#800000, 3%) !default;
+$brand:                 darken(#800000, 3%) !default; //lighten($brand-primary, 1%) !default;
 
 //== Power Select
 

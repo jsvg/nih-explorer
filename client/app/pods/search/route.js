@@ -8,10 +8,14 @@ export default Route.extend({
     icName: { refreshModel: true },
     activity: { refreshModel: true },
     offset: { refreshModel: true },
-    orgCountry: { refreshModel: true }
+    orgCountry: { refreshModel: true },
+    nihSpendingCats: { refreshModel: true }
   },
 
   model(params) {
+    if ( !params.q ) {
+      delete params.q;
+    }
     return hash({
       grants: get(this, 'store').query('grant', params).then(result => {
         set(this, 'meta', result.get('meta'));

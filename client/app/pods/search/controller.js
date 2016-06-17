@@ -3,12 +3,13 @@ import Ember from 'ember';
 const { Controller, computed, get, getProperties, set } = Ember;
 export default Controller.extend({
   /* query params */
-  queryParams: ['q','orgCountry','icName','fundingMechanism','activity','offset'],
+  queryParams: ['q','orgCountry','icName','fundingMechanism','activity','offset','nihSpendingCats'],
   q: null,
   icName: null,
   fundingMechanism: null,
   activity: null,
   orgCountry: null,
+  nihSpendingCats: null,
   offset: 0,
 
   /**
@@ -16,8 +17,8 @@ export default Controller.extend({
    * data-stat components
    * aggParamsBase also used to inform filter values
    */
-  aggParamBase: computed('q','icName','fundingMechanism','activity','orgCountry', function() {
-    const filters = getProperties(this, 'q', 'icName', 'fundingMechanism', 'activity', 'orgCountry');
+  aggParamBase: computed('q','icName','fundingMechanism','activity','orgCountry','nihSpendingCats', function() {
+    const filters = getProperties(this, 'q', 'icName', 'fundingMechanism', 'activity', 'orgCountry', 'nihSpendingCats');
     return Object.freeze(filters);
   }),
   grantCountParams: computed('aggParamBase', function() {
@@ -67,6 +68,10 @@ export default Controller.extend({
       } else if ( route === 'viz' ) {
         this.transitionToRoute('search.viz').then(()=> { get(this, 'isSearchIndexRoute'); });
       }
+    },
+
+    clearSearch() {
+      set(this, 'q', null);
     }
   }
 });

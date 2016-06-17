@@ -7,5 +7,7 @@
   onchange=(action changeAction)
   as |result|
 }}
-  {{format-item result.id format}} <span class='badge'>{{format-item result.attributes.value 'cleanNum'}}</span>
+  {{#if result.id}}
+    {{format-item result.id format}} <span class='badge'>{{format-item result.attributes.value 'cleanNum'}}</span>
+  {{/if}}
 {{/power-select}}

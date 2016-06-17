@@ -12,16 +12,25 @@ export default Controller.extend({
       const q = get(this, 'searchVar'),
             params = { queryParams: { q } };
 
-      this.transitionToRoute('search', params).then(() => {
-        // reset filters
-        let searchParams = get(this,'searchCtrlr');
-        set(this, 'searchVar', null);
-        searchParams.set('offset', 0);
-        searchParams.set('activity', null);
-        searchParams.set('icName', null);
-        searchParams.set('fundingMechanism', null);
-        searchParams.set('orgCountry', null);
-      });
+      /**
+       * User flow: if query exists, and make new query, clear filters
+       * else if filtering across all grants, and make new query, dont clear filters
+       */
+      if ( !q ) {
+        this.transitionToRoute('search', params);
+      } else {
+        this.transitionToRoute('search', params).then(() => {
+          // reset filters
+          let searchParams = get(this,'searchCtrlr');
+          set(this, 'searchVar', null);
+          searchParams.set('offset', 0);
+          searchParams.set('activity', null);
+          searchParams.set('icName', null);
+          searchParams.set('fundingMechanism', null);
+          searchParams.set('orgCountry', null);
+          searchParams.set('nihSpendingCats', null);
+        });
+      }
     }
   }
 });
