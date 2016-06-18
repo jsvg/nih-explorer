@@ -17,11 +17,13 @@ export default JSONAPISerializer.extend({
     
     // parse offset value and add to meta object
     for ( var key in normalized.links ) {
-      const offsetMatch = normalized.links[key].match(/offset=(\d*)/);
-      if ( offsetMatch ) {
-        normalized.meta.pagination[key] = Number(normalized.links[key].match(/offset=(\d*)/)[1]) || 0;
-      } else {
-        normalized.meta.pagination[key] = 0;
+      if ( normalized.links.hasOwnProperty(key) ) {
+        const offsetMatch = normalized.links[key].match(/offset=(\d*)/);
+        if ( offsetMatch ) {
+          normalized.meta.pagination[key] = Number(normalized.links[key].match(/offset=(\d*)/)[1]) || 0;
+        } else {
+          normalized.meta.pagination[key] = 0;
+        }
       }
     }
     

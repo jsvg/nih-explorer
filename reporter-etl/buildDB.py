@@ -167,7 +167,7 @@ dfLinks = dfLinks\
 def projectArrayMaker(arrays):
     tmp = []
     for r in arrays:
-        if type(r) == list:
+        if isinstance(r, list):
             [tmp.append(i) for i in r]
     return tmp
 pubsLinkTable = dfLinks.groupby('PMID')['projects'].agg(projectArrayMaker)

@@ -1,5 +1,4 @@
-'use strict';
-const expect = require('chai').expect;
+var expect = require('chai').expect;
 // figure out end-to-end integration test later
 describe('Integration Test', function() {
   it('test string is a string', function(done) {

@@ -38,10 +38,8 @@
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
-    "gulp-mocha": "^2.2.0",
     "gulp-nodemon": "^2.0.6",
-    "mocha": "^2.5.3",
-    "superagent": "^2.0.0-alpha.3"
+    "mocha": "^2.5.3"
   },
   "scripts": {
     "start": "./node_modules/.bin/gulp",

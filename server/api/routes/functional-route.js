@@ -16,7 +16,7 @@ module.exports = new Router().get('/:resource', (req, res) => {
   const resource = inflection.singularize(req.params.resource),
         db = req.app.locals.db,
         reqQueryParams = req.query,
-        limit = parseInt(reqQueryParams.limit) || config.defaultLimit;
+        limit = parseInt(reqQueryParams.limit, 10) || config.defaultLimit;
 
   /**
    * Aggregation pipeline params array
@@ -90,7 +90,7 @@ module.exports = new Router().get('/:resource', (req, res) => {
     aggregationParams.unshift(searchOptions);
   }
   if ( reqQueryParams.hasOwnProperty('offset') ) {
-    aggregationParams.push({ $skip : parseInt(reqQueryParams.offset) });
+    aggregationParams.push({ $skip : parseInt(reqQueryParams.offset, 10) });
   }
   if ( !reqQueryParams.hasOwnProperty('aggBy') ) {
     aggregationParams.push({$limit: limit});
@@ -160,9 +160,9 @@ module.exports = new Router().get('/:resource', (req, res) => {
     if ( reqQueryParams.hasOwnProperty('aggBy') ) {
       try {
         res.send(utils.aggSerializer.serialize(results.asyncAggregation));
-      } catch(err) {
-        log('error', 'issue during async serialization\n', err.message);
-        res.status(500).send({err: err.message, results});
+      } catch(e) {
+        log('error', 'issue during async serialization\n', e.message);
+        res.status(500).send({err: e.message, results});
         return;
       }
     } else {
@@ -175,9 +175,9 @@ module.exports = new Router().get('/:resource', (req, res) => {
             reqQueryParams
           ).serialize(results.asyncAggregation)
         );
-      } catch(err) {
-        log('error', 'issue during async serialization\n', err.message);
-        res.status(500).send({err: err.message, results});
+      } catch(e) {
+        log('error', 'issue during async serialization\n', e.message);
+        res.status(500).send({err: e.message, results});
         return;
       }
     }

@@ -6,7 +6,7 @@ const JSONAPISerializer = require('jsonapi-serializer').Serializer,
 
 const serializer = function(metaTotal, resource, schema, query) {
   const baseUrl = [config.apiUrl, resource].join('/');
-  let jsonApiConfig = {
+  const jsonApiConfig = {
     id: '_id',
     meta: {
       count: metaTotal
@@ -29,7 +29,7 @@ const serializer = function(metaTotal, resource, schema, query) {
    * logic for relationships
    */
   let schemaAttrs = [];
-  for ( let key in schema ) {
+  for ( const key in schema ) {
     if ( !schema.hasOwnProperty(key) ) { continue; }
     // map all schema attrs to an array
     schemaAttrs.push(key);
@@ -65,8 +65,8 @@ const serializer = function(metaTotal, resource, schema, query) {
    * 2) Node's stringify fn only provides shallow encoding,
    *    so qs library required
    */
-  const limit = parseInt(query.limit) || config.defaultLimit,
-        offset = parseInt(query.offset) || 0,
+  const limit = parseInt(query.limit, 10) || config.defaultLimit,
+        offset = parseInt(query.offset, 10) || 0,
         total = metaTotal,
         firstQuery = Object.assign({}, query),
         lastQuery = Object.assign({}, query),
@@ -111,8 +111,8 @@ const aggSerializer = new JSONAPISerializer('aggregation', {
  * for fields like activityCode (e.g. activityCode: {$in: [1,2,3]})
  */
 const parseArrayEqualityTerm = function(key, term, valType) {
-  let map = {},
-      termMap = {};
+  const map = {},
+        termMap = {};
   const termKey = '$'+term.split(/([lg]te?)(.*)/g)[1];
   if ( valType === 'Number' ) {
     const termVal = parseFloat(term.split(/([lg]te?)(.*)/g)[2]);
@@ -127,23 +127,23 @@ const parseArrayEqualityTerm = function(key, term, valType) {
 };
 const parseArrayValue = function(key, arrVal, valType) {
   // if value is date or number (i.e. potential for equality param)
-  let map = {};
+  const map = {};
   if ( valType === 'Number' || valType === 'Date' ) {
     // if first value of array has an equality metric
     if ( arrVal[0].match(/[lg]te?/g) ) {
       // setup empty $and array to be filled with range terms
       map.$and = [];
       // push terms into array
-      arrVal.map(term => {
+      arrVal.map((term) => {
         map.$and.push(parseArrayEqualityTerm(key, term, valType));
       });
     // if the item is a number or date, but is not an equality metric
     } else {
       map[key] = {};
       if ( valType === 'Number' ) {
-        map[key].$in = arrVal.map(i => parseFloat(i));
+        map[key].$in = arrVal.map((i) => parseFloat(i));
       } else if ( valType === 'Date' ) {
-        map[key].$in = arrVal.map(i => new Date(i));
+        map[key].$in = arrVal.map((i) => new Date(i));
       }
     }
   // else value must be a string
@@ -199,9 +199,9 @@ module.exports = {
    * Supports set value in array with <field>val1|val2...
    */
   reqQueryHandler(query, schema) {
-    let mongoQuery = {};
+    const mongoQuery = {};
     
-    for ( let key in query ) {
+    for ( const key in query ) {
       /**
        * Three checks to make sure that the key:
        * 1. is not a prototype prop of reqQuery 
@@ -209,10 +209,18 @@ module.exports = {
        * 3. value is not null
        * 4. value is not an empty object or array
        */
-      if ( !query.hasOwnProperty(key) ) { continue; }
-      if ( !schema.hasOwnProperty(key) ) { continue; }
-      if ( !query[key] ) { continue; }
-      if ( !Object.keys(query[key]).length ) { continue; }
+      if ( !query.hasOwnProperty(key) ) {
+        continue;
+      }
+      if ( !schema.hasOwnProperty(key) ) {
+        continue;
+      }
+      if ( !query[key] ) {
+        continue;
+      }
+      if ( !Object.keys(query[key]).length ) {
+        continue;
+      }
 
       // extract val w/ key, get val type
       const val = query[key],
@@ -221,11 +229,11 @@ module.exports = {
       // array case
       if ( Array.isArray(val) ) {
         // need to check for existance of a range to prevent overwriting
-        let parsed = parseArrayValue(key, val, valType);
-        let queryHasAnd = mongoQuery.hasOwnProperty('$and'),
-            valIsRange = parsed.hasOwnProperty('$and');
+        const parsed = parseArrayValue(key, val, valType),
+              queryHasAnd = mongoQuery.hasOwnProperty('$and'),
+              valIsRange = parsed.hasOwnProperty('$and');
         if ( queryHasAnd && valIsRange ) {
-          parsed.$and.map(i => mongoQuery.$and.push(i));
+          parsed.$and.map((i) => mongoQuery.$and.push(i));
         } else {
           Object.assign(mongoQuery, parsed);
         }
