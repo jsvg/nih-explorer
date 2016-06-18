@@ -5,10 +5,10 @@ module.exports = function(environment) {
     modulePrefix: 'client',
     podModulePrefix: 'client/pods',
     environment: environment,
-    baseURL: '/',
+    baseURL: '/nih-explorer',
     apiHost: 'http://localhost:8080',
     apiNamespace: 'api/v1',
-    locationType: 'auto',
+    locationType: 'hash',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
