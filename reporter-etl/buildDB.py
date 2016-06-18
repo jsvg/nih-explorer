@@ -11,7 +11,7 @@ local = MongoClient("mongodb://localhost:27017").reporter
 def loadDF(df, collectionName, db, dropFirst=True):
     if dropFirst:
         db[collectionName].drop()
-    db[collectionName].insert_many(df.to_dict(orient='records'))
+    db[collectionName].insert(df.to_dict(orient='records'))
     print 'Successfully loaded:', collectionName
 
 
@@ -205,7 +205,7 @@ dfPubs = dfPubs.drop('page', axis=1)
 dfPubs = dfPubs.drop_duplicates('_id')
 
 print 'Prepped to load publications - dfPubs shape', dfPubs.shape
-loadDF(dfPubs, 'publication', local)
+loadDF(dfPubs.rename(columns={0:'projects'}), 'publication', local)
 
 # create weighted index
 print 'Creating pubs index'
