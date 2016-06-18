@@ -6,7 +6,6 @@ module.exports = function(environment) {
     podModulePrefix: 'client/pods',
     environment: environment,
     baseURL: '/nih-explorer',
-    apiHost: 'http://localhost:8080',
     apiNamespace: 'api/v1',
     locationType: 'hash',
     EmberENV: {
@@ -23,6 +22,7 @@ module.exports = function(environment) {
   };
 
   if (environment === 'development') {
+    ENV.apiHost = 'http://localhost:8080';
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -43,7 +43,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
+    ENV.apiHost = 'http://jsv.space';
   }
 
   return ENV;

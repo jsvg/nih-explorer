@@ -28,9 +28,11 @@ const serializer = function(metaTotal, resource, schema, query) {
    * resource schema definition, to include
    * logic for relationships
    */
-  let schemaAttrs = [];
+  const schemaAttrs = [];
   for ( const key in schema ) {
-    if ( !schema.hasOwnProperty(key) ) { continue; }
+    if ( !schema.hasOwnProperty(key) ) {
+      continue;
+    }
     // map all schema attrs to an array
     schemaAttrs.push(key);
 
@@ -159,11 +161,11 @@ const parseArrayValue = function(key, arrVal, valType) {
  * check for type is date or number, equality is allowed
  */
 const parseSingleValue = function(key, val, valType) {
-  let map = {};
+  const map = {};
   // inequality mapping
   if ( val.match(/[lg]te?/g) ) {
-    let valMap = {};
-    const termKey = '$'+val.split(/([lg]te?)(.*)/g)[1];
+    const valMap = {},
+          termKey = '$'+val.split(/([lg]te?)(.*)/g)[1];
     if ( valType === 'Number' ) {
       const termVal = parseFloat(val.split(/([lg]te?)(.*)/g)[2]);
       valMap[termKey] = termVal;

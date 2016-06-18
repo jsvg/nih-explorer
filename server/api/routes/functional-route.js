@@ -25,7 +25,7 @@ module.exports = new Router().get('/:resource', (req, res) => {
    * - aggregation methods
    * - special functions
    */
-  let aggregationParams = [];
+  const aggregationParams = [];
 
   /**
    * Handling nonexistent resource error 

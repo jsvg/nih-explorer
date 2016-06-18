@@ -10,8 +10,8 @@ gulp.task('nodemon', (cb) => {
     script: 'app.js',
     }).on('start', () => {
       if (!started) {
-        return cb();
         started = true;
+        cb();
       }
     }).on('restart', () => {
       setTimeout(() => {
