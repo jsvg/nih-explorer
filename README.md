@@ -16,24 +16,25 @@ Consists of three components:
 ### Server
 __Goal__: Provide a {json:api} compliant REST API
 
-__Tech Components__
+__Components__
 * [Node](https://nodejs.org/en/) / [Express](expressjs.com): server setup
 * [JSON-Serializer](https://github.com/SeyZ/jsonapi-serializer): for complex aggregation and search functional routes
 * [Fortune](fortunejs.com): auto-generated resource routes, configured to comply to {json:api}
 * Basic load testing with [artillary.io](https://artillery.io) (results [here](http://htmlpreview.github.com/?https://github.com/jsvg/nih-explorer/blob/master/server/loadtest/report.html))
 
 ### Client
-__Goal__: Provide an interface rich with interactive data visualizations and complex but intuitive UI faceting
+__Goal__: Provide an interface with interactive data visualizations and intuitive UI faceting. Layer feature exposure to prevent inundating users with options.
 
-__Tech Components__
+__Components__
 * [Ember](http://emberjs.com/): MV* framework
 * [C3](c3js.org): quick highly configurable charts
 * [Bootstrap](https://github.com/twbs/bootstrap-sass): SASS-modified version of bootstrap
+* [Balsamiq](https://balsamiq.com/): wireframing program to generate mockups [here](https://github.com/jsvg/nih-explorer/tree/master/wireframes).
 
 ### ETL
 __Goal__: Clean and restructure inherently messy public NIH funding data, and load into a mongo db instance
 
-__Tech Components__
+__Components__
 * [Pandas](http://pandas.pydata.org/): data wrangling library, essential to anything data-related
 * [ipython Notebook](https://ipython.org/notebook.html): web browser-based python IDE
 * [pymongo](https://api.mongodb.com/python/current/): mongo driver to allow mass data loading into mongo
