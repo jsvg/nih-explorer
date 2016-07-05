@@ -43,7 +43,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-    ENV.apiHost = 'http://jsv.space';
+    ENV.apiHost = 'http://localhost:8080';
   }
 
   return ENV;
