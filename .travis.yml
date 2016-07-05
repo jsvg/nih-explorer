@@ -31,16 +31,17 @@ before_install:
   - npm install -g bower
   - npm install -g ember-cli
 install:
-  # Client build
+  # Client install
   - cd ../client
   - npm install
   - bower install
   - npm install phantomjs-prebuilt
-  # Server build
+  # Server install
   - cd ../server
   - npm install
-script:
+  # Client build
   - cd ../client
   - npm rebuild node-sass
   - ember build --environment=production --output-path=../server/public
+script:
   #- npm test
