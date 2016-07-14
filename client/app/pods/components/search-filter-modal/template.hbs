@@ -1,0 +1,46 @@
+{{! modal time }}
+{{#bs-modal open=isShowingModal header=false body=false footer=false}}
+  {{#bs-modal-header}}
+    {{! should eventually be a drop down w options for data filters & data stats }}
+    <div class='modal-title modalTitle'>Dashboard Settings - Data Filters</div>
+  {{/bs-modal-header}}
+  {{#bs-modal-body class='search-filter-modal-body'}}
+    <div class='container-fluid'>
+      <div class='row'>
+        {{! inactive filters }}
+        <div class='inactive-filter-col col-md-6'>
+          <div class='filter-col-header'>
+            <div class='text-center'>Inactive Filters {{fa-icon 'times-circle'}}</div>
+          </div>
+          <div class='filter-col-body'>
+            {{#each filterState as |filter|}}
+              {{#if (not filter.activated)}}
+                <div class='filter-item text-center' {{action 'toggleFilter' filter}}>
+                  {{filter.filterTitle}} {{!fa-icon 'chevron-right' class='hover-icon-right'}}
+                </div>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+        {{! active filters }}
+        <div class='active-filter-col col-md-6'>
+          <div class='filter-col-header'>
+            <div class='text-center'>Active Filters {{fa-icon 'check-circle'}}</div>
+          </div>
+          <div class='filter-col-body'>
+            {{#each filterState as |filter|}}
+              {{#if filter.activated}}
+                <div class='filter-item text-center' {{action 'toggleFilter' filter}}>
+                  {{!fa-icon 'chevron-left' class='hover-icon-left'}} {{filter.filterTitle}}
+                </div>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/bs-modal-body}}
+  {{#bs-modal-footer class='search-filter-modal-footer'}}
+    <i class='text-muted'>Click row to toggle attribute filter</i>
+  {{/bs-modal-footer}}
+{{/bs-modal}}

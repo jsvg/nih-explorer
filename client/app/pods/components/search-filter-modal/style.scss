@@ -1,0 +1,60 @@
+.search-filter-modal-body {
+  // fix for rounded border overlaps
+  .inactive-filter-col {
+    left: 1px;
+  }
+
+  // copied from bootstrap's well.scss
+  .inactive-filter-col,
+  .active-filter-col {
+    @include box-shadow(inset 0 1px 1px rgba($gray-dark, .05));
+    background-color: $well-bg;
+    border: 1px solid $well-border;
+    border-radius: $border-radius-small;
+    margin-bottom: 20px;
+    min-height: 20px;
+    padding: 9px;
+  }
+
+  .filter-col-header {
+    border-bottom: 1px solid $gray-lighter;
+    font-size: 17px;
+    font-variant: small-caps;
+    font-weight: bold;
+    padding: 5px 0;
+  }
+
+  .filter-col-body {
+    background: lighten($well-bg, 10%);
+
+    .filter-item {
+      border-bottom: 1px solid $well-bg;
+      cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
+      overflow: hidden;
+      padding: 5px 0;
+      text-overflow: ellipsis;
+      transition: .2s all ease;
+      white-space: nowrap;
+      &:hover {
+        background: darken($well-bg, 5%);
+      }
+    }
+  }
+
+  .row,
+  .col-md-6 {
+    margin-bottom: 0;
+    padding: 0;
+  }
+}
+
+.search-filter-modal-footer {
+  margin: 0 auto;
+  padding: 8px 15px 10px 0;
+
+  i {
+    font-size: 11px;
+  }
+}

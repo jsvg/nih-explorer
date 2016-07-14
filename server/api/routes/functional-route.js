@@ -7,30 +7,20 @@
 const Router = require('express').Router,
       inflection = require('inflection'),
       utils = require('../route-utils'),
-      schemas = require('../schemas'),
-      config = require('../config'),
       log = require('bragi').log,
       async = require('async');
 
 module.exports = new Router().get('/:resource', (req, res) => {
   const resource = inflection.singularize(req.params.resource),
-        db = req.app.locals.db,
         reqQueryParams = req.query,
-        limit = parseInt(reqQueryParams.limit, 10) || config.defaultLimit;
+        db = req.app.locals.db,
+        params = utils.urlQueryParamsParser(reqQueryParams, resource);
 
   /**
-   * Aggregation pipeline params array
-   * populated by series of phases for
-   * - schema-based filtering
-   * - aggregation methods
-   * - special functions
+   * Handling nonexistent resource error
+   * params returns false if resource doesn't exist 
    */
-  const aggregationParams = [];
-
-  /**
-   * Handling nonexistent resource error 
-   */
-  if ( !schemas.hasOwnProperty(resource) ) {
+  if ( !params ) {
     res.status(400).json({
       status: '400',
       detail: 'Resource does not exist'
@@ -39,81 +29,12 @@ module.exports = new Router().get('/:resource', (req, res) => {
   }
 
   /**
-   * Handling schema-based filtering actions
-   * - schemaAttr=<criteria>
-   * - schemaAttr={gt|gte|lte|lt}<criteria>
-   */
-  const mongoFilterOptions = utils.reqQueryHandler(reqQueryParams, schemas[resource]);
-  aggregationParams.unshift(mongoFilterOptions);
-
-  /**
-   * Handling agg methods
-   * Only execute on aggs if all three properties are present
-   * - aggBy: what field to group by: or if it equals COUNT, then count it
-   * - aggMethod: count, avg, sum, std, max, min
-   * - aggOn: what field to execute aggMethod across
-   *
-   * If aggregation occurs on a nested item, 
-   * $unwind is pushed into aggregationParams
-   */
-  if ( reqQueryParams.hasOwnProperty('aggBy') ) {
-    const aggMap = {$group: {}},
-          aggMethod = reqQueryParams.hasOwnProperty('aggMethod') ?
-            '$'+reqQueryParams.aggMethod : '$sum',
-          aggOn = reqQueryParams.hasOwnProperty('aggOn') ?
-            '$'+reqQueryParams.aggOn : 1;
-
-    // check for proper aggBy param
-    const aggBy = schemas[resource].hasOwnProperty(reqQueryParams.aggBy) ?
-      '$'+reqQueryParams.aggBy : 'total';
-
-    // add $unwind if grouping on array
-    if ( aggBy!== 'total' && schemas[resource][reqQueryParams.aggBy].type.name === 'Array' ) {
-      aggregationParams.push({$unwind: aggBy});
-    }
-
-    aggMap.$group._id = aggBy;
-    aggMap.$group.value = {};
-    aggMap.$group.value[aggMethod] = aggOn;
-    aggregationParams.push(aggMap);
-  }
-
-  /**
-   * Handling special functions
-   * - limit: default = 20
-   * - offset
-   * - q: index search
-   */
-  const searchOptions = {};
-  if ( reqQueryParams.hasOwnProperty('q') ) {
-    searchOptions.$match = { $text: { $search: reqQueryParams.q } };
-    aggregationParams.unshift(searchOptions);
-  }
-  if ( reqQueryParams.hasOwnProperty('offset') ) {
-    aggregationParams.push({ $skip : parseInt(reqQueryParams.offset, 10) });
-  }
-  if ( !reqQueryParams.hasOwnProperty('aggBy') ) {
-    aggregationParams.push({$limit: limit});
-  }
-
-  /**
-   * Sort results
-   * - if query invovles aggregation, sort by value (desc)
-   * - else if query involves a search, sort by relevancy
-   */
-  if ( reqQueryParams.hasOwnProperty('aggBy') ) {
-    aggregationParams.push({$sort: { value: -1 }});
-  } else if ( reqQueryParams.hasOwnProperty('q') ) {
-    aggregationParams.push({$sort: { score: { $meta: 'textScore' }, totalCost: -1 }});
-  }
-
-  /**
    * Handling route debug
    */
   if ( reqQueryParams.debug === 'true' ) {
     res.json({
       'incoming req': reqQueryParams,
-      'mongo': aggregationParams
+      'mongo': params.aggregationParams
     });
     return;
   }
@@ -124,11 +45,11 @@ module.exports = new Router().get('/:resource', (req, res) => {
    */
   const asyncTotal = function(callback) {
     const countCriteria = {};
-    if ( searchOptions.hasOwnProperty('$match') ) {
-      Object.assign(countCriteria, searchOptions.$match);
+    if ( params.searchOptions.hasOwnProperty('$match') ) {
+      Object.assign(countCriteria, params.searchOptions.$match);
     }
-    if ( mongoFilterOptions.hasOwnProperty('$match') ) {
-      Object.assign(countCriteria, mongoFilterOptions.$match);
+    if ( params.mongoFilterOptions.hasOwnProperty('$match') ) {
+      Object.assign(countCriteria, params.mongoFilterOptions.$match);
     }
     db.collection(resource)
       .count(countCriteria, (err, count) => {
@@ -142,7 +63,7 @@ module.exports = new Router().get('/:resource', (req, res) => {
   };
   const asyncAggregation = function(callback) {
     db.collection(resource)
-      .aggregate(aggregationParams, (err, result) => {
+      .aggregate(params.aggregationParams, (err, result) => {
         if ( err ) {
           log('error', 'issue during aggregation query\n', err.message);
           res.status(500).send(err.message);
@@ -160,9 +81,9 @@ module.exports = new Router().get('/:resource', (req, res) => {
     if ( reqQueryParams.hasOwnProperty('aggBy') ) {
       try {
         res.send(utils.aggSerializer.serialize(results.asyncAggregation));
-      } catch(e) {
-        log('error', 'issue during async serialization\n', e.message);
-        res.status(500).send({err: e.message, results});
+      } catch(err) {
+        log('error', 'issue during async serialization\n', err.message);
+        res.status(500).send({err: err.message, results});
         return;
       }
     } else {
@@ -171,13 +92,12 @@ module.exports = new Router().get('/:resource', (req, res) => {
           utils.serializer(
             results.asyncTotal,
             resource,
-            schemas[resource],
             reqQueryParams
           ).serialize(results.asyncAggregation)
         );
-      } catch(e) {
-        log('error', 'issue during async serialization\n', e.message);
-        res.status(500).send({err: e.message, results});
+      } catch(err) {
+        log('error', 'issue during async serialization\n', err.message);
+        res.status(500).send({err: err.message, results});
         return;
       }
     }

@@ -5,7 +5,7 @@ module.exports = function(environment) {
     modulePrefix: 'client',
     podModulePrefix: 'client/pods',
     environment: environment,
-    baseURL: '/nih-explorer',
+    //baseURL: '/nih-explorer',
     apiNamespace: 'api/v1',
     locationType: 'hash',
     EmberENV: {

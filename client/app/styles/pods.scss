@@ -1,7 +1,8 @@
-@import "app/pods/components/search-table/styles";
-@import "app/pods/components/search-table-modal/styles";
-@import "app/pods/components/data-filter/styles";
-@import "app/pods/components/data-stat/styles";
-@import "app/pods/application/style";
-@import "app/pods/search/style";
-@import "app/pods/search/viz/style";
+@import 'app/pods/components/search-table/style';
+@import 'app/pods/components/search-table-modal/style';
+@import 'app/pods/components/search-filter-modal/style';
+@import 'app/pods/components/data-filter/style';
+@import 'app/pods/components/data-stat/style';
+@import 'app/pods/application/style';
+@import 'app/pods/search/style';
+@import 'app/pods/search/viz/style';

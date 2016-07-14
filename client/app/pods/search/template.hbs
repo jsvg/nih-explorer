@@ -62,79 +62,28 @@
     {{! filters }}
     <div id='filter' class='col-md-3'>
       <div class='row text-center'><strong>Filters</strong></div>
-      {{! filter fundingMechanism}}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>Funding Mechanism</h5>
-          {{data-filter
-            resource='grants'
-            filterAttr='fundingMechanism'
-            placeholder='Select funding mechanism'
-            currentParams=aggParamBase
-            selectedValue=fundingMechanism
-            changeAction=(action 'filterSelection' 'fundingMechanism')
-          }}
+
+      {{! flex filter }}
+      {{#each filterProps as |filter|}}
+        <div class='row'>
+          <div class='col-md-12'>
+            <h5>{{filter.filterTitle}}</h5>
+            {{data-filter
+              resource=filter.resource
+              filterAttr=filter.filterAttr
+              placeholder=filter.placeholder
+              currentParams=filter.currentParams
+              selectedValue=filter.selectedValue
+              changeAction=(action 'filterSelection' filter.filterAttr)
+              itemFormat=filter.itemFormat
+            }}
+          </div>
         </div>
-      </div>
-      {{! filter activity }}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>Activity Code</h5>
-          {{data-filter
-            resource='grants'
-            filterAttr='activity'
-            placeholder='Select activity code'
-            currentParams=aggParamBase
-            selectedValue=activity
-            changeAction=(action 'filterSelection' 'activity')
-            itemFormat='upper'
-          }}
-        </div>
-      </div>
-      {{! filter icName }}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>Administering I/C</h5>
-          {{data-filter
-            resource='grants'
-            filterAttr='icName'
-            placeholder='Select I/C'
-            currentParams=aggParamBase
-            selectedValue=icName
-            changeAction=(action 'filterSelection' 'icName')
-          }}
-        </div>
-      </div>
-      {{! filter orgCountry }}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>Organization Country</h5>
-          {{data-filter
-            resource='grants'
-            filterAttr='orgCountry'
-            placeholder='Select organization country'
-            currentParams=aggParamBase
-            selectedValue=orgCountry
-            changeAction=(action 'filterSelection' 'orgCountry')
-          }}
-        </div>
-      </div>
-      {{! filter nihSpendingCats }}
-      <div class='row'>
-        <div class='col-md-12'>
-          <h5>NIH Spending Categories (RCDC)</h5>
-          {{data-filter
-            resource='grants'
-            filterAttr='nihSpendingCats'
-            placeholder='Select an RCDC code'
-            currentParams=aggParamBase
-            selectedValue=nihSpendingCats
-            changeAction=(action 'filterSelection' 'nihSpendingCats')
-          }}
-        </div>
-      </div>
+      {{/each}}
+
       {{! view switch buttons }}
       <div class='row text-center current-view'>
+        {{!--
         <div class='title'><strong>Current View</strong></div>
         <div class='col-md-12 item'>
           {{#bs-button-group}}
@@ -142,8 +91,16 @@
             {{#bs-button class='paginationButton' disabled=(not isSearchIndexRoute) type='primary' size='xs' action='changeRoute' value='viz'}}Data Viz (beta){{/bs-button}}
           {{/bs-button-group}}
         </div>
+        --}}
+        <br>{{#bs-button class='paginationButton' type='primary' size='xs' action='showFilterModal'}}Edit Filters{{/bs-button}}
       </div>
     </div>
 
   </div>
 </div>
+
+{{search-filter-modal
+  isShowingModal=isShowingFilterModal
+  filterState=baseFilterSet
+  toggleFilter='toggleActivation'
+}}
