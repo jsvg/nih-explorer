@@ -5,7 +5,7 @@ module.exports = function(environment) {
     modulePrefix: 'client',
     podModulePrefix: 'client/pods',
     environment: environment,
-    //baseURL: '/nih-explorer',
+    rootURL: '/',
     apiNamespace: 'api/v1',
     locationType: 'hash',
     EmberENV: {
@@ -32,7 +32,6 @@ module.exports = function(environment) {
 
   if (environment === 'test') {
     // Testem prefers this...
-    ENV.baseURL = '/';
     ENV.locationType = 'none';
 
     // keep test console output quieter

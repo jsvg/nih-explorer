@@ -27,6 +27,7 @@ before_install:
   - conda create -q -n test-environment python="2.7" pymongo pandas xlrd
   - source activate test-environment
   - python buildDB.py install
+  - source deactivate test-environment
   # Deps
   - npm install -g bower
   - npm install -g ember-cli
@@ -41,6 +42,6 @@ install:
   # Client build
   - cd ../client
   - npm rebuild node-sass
-  - ember build --environment=production --output-path=../server/public
+  # - ember build --environment=production --output-path=../server/public
 script:
   #- npm test
