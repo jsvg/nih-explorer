@@ -27,6 +27,10 @@ export default Route.extend({
       delete params.q;
     }
     return hash({
+      // IMPORTANT: get(...).query(...).then(...) needs to be refactored
+      // away so that ajax/agg service should be used instead then
+      // models folder can be removed and ember-data dependency dropped
+      //
       // .query() returns table data, .then() sets controller's meta count
       // property to enable smart pagination
       grants: get(this, 'store').query('grant', params).then(result => {

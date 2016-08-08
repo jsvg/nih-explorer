@@ -17,12 +17,16 @@
         {{/bs-form}}
       </ul>
 
-      {{!-- right }}
+      {{! right }}
       <ul class='nav navbar-nav navbar-right'>
-        {{#link-to 'about' tagName='li'}}<a href='#'>About</a>{{/link-to}}
-        {{#link-to 'about' tagName='li'}}<a href='#'>{{fa-icon 'heart-o' size='lg' class='text-info'}}</a>{{/link-to}}
+        {{#bs-dropdown tagName='li'}}
+          {{#bs-dropdown-toggle tagName='a'}}F. Collins <span class='caret'></span>{{/bs-dropdown-toggle}}
+          {{#bs-dropdown-menu}}
+            <li>{{#link-to 'index'}}Home{{/link-to}}</li>
+            <li>{{#link-to 'collections'}}Collections{{/link-to}}</li>
+          {{/bs-dropdown-menu}}
+        {{/bs-dropdown}}
       </ul>
-      --}}
     </div>
   </div>
 </nav>

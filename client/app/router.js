@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('search', function() {
     this.route('viz');
   });
+  this.route('collections');
 });
 
 export default Router;

@@ -58,6 +58,11 @@ export default Mixin.create({
     return Object.freeze(filters);
   }),
 
+  /**
+   * This will eventually will be offloaded to the server
+   * where it can be stored/cached on a user-dependent basis,
+   * which will require POSTing HTTP requests
+   */
   baseFilterSet: [
     // default set (activated true at startup)
     {

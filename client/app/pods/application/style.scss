@@ -5,7 +5,7 @@ $inputcolor: #999999;
   background: $brand; 
   
   .navbar-header > a {
-    color: #fff;
+    color: #fff !important;
     font-size: 1.5em;
     letter-spacing: 1px;
   }
@@ -13,6 +13,14 @@ $inputcolor: #999999;
   .navbar-brand {
     &:hover {
       color: white;
+    }
+  }
+
+  .dropdown-toggle {
+    color: #fff !important;
+
+    &:hover {
+      color: #fff;
     }
   }
 

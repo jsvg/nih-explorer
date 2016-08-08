@@ -1,0 +1,55 @@
+#collection-info {
+  button {
+    background: #fff;
+    border: 1px solid #aaa;
+    border-radius: 1px;
+    color: #333;
+    font-size: 13px;
+    height: 28px;
+    line-height: 28px;
+    margin-bottom: 10px;
+    max-width: auto;
+    padding: 0 1em 2.1em;
+    transition: .2s all ease;
+
+    &:hover {
+      background: lighten($brand, 50%);
+    }
+  }
+
+  // actions links
+  .pull-right {
+    padding-top: .4em;
+    .action-link {
+      color: $link-color;
+      cursor: pointer;
+      display: inline;
+      font-weight: bold;
+      transition: .2s all ease;
+
+      &:hover {
+        color: $brand-success;
+      }
+    }
+  }
+
+  .col-md-12 {
+    border-bottom: 1px dotted gray;
+    color: $gray-lighter;
+  }
+
+  padding-bottom: 30px;
+}
+
+.row-actions {
+  font-size: 1.1em;
+
+  i {
+    padding: 0 .2em;
+    transition: 0.2s all ease;
+
+    &:hover {
+      color: $brand-success;
+    }
+  }
+}
