@@ -10,6 +10,10 @@ module.exports = new Router().post('/collections', (req, res) => {
   const clxn = req.body,
         db = req.app.locals.db;
 
+  // create timestamps
+  clxn.createdOn = new Date();
+  clxn.updatedOn = new Date();
+
   db.collection('collection').insertOne(clxn, err => {
     if ( err ) {
       /**

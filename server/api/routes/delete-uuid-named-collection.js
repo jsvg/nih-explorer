@@ -4,14 +4,14 @@
 
 'use strict';
 const Router = require('express').Router,
+      ObjectID = require('mongodb').ObjectID,
       log = require('bragi').log;
 
-module.exports = new Router().delete('/collections/:uuid/:name', (req, res) => {
-  const uuid = req.params.uuid,
-        name = req.params.name,
+module.exports = new Router().delete('/collections/:id', (req, res) => {
+  const _id = new ObjectID(req.params.id),
         db = req.app.locals.db;
 
-  db.collection('collection').deleteOne({uuid, name}, (err, r) => {
+  db.collection('collection').deleteOne({_id}, (err, r) => {
     if ( err ) {
       log('error', 'issue during collection deletion\n', err.message);
       res.status(500).send(err.message);

@@ -1,14 +1,20 @@
 // search
 import Ember from 'ember';
 import BaseFilterStateProperties from 'client/mixins/data-filter-options';
-const { Controller, computed, get, set } = Ember;
+const { Controller, computed, get, set, inject: {service}, RSVP: {Promise} } = Ember;
+
 export default Controller.extend(BaseFilterStateProperties, {
+  ajax: service(),
+  aggregator: service(),
+
+  isShowingFilterModal: false,
+  isShowingCreateCollectionsModal: false,
+
   /**
    * Dynamically generated data-filter properties
    * based on URL state (aggParamBase) as well as
    * state of baseFilterSet contained in data-filter-options mixin
    */
-  isShowingFilterModal: false,
   filterProps: computed('baseFilterSet.@each.activated', 'aggParamBase', function() {
     const currentParams = get(this, 'aggParamBase');
     let baseSet = get(this, 'baseFilterSet');
@@ -55,8 +61,8 @@ export default Controller.extend(BaseFilterStateProperties, {
 
   actions: {
     /* toggles modal for editing filter states */
-    showFilterModal() {
-      this.toggleProperty('isShowingFilterModal');
+    showModal(type) {
+      this.toggleProperty(`isShowing${type}Modal`);
     },
 
     /* toggles filter activation state @ search-filter-modal component */
@@ -93,6 +99,58 @@ export default Controller.extend(BaseFilterStateProperties, {
     /* triggered by button to clear search */
     clearSearch() {
       set(this, 'q', null);
+    },
+
+    /* creates a collection based on url state and name given from component */
+    createCollection(name) {
+      // note: eventually uuid will be defined by user session management
+      const filterBase = get(this, 'aggParamBase'),
+            uuid = 1;
+      
+      // properties will be attached to this object for POSTing
+      const collection = {};
+      collection.uuid = uuid;
+      collection.name = name;
+
+      /**
+       * Clean up the filterBase for only relevant values,
+       * and attach those values to collection object
+       */
+      for ( let key in filterBase ) {
+        if ( !filterBase.hasOwnProperty(key) ) { continue; }
+        if ( !filterBase[key] ) { continue; }
+        if ( (key === 'offset') || (key === 'limit') ) { continue; }
+        collection[key] = filterBase[key];
+      }
+
+      /**
+       * Fetch aggregated meta values for easy caching on server,
+       * high degree of async here
+       */
+      const agg = get(this, 'aggregator');
+      let aggAsync = (prop, params) => {
+        return new Promise((resolve) => {
+          agg.aggregate('grants', params).then(res => {
+            resolve(collection[prop] = res);
+          });
+        });
+      };
+
+      /**
+       * Trigger parallel promises that, only when complete,
+       * allow POST ajax action, and then transition to
+       * collections route
+       */
+      Promise.all([
+        aggAsync('itemCount', get(this, 'grantCountParams')),
+        aggAsync('sumCost', get(this, 'sumCostParams')),
+        aggAsync('avgCost', get(this, 'avgCostParams'))
+      ]).then(() => {
+        // POST call
+        get(this, 'ajax').post('/collections', { data: collection }).then(() => {
+          this.transitionToRoute('collections');
+        });
+      });
     }
   }
 });

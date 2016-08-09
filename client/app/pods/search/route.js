@@ -43,10 +43,12 @@ export default Route.extend({
   /*
    * Small override in order to 
    * pass meta property to controller
-   * for use in template and logic
+   * for use in template and logic,
+   * and reset modal showing property
    */
   setupController(controller, model) {
     controller.set('meta', this.get('meta'));
+    controller.set('isShowingCreateCollectionsModal', false);
     this._super(controller, model);
   }
 });

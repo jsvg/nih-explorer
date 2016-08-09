@@ -1,0 +1,41 @@
+<table class='table table-hover'>
+  <thead>
+    <th></th>
+    <th>Collection Name</th>
+    <th>Grant Count</th>
+    <th>Sum Cost</th>
+    <th>Average Cost</th>
+    <th>Created</th>
+    <th>Updated</th>
+    <th>Actions</th>
+  </thead>
+  <tbody>
+    {{#each collections as |collection|}}
+      <tr>
+        <td><div>{{input type='checkbox'}}</div></td>
+        <td><div>{{collection.name}}</div></td>
+        <td><div>{{format-item collection.itemCount 'cleanNum'}}</div></td>
+        <td><div>{{format-item collection.sumCost 'currency'}}</div></td>
+        <td><div>{{format-item collection.avgCost 'currency'}}</div></td>
+        <td><div>{{moment-from-now collection.createdOn}}</div></td>
+        <td><div>{{moment-from-now collection.updatedOn}}</div></td>
+        <td>
+          <div class='row-actions'>
+            {{#fa-icon 'search' click=(action rowClicked collection)}}
+              {{#tooltip-on-component class='custom-popover'}}View result set{{/tooltip-on-component}}
+            {{/fa-icon}}
+            {{#fa-icon 'cloud-download'}}
+              {{#tooltip-on-component class='custom-popover'}}Export data{{/tooltip-on-component}}
+            {{/fa-icon}}
+            {{#fa-icon 'pencil'}}
+              {{#tooltip-on-component class='custom-popover'}}Edit collection{{/tooltip-on-component}}
+            {{/fa-icon}}
+            {{#fa-icon 'times' click=(action deleteCollection collection)}}
+              {{#tooltip-on-component class='custom-popover'}}Remove collection{{/tooltip-on-component}}
+            {{/fa-icon}}
+          </div>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

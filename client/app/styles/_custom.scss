@@ -45,3 +45,13 @@
     animation: drop-fade-above .15s reverse;
   }
 }
+
+// to customize ember-tooltips
+.custom-popover {
+  color: #fff;
+  letter-spacing: 1px;
+  font-size: 12px;
+  font-style: normal;
+  text-decoration: none;
+  text-shadow: none;
+}

@@ -17,8 +17,8 @@ Serves index.html file in server/public folder. This file is the result of build
 These are CRUDy routes that facilitate the use of the user stored collections feature. There are four in total.
 * __GET /collections/:uuid__: retrieves all collections for a user
 * __POST /collections__: stores a new collection for a user
-* __PUT /collection__: overwrites an existing collection
-* __DELETE /collection/:uuid/:name__: removes a collection
+* __PUT /collections__: overwrites an existing collection
+* __DELETE /collections/:id__: removes a collection based on its ObjectID
 
 #### Schema based routes
 These are automatically generated routes based on the schema.js file in the server/api folder. The schema objects are consumed by the functional-route.js file (server/api/routes), which creates complex GET routes that allow for:

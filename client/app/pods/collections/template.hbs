@@ -3,13 +3,13 @@
 
   {{! info top row }}
   <div id='collection-info' class='row'>
-    <div class='col-md-12'>
-      <div class='col-md-5 pull-left'>
+    <div class='col-xs-12'>
+      <div class='col-xs-5 pull-left'>
         {{#bs-button size='xs' type='primary' class='clearBtn'}}
           Create new from batch {{fa-icon 'fa-plus-circle'}}
         {{/bs-button}}
       </div>
-      <div class='col-md-7 pull-right text-right'>
+      <div class='col-xs-7 pull-right text-right'>
         <div class='action-link'>Compare</div> |
         <div class='action-link'>Group</div> |
         <div class='action-link'>Combine</div> |
@@ -21,41 +21,19 @@
 
   {{! table }}
   <div class='row'>
-    <div class='col-md-12'>
-
-      <table class='table table-hover'>
-        <thead>
-          <th></th>
-          <th>Collection Name</th>
-          <th>Grant Count</th>
-          <th>Sum Cost</th>
-          <th>Average Cost</th>
-          <th>Created</th>
-          <th>Updated</th>
-          <th>Actions</th>
-        </thead>
-        <tbody>
-          {{#each model as |collection|}}
-            <tr>
-              <td><div>{{input type='checkbox'}}</div></td>
-              <td><div>{{collection.name}}</div></td>
-              <td><div>{{format-item collection.itemCount 'cleanNum'}}</div></td>
-              <td><div>{{format-item collection.sumCost 'currency'}}</div></td>
-              <td><div>{{format-item collection.avgCost 'currency'}}</div></td>
-              <td><div>{{moment-from-now collection.createdOn}}</div></td>
-              <td><div>{{moment-from-now collection.updatedOn}}</div></td>
-              <td>
-                <div class='row-actions'>
-                  {{fa-icon 'cloud-download'}}
-                  {{fa-icon 'pencil'}}
-                  {{fa-icon 'trash'}}
-                </div>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
+    <div class='col-xs-12'>
+      {{#if model}}
+        {{collections-table
+          collections=model
+          deleteCollection=(route-action 'deleteCollection')
+          rowClicked=(route-action 'visitResults')
+        }}
+      {{else}}
+        <div class='col-xs-8 col-xs-offset-2 text-center'>
+          <em>No collections created yet.</em>
+          <p>Create a collection in the <strong>{{link-to 'search view' 'search'}}</strong> if you'd like to store profiles of grant sets.</p>
+        </div>
+      {{/if}}
     </div>
-
   </div>
 </div>

@@ -1,0 +1,33 @@
+{{#bs-modal open=isShowingModal size='sm' header=false body=false footer=false openAction='resetName'}}
+  {{#bs-modal-header}}
+    Create collection
+  {{/bs-modal-header}}
+  {{#bs-modal-body}}
+    <div class='container-fluid'>
+      <div class='col-xs-10 col-xs-offset-1 text-center'>
+        <div class='create-clxns-modal-input-label'><strong>Collection name</strong></div>
+        {{#bs-form
+          action=(action this.attrs.storeCollection name)
+        }}
+          {{bs-form-element
+            controlType='text'
+            placeholder=inputPlaceholder
+            label='Collection name'
+            invisibleLabel=true
+            value=name
+            autofocus=true
+            required=true
+          }}
+        {{/bs-form}}
+        {{#bs-button
+          type='primary'
+          size='sm'
+          disabled=(not name)
+          action=(action this.attrs.storeCollection name)
+        }}
+          Store collection
+        {{/bs-button}}
+      </div>
+    </div>
+  {{/bs-modal-body}}
+{{/bs-modal}}
