@@ -15,7 +15,8 @@ const { Mixin, computed, getProperties } = Ember;
 
 export default Mixin.create({
   queryParams: [
-    'q','offset',
+    'q',
+    'offset',
     'fundingMechanism',
     'activity',
     'icName',

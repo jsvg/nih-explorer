@@ -50,5 +50,29 @@ export default Route.extend({
     controller.set('meta', this.get('meta'));
     controller.set('isShowingCreateCollectionsModal', false);
     this._super(controller, model);
+  },
+
+  /**
+   * Required to drop sticky query params
+   */
+  resetController(controller, isExiting) {
+    // isExiting would be false if only the route's model was changing
+    if (isExiting) {
+      controller.set('q', null);
+      controller.set('offset', 0);
+      controller.set('fundingMechanism', null);
+      controller.set('activity', null);
+      controller.set('icName', null);
+      controller.set('orgCountry', null);
+      controller.set('nihSpendingCats', null);
+      controller.set('applicationType', null);
+      controller.set('edInstType', null);
+      controller.set('coreProjectNum', null);
+      controller.set('programOfficerName', null);
+      controller.set('piNames', null);
+      controller.set('orgDept', null);
+      controller.set('orgState', null);
+      controller.set('orgName', null);
+    }
   }
 });

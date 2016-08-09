@@ -20,11 +20,8 @@ export default Route.extend({
       // clean queryParams
       delete queryParams.uuid;
       delete queryParams._id;
-      if ( queryParams.q ) {
-        this.transitionTo('search', { queryParams });
-      } else {
-        this.transitionTo('search');
-      }
+
+      this.transitionTo('search', { queryParams });
     }
   }
 });
