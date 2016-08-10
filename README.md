@@ -1,6 +1,6 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab5f17f922864a5b99da9c455b3fa8a0)](https://www.codacy.com/app/vangiessen_julian/nih-explorer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsvg/nih-explorer&amp;utm_campaign=Badge_Grade)
 [![Build Status](https://travis-ci.org/jsvg/nih-explorer.svg?branch=master)](https://travis-ci.org/jsvg/nih-explorer)
 [![Dependency Status](https://gemnasium.com/badges/github.com/jsvg/nih-explorer.svg)](https://gemnasium.com/github.com/jsvg/nih-explorer)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab5f17f922864a5b99da9c455b3fa8a0)](https://www.codacy.com/app/vangiessen_julian/nih-explorer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jsvg/nih-explorer&amp;utm_campaign=Badge_Grade)
 
 # NIH Explorer
 
@@ -11,7 +11,12 @@ Consists of three components:
 * An Ember.js web app to provide an ambitious means of exploring of the funding data
 
 ### Demo
-![](http://g.recordit.co/Gw4Lg54pUZ.gif)
+![](http://g.recordit.co/VQBMLhT1BB.gif)
+
+### Approach
+The UX and design approach adopts principles of human-centered design and rapid prototyping. The goal is to consider the technical challenges presented by the novelty of developing an application that is meant to be complex in design and intuitive by nature. Feature ideas flow backwards from the considerations of user desires and pain points (largely speculative in this case).
+
+Feature implementation begins with a [whiteboard sketch](https://github.com/jsvg/nih-explorer/blob/master/design/whiteboarding_create_collections_080416.jpg) done through a simple UI lens and deep UX perspective. The UI is then enhanced in a [wireframing step](https://github.com/jsvg/nih-explorer/blob/master/wireframes/table_view_060115.png) (Balsamiq), which leads to implementation.
 
 ### Server
 __Goal__: Provide a {json:api} compliant REST API
