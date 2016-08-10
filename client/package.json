@@ -49,7 +49,7 @@
     "ember-href-to": "1.4.0",
     "ember-load-initializers": "^0.5.1",
     "ember-moment": "7.0.0-beta.3",
-    "ember-power-select": "https://github.com/jsvg/ember-power-select/tarball/670f4cbc1c2af6bfed0bdfd67609659af951fdf1",
+    "ember-power-select": "https://github.com/jsvg/ember-power-select/tarball/master",
     "ember-resolver": "^2.0.3",
     "ember-route-action-helper": "0.3.3",
     "ember-tether": "0.3.1",
