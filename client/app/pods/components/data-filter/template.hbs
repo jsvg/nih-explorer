@@ -1,14 +1,20 @@
-{{#power-select
-  allowClear=true
-  dropdownClass='slide-fade'
-  options=results
-  searchField='id'
-  placeholder=placeholder
-  selected=(find-by results 'id' selectedValue)
-  onchange=(action changeAction)
-  as |result|
-}}
-  {{#if result.id}}
-    {{format-item result.id format}} <span class='badge'>{{format-item result.attributes.value 'cleanNum'}}</span>
-  {{/if}}
-{{/power-select}}
+<div class='row'>
+  <div class='col-xs-12'>
+    <h5>{{properties.filterTitle}}</h5>
+    {{#power-select
+      allowClear=true
+      dropdownClass='slide-fade'
+      options=promise
+      searchField='id'
+      placeholder=properties.placeholder
+      loadingMessage='Loading...'
+      selected=(find-by promiseResults 'id' properties.selectedValue)
+      onchange=(action changeAction)
+      as |result|
+    }}
+      {{#if result.id}}
+        {{format-item result.id properties.itemFormat}} <span class='badge'>{{format-item result.attributes.value 'cleanNum'}}</span>
+      {{/if}}
+    {{/power-select}}
+  </div>
+</div>

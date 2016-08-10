@@ -4,6 +4,7 @@
   {{! info top row }}
   <div id='info' class='row'>
     <div class='col-xs-12'>
+      {{! current search button }}
       <div class='col-xs-5 pull-left'>
         <div class='tag'>
           {{#if q}}
@@ -14,6 +15,7 @@
           {{/if}}
         </div>
       </div>
+      {{! data stats }}
       <div class='col-xs-7 pull-right'>
         <div class='col-xs-3'>
           {{data-stat
@@ -61,32 +63,24 @@
 
     {{! filters }}
     <div id='filter' class='col-xs-3'>
-      <div class='row text-center'><strong>Filters</strong></div>
+      <div class='row text-center'>
+        <strong>Filters</strong>
+      </div>
 
       {{! flex filter }}
       {{#each filterProps as |filter|}}
-        <div class='row'>
-          <div class='col-xs-12'>
-            <h5>{{filter.filterTitle}}</h5>
-            {{data-filter
-              resource=filter.resource
-              filterAttr=filter.filterAttr
-              placeholder=filter.placeholder
-              currentParams=filter.currentParams
-              selectedValue=filter.selectedValue
-              changeAction=(action 'filterSelection' filter.filterAttr)
-              itemFormat=filter.itemFormat
-            }}
-          </div>
-        </div>
+        {{data-filter
+          properties=filter
+          changeAction=(action 'filterSelection' filter.filterAttr)
+        }}
       {{/each}}
 
       {{! view switch buttons }}
       <div class='row text-center current-view'>
         <div class='col-xs-12 item'>
           {{#bs-button-group}}
-            {{#bs-button class='paginationButton' type='primary' size='xs' action=(action 'showModal' 'Filter')}}Edit Filters{{/bs-button}}
-            {{#bs-button class='paginationButton' type='primary' size='xs' action=(action 'showModal' 'CreateCollections')}}Create Collection{{/bs-button}}
+            {{#bs-button class='paginationButton' type='primary' size='xs' action=(toggle 'isShowingFilterModal' this)}}Edit Filters{{/bs-button}}
+            {{#bs-button class='paginationButton' type='primary' size='xs' action=(toggle 'isShowingCreateCollectionsModal' this)}}Create Collection{{/bs-button}}
           {{/bs-button-group}}
         </div>
       </div>
@@ -98,7 +92,7 @@
 {{search-filter-modal
   isShowingModal=isShowingFilterModal
   filterState=baseFilterSet
-  toggleFilter='toggleActivation'
+  toggleFilter=(action 'toggleActivation')
 }}
 
 {{create-collections-modal

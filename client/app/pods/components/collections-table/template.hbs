@@ -21,13 +21,13 @@
         <td><div>{{moment-from-now collection.updatedOn}}</div></td>
         <td>
           <div class='row-actions'>
-            {{#fa-icon 'search' click=(action rowClicked collection)}}
+            {{#fa-icon 'search' click=(action viewCollection collection)}}
               {{#tooltip-on-component class='custom-popover'}}View result set{{/tooltip-on-component}}
             {{/fa-icon}}
-            {{#fa-icon 'cloud-download'}}
+            {{#fa-icon 'cloud-download' click=(action exportCollection collection)}}
               {{#tooltip-on-component class='custom-popover'}}Export data - coming soon{{/tooltip-on-component}}
             {{/fa-icon}}
-            {{#fa-icon 'pencil'}}
+            {{#fa-icon 'pencil' click=(action editCollection collection)}}
               {{#tooltip-on-component class='custom-popover'}}Edit collection - coming soon{{/tooltip-on-component}}
             {{/fa-icon}}
             {{#fa-icon 'times' click=(action deleteCollection collection)}}

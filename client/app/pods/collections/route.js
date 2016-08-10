@@ -1,5 +1,7 @@
-import Ember from 'ember';
-const { Route, inject: { service }, get } = Ember;
+import Route from 'ember-route';
+import get from 'ember-metal/get';
+import service from 'ember-service/inject';
+
 export default Route.extend({
   ajax: service(),
 
@@ -8,20 +10,44 @@ export default Route.extend({
     return get(this, 'ajax').request(`/collections/${uuid}`);
   },
 
+  extractQueryParams(collection) {
+    const queryParams = {};
+    for(var key in collection) {
+      // gets all filterParams[*] from collection object
+      if( /filterParams/.test(key) ) {
+        let filterName = key.match(/\[(.*)\]/)[1];
+        queryParams[filterName] = collection[key];
+      }
+    }
+    return queryParams;
+  },
+
   actions: {
+    viewCollection(collection) {
+      const queryParams = get(this, 'extractQueryParams')(collection);
+      this.transitionTo('search', { queryParams });
+    },
+
+    editCollection(collection) {
+      console.log('todo', collection);
+    },
+
+    exportCollection(collection) {
+      const queryParams = get(this, 'extractQueryParams')(collection);
+      get(this, 'ajax').request('grants', {
+        method: 'GET',
+        data: queryParams
+      }).then(result => console.log(result));
+      // realistically will happen on server
+      // GET/POST to special node route
+      // responds with static file
+    },
+
     deleteCollection(collection) {
       const url = `collections/${collection._id}`;
       get(this, 'ajax').delete(url).then(() => {
-        // trigger model refresh and subsequent component update
-        this.refresh();
+        this.refresh(); // trigger model refresh and subsequent component update
       });
-    },
-    visitResults(queryParams) {
-      // clean queryParams
-      delete queryParams.uuid;
-      delete queryParams._id;
-
-      this.transitionTo('search', { queryParams });
     }
   }
 });

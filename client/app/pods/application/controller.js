@@ -1,6 +1,9 @@
 // application
-import Ember from 'ember';
-const { Controller, inject: {controller}, get, set } = Ember;
+import Controller from 'ember-controller';
+import get from 'ember-metal/get';
+import set from 'ember-metal/set';
+import controller from 'ember-controller/inject';
+
 export default Controller.extend({
   /**
    * Operations responsible for reseting state of search route

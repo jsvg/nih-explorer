@@ -1,7 +1,10 @@
-import Ember from 'ember';
-const { Component, inject, get, set } = Ember;
+import Component from 'ember-component';
+import get from 'ember-metal/get';
+import set from 'ember-metal/set';
+import service from 'ember-service/inject';
+
 export default Component.extend({
-  aggregator: inject.service(),
+  aggregator: service(),
 
   didReceiveAttrs() {
     const api = get(this, 'aggregator'),

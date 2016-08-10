@@ -1,5 +1,8 @@
-import Ember from 'ember';
-const { Service, inject: {service} , get, RSVP: {Promise} } = Ember;
+import Service from 'ember-service';
+import get from 'ember-metal/get';
+import service from 'ember-service/inject';
+import RSVP from 'rsvp';
+
 export default Service.extend({
   ajax: service(),
 
@@ -7,7 +10,7 @@ export default Service.extend({
     if ( !params.q ) {
       delete params.q;
     }
-    return new Promise((resolve) => {
+    return new RSVP.Promise((resolve) => {
       get(this, 'ajax').request(resource, {
         method: 'GET',
         data: params

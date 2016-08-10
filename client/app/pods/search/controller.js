@@ -1,7 +1,11 @@
 // search
-import Ember from 'ember';
 import BaseFilterStateProperties from 'client/mixins/data-filter-options';
-const { Controller, computed, get, set, inject: {service}, RSVP: {Promise} } = Ember;
+import Controller from 'ember-controller';
+import computed from 'ember-computed';
+import get from 'ember-metal/get';
+import set from 'ember-metal/set';
+import service from 'ember-service/inject';
+import RSVP from 'rsvp';
 
 export default Controller.extend(BaseFilterStateProperties, {
   ajax: service(),
@@ -60,15 +64,10 @@ export default Controller.extend(BaseFilterStateProperties, {
   }),
 
   actions: {
-    /* toggles modal for editing filter states */
-    showModal(type) {
-      this.toggleProperty(`isShowing${type}Modal`);
-    },
-
     /* toggles filter activation state @ search-filter-modal component */
     toggleActivation(filterProps) {
       // reset filter before turning it inactive
-      if (get(this, filterProps.filterAttr)) {
+      if ( get(this, filterProps.filterAttr) ) {
         set(this, filterProps.filterAttr, null);
       }
       set(filterProps, 'activated', !filterProps.activated);
@@ -116,12 +115,14 @@ export default Controller.extend(BaseFilterStateProperties, {
        * Clean up the filterBase for only relevant values,
        * and attach those values to collection object
        */
+      const filterParams = {};
       for ( let key in filterBase ) {
         if ( !filterBase.hasOwnProperty(key) ) { continue; }
         if ( !filterBase[key] ) { continue; }
         if ( (key === 'offset') || (key === 'limit') ) { continue; }
-        collection[key] = filterBase[key];
+        filterParams[key] = filterBase[key];
       }
+      collection.filterParams = filterParams;
 
       /**
        * Fetch aggregated meta values for easy caching on server,
@@ -129,7 +130,7 @@ export default Controller.extend(BaseFilterStateProperties, {
        */
       const agg = get(this, 'aggregator');
       let aggAsync = (prop, params) => {
-        return new Promise((resolve) => {
+        return new RSVP.Promise((resolve) => {
           agg.aggregate('grants', params).then(res => {
             resolve(collection[prop] = res);
           });
@@ -141,7 +142,7 @@ export default Controller.extend(BaseFilterStateProperties, {
        * allow POST ajax action, and then transition to
        * collections route
        */
-      Promise.all([
+      RSVP.Promise.all([
         aggAsync('itemCount', get(this, 'grantCountParams')),
         aggAsync('sumCost', get(this, 'sumCostParams')),
         aggAsync('avgCost', get(this, 'avgCostParams'))

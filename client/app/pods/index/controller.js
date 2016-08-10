@@ -1,6 +1,7 @@
 // index
-import Ember from 'ember';
-const { Controller, get } = Ember;
+import Controller from 'ember-controller';
+import get from 'ember-metal/get';
+
 export default Controller.extend({
   actions: {
     search() {

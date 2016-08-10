@@ -11,26 +11,11 @@
         {{/bs-button}}
       </div>
       <div class='col-xs-7 pull-right text-right'>
-        <div class='action-link'>
-          Compare
-          {{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}
-        </div> |
-        <div class='action-link'>
-          Group
-          {{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}
-        </div> |
-        <div class='action-link'>
-          Combine
-          {{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}
-        </div> |
-        <div class='action-link'>
-          Export
-          {{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}
-        </div> |
-        <div class='action-link'>
-          Delete
-          {{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}
-        </div>
+        <div class='action-link'>Compare{{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}</div> |
+        <div class='action-link'>Group{{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}</div> |
+        <div class='action-link'>Combine{{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}</div> |
+        <div class='action-link'>Export{{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}</div> |
+        <div class='action-link'>Delete{{#tooltip-on-element class='custom-popover' side='bottom'}}Coming soon{{/tooltip-on-element}}</div>
       </div>
     </div>
   </div>
@@ -41,8 +26,10 @@
       {{#if model}}
         {{collections-table
           collections=model
+          viewCollection=(route-action 'viewCollection')
+          editCollection=(route-action 'editCollection')
+          exportCollection=(route-action 'exportCollection')
           deleteCollection=(route-action 'deleteCollection')
-          rowClicked=(route-action 'visitResults')
         }}
       {{else}}
         <div class='col-xs-8 col-xs-offset-2 text-center'>

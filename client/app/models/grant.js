@@ -1,5 +1,4 @@
-import Ember from 'ember';
-const { computed } = Ember;
+import computed from 'ember-computed';
 import Model from 'ember-data/model';
 import attr from 'ember-data/attr';
 import { hasMany } from 'ember-data/relationships';

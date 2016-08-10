@@ -1,6 +1,9 @@
 // search
-import Ember from 'ember';
-const { Route, RSVP: {hash}, get, set } = Ember;
+import Route from 'ember-route';
+import get from 'ember-metal/get';
+import set from 'ember-metal/set';
+import RSVP from 'rsvp';
+
 export default Route.extend({
   queryParams: {
     q: { refreshModel: true },
@@ -21,18 +24,10 @@ export default Route.extend({
   },
 
   model(params) {
-    // need to delete params.q in case where filtering
-    // without an active search (e.g. "cancer")
     if ( !params.q ) {
       delete params.q;
     }
-    return hash({
-      // IMPORTANT: get(...).query(...).then(...) needs to be refactored
-      // away so that ajax/agg service should be used instead then
-      // models folder can be removed and ember-data dependency dropped
-      //
-      // .query() returns table data, .then() sets controller's meta count
-      // property to enable smart pagination
+    return RSVP.hash({
       grants: get(this, 'store').query('grant', params).then(result => {
         set(this, 'meta', result.get('meta'));
         return result;

@@ -1,5 +1,9 @@
-import Ember from 'ember';
-const { Controller, get, computed, computed: { reads } , inject: { controller } } = Ember;
+import Controller from 'ember-controller';
+import computed from 'ember-computed';
+import { reads } from 'ember-computed';
+import get from 'ember-metal/get';
+import controller from 'ember-controller/inject';
+
 export default Controller.extend({
   searchController: controller('search'),
   filterBase: reads('searchController.aggParamBase'),

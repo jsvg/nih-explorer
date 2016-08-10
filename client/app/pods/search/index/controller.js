@@ -1,5 +1,9 @@
-import Ember from 'ember';
-const { Controller, set, computed: { reads }, inject: { controller }, $ } = Ember;
+import Controller from 'ember-controller';
+import { reads } from 'ember-computed';
+import set from 'ember-metal/set';
+import controller from 'ember-controller/inject';
+import $ from 'jquery';
+
 export default Controller.extend({
   searchController: controller('search'),
   pagination: reads('searchController.meta.pagination'),

@@ -1,9 +1,2 @@
-import Ember from 'ember';
-const { Component } = Ember;
-export default Component.extend({
-  actions: {
-    toggleFilter(filterProps) {
-      this.sendAction('toggleFilter', filterProps);
-    }
-  }
-});
+import Component from 'ember-component';
+export default Component.extend({});

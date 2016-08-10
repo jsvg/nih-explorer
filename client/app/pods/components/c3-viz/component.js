@@ -1,6 +1,9 @@
+import Component from 'ember-component';
+import get from 'ember-metal/get';
+import set from 'ember-metal/set';
+import { getProperties } from 'ember-metal/get';
+import { debounce, later, scheduleOnce } from 'ember-runloop';
 import c3 from 'c3';
-import Ember from 'ember';
-const { Component, get, getProperties, set, run } = Ember;
 
 export default Component.extend({
   tagName: 'div',
@@ -17,7 +20,7 @@ export default Component.extend({
       // default animation is 350ms
       // t/f data must by loaded after unload animation (400)
       // or chart will not properly render
-      run.later(this, function() {
+      later(this, function() {
         chart.load(
           // data, axis, color are only mutable elements
           get(this, 'data'),
@@ -78,7 +81,7 @@ export default Component.extend({
     // t/f use 'afterRender' property to ensure
     // state readiness
     try {
-      run.scheduleOnce('afterRender', this, this._setupc3);
+      scheduleOnce('afterRender', this, this._setupc3);
     } catch(err) {
       console.log(err);
     }
@@ -88,7 +91,7 @@ export default Component.extend({
     // if data proprety is dependent on async relationships,
     // animations can cause buggy renders, therefore debounce
     // component update to ensure proper visualization
-    run.debounce(this, this._reload, 360);
+    debounce(this, this._reload, 360);
   },
 
   willDestroyElement() {

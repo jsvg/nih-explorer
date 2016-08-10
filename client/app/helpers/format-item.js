@@ -1,6 +1,4 @@
-import Ember from 'ember';
-const { Helper } = Ember;
-
+import { helper } from 'ember-helper';
 
 function nFormatter(num, digits) {
   const si = [
@@ -19,7 +17,7 @@ function nFormatter(num, digits) {
   return num.toString();
 }
 
-export default Helper.helper(function([item, method]) {
+export default helper(function([item, method]) {
   // handle null items, occasionally passed in by computed property updates
   if ( !item ) { return; }
 

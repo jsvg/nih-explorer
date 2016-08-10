@@ -15,8 +15,8 @@
           <div class='filter-col-body'>
             {{#each filterState as |filter|}}
               {{#if (not filter.activated)}}
-                <div class='filter-item text-center' {{action 'toggleFilter' filter}}>
-                  {{filter.filterTitle}} {{!fa-icon 'chevron-right' class='hover-icon-right'}}
+                <div class='filter-item text-center' {{action toggleFilter filter}}>
+                  {{filter.filterTitle}}
                 </div>
               {{/if}}
             {{/each}}
@@ -30,8 +30,8 @@
           <div class='filter-col-body'>
             {{#each filterState as |filter|}}
               {{#if filter.activated}}
-                <div class='filter-item text-center' {{action 'toggleFilter' filter}}>
-                  {{!fa-icon 'chevron-left' class='hover-icon-left'}} {{filter.filterTitle}}
+                <div class='filter-item text-center' {{action toggleFilter filter}}>
+                  {{filter.filterTitle}}
                 </div>
               {{/if}}
             {{/each}}

@@ -10,8 +10,9 @@
  * 3. add attr to aggParamsBase computed property keys
  * 4. add properties to baseFilterSet
  */
-import Ember from 'ember';
-const { Mixin, computed, getProperties } = Ember;
+import Mixin from 'ember-metal/mixin';
+import computed from 'ember-computed';
+import { getProperties } from 'ember-metal/get';
 
 export default Mixin.create({
   queryParams: [

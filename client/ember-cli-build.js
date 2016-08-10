@@ -13,6 +13,9 @@ module.exports = function(defaults) {
     'ember-bootstrap': {
       'importBootstrapCSS': false,
       'importBootstrapFont': false
+    },
+    'ember-composable-helpers': {
+      only: ['toggle']
     }
   });
 
