@@ -6,8 +6,10 @@
       dropdownClass='slide-fade'
       options=promise
       searchField='id'
-      placeholder=properties.placeholder
-      loadingMessage='Loading...'
+      placeholder=placeholder
+      disabled=disabled
+      loadingMessage='loading...'
+      optionsComponent='data-filter.filter-dropdown'
       selected=(find-by promiseResults 'id' properties.selectedValue)
       onchange=(action changeAction)
       as |result|

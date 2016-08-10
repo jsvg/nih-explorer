@@ -17,3 +17,11 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+.ember-power-select-option {
+  transition: 0.1s all ease;
+  &:hover {
+    background: $ember-power-select-highlighted-background;
+    color: lighten($gray-lighter, 20%);
+  }
+}

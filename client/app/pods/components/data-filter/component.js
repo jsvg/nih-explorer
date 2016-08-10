@@ -1,10 +1,14 @@
 import Component from 'ember-component';
+import { reads } from 'ember-computed';
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
 import service from 'ember-service/inject';
 
 export default Component.extend({
   ajax: service(),
+  noResults: false,
+  disabled: false,
+  placeholder: reads('properties.placeholder'),
 
   didReceiveAttrs() {
     const ajax = get(this, 'ajax'),
@@ -22,6 +26,12 @@ export default Component.extend({
           if ( !that.isDestroyed ) {
             set(that, 'promiseResults', result.data);
           }
+          // no results
+          if ( result.data[0].id === '' ) {
+            set(that, 'noResults', true);
+            set(that, 'placeholder', 'No options available');
+            set(that, 'disabled', true);
+          }
           return result.data;
         }).catch(err => {
           console.log(err);
@@ -30,5 +40,6 @@ export default Component.extend({
     }
 
     set(this, 'promise', getData(this));
-  }
+  },
+
 });

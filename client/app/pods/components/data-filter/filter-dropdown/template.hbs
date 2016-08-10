@@ -1,0 +1,32 @@
+{{#if loading}}
+  {{#if loadingMessage}}
+    <li 
+     class='ember-power-select-option ember-power-select-option--loading-message'
+     role='option'
+    >
+      {{fa-icon 'spinner' spin=true}} {{loadingMessage}}
+    </li>
+  {{/if}}
+{{else}}
+  {{#each optionsSet as |opt index|}}
+    <li
+     class='ember-power-select-option'
+     role='option'
+     aria-disabled={{opt.disabled}}
+     aria-current={{eq opt highlighted}}
+     data-option-index='{{index}}'
+    >
+     {{yield opt}}
+   </li>
+  {{/each}}
+  {{#if (not allOptionsLoaded)}}
+    <li 
+     class='ember-power-select-option ember-power-select-load-more text-muted'
+     role='option'
+     data-option-index='loadMore'
+     {{action 'loadMore'}}
+    >
+      {{fa-icon 'plus-circle' size='xs'}} load more options
+    </li>
+  {{/if}}
+{{/if}}

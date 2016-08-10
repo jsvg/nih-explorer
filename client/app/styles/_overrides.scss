@@ -85,6 +85,12 @@ $ember-power-select-trigger-rtl-padding: 0 8px 0 16px !default;
 $ember-power-select-multiple-option-padding: 0 4px !default;
 
 
+// Custom
+.ember-power-select-load-more {
+  border-top: 1px solid $ember-power-select-border-color;
+  line-height: 2;
+}
+
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
