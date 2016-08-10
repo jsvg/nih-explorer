@@ -16,7 +16,7 @@ Consists of three components:
 ### Approach
 The UX and design approach adopts principles of human-centered design and rapid prototyping. The goal is to consider the technical challenges presented by the novelty of developing an application that is meant to be complex in design and intuitive by nature. Feature ideas flow backwards from the considerations of user desires and pain points (largely speculative in this case).
 
-Feature implementation begins with a [whiteboard sketch](https://github.com/jsvg/nih-explorer/blob/master/design/whiteboarding_create_collections_080416.jpg) done through a simple UI lens and deep UX perspective. The UI is then enhanced in a [wireframing step](https://github.com/jsvg/nih-explorer/blob/master/wireframes/table_view_060115.png) (Balsamiq), which leads to implementation.
+Feature implementation begins with a [whiteboard sketch](https://github.com/jsvg/nih-explorer/blob/master/design/whiteboarding_create_collections_080416.jpg) done through a simple UI lens and deep UX perspective. The UI is then enhanced in a [wireframing step](https://github.com/jsvg/nih-explorer/blob/master/design/create_collections_080416.pdf) (Balsamiq), which leads to implementation.
 
 ### Server
 __Goal__: Provide a {json:api} compliant REST API
