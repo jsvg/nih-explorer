@@ -10,28 +10,42 @@ export default Controller.extend({
    * when conducting a new query on the search bar param
    */
   searchCtrlr: controller('search'),
+  placeholder: 'Search NIH spending...',
   actions: {
     search() {
       const q = get(this, 'searchVar'),
-            params = { queryParams: { q } };
+            transitionParams = { queryParams: { q } };
 
       /**
        * User flow: if query exists, and make new query, clear filters
        * else if filtering across all grants, and make new query, dont clear filters
        */
+      set(this, 'searchVar', null);
+      set(this, 'placeholder', 'searching...');
       if ( !q ) {
-        this.transitionToRoute('search', params);
+        this.transitionToRoute('search', transitionParams).then(() => {
+          set(this, 'placeholder', 'Search NIH spending...');
+        });
       } else {
-        this.transitionToRoute('search', params).then(() => {
-          // reset filters
-          let searchParams = get(this,'searchCtrlr');
-          set(this, 'searchVar', null);
-          searchParams.set('offset', 0);
-          searchParams.set('activity', null);
-          searchParams.set('icName', null);
-          searchParams.set('fundingMechanism', null);
-          searchParams.set('orgCountry', null);
-          searchParams.set('nihSpendingCats', null);
+        this.transitionToRoute('search', transitionParams).then(() => {
+          // reset search bar
+          set(this, 'placeholder', 'Search NIH spending...');
+          // reset query param filters
+          const searchRouteCtrlr = get(this,'searchCtrlr');
+          searchRouteCtrlr.set('offset', 0);
+          searchRouteCtrlr.set('fundingMechanism', null);
+          searchRouteCtrlr.set('activity', null);
+          searchRouteCtrlr.set('icName', null);
+          searchRouteCtrlr.set('orgCountry', null);
+          searchRouteCtrlr.set('nihSpendingCats', null);
+          searchRouteCtrlr.set('applicationType', null);
+          searchRouteCtrlr.set('edInstType', null);
+          searchRouteCtrlr.set('coreProjectNum', null);
+          searchRouteCtrlr.set('programOfficerName', null);
+          searchRouteCtrlr.set('piNames', null);
+          searchRouteCtrlr.set('orgDept', null);
+          searchRouteCtrlr.set('orgState', null);
+          searchRouteCtrlr.set('orgName', null);
         });
       }
     }

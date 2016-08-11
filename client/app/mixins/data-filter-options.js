@@ -9,6 +9,7 @@
  * 2. set default Mixin property to null or 0
  * 3. add attr to aggParamsBase computed property keys
  * 4. add properties to baseFilterSet
+ * 5. edit qp reset in application controller
  */
 import Mixin from 'ember-metal/mixin';
 import computed from 'ember-computed';

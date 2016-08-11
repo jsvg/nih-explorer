@@ -9,10 +9,10 @@
     <div class='collapse navbar-collapse'>
       {{! left }}
       <ul class='nav navbar-nav'>
-        {{#bs-form class='navbar-form navbar-left' action='search' submitOnEnter=true novalidate=true}}
+        {{#bs-form class='navbar-form navbar-left' action='search' novalidate=true}}
           {{bs-form-element
             controlType='text'
-            placeholder='Search NIH spending...'
+            placeholder=placeholder
             value=searchVar}}
         {{/bs-form}}
       </ul>

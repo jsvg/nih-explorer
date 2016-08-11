@@ -16,27 +16,29 @@ export default Component.extend({
           params = Object.assign({aggBy}, props.currentParams);
 
     if ( ! params.q ) { delete params.q; }
-
     return ajax.request(props.resource, {
       method: 'GET',
       data: params
     }).then(result => {
       if ( !that.isDestroyed ) {
         set(that, 'promiseResults', result.data);
+
+        // no results or one null result
+        if ( (result.data[0].id === '') && (result.data.length <= 1) ) {
+          set(that, 'noResults', true);
+          set(that, 'placeholder', 'No options available');
+        // needs to be reset otherwise
+        } else {
+          set(that, 'noResults', false);
+          set(that, 'placeholder', props.placeholder);
+        }
+        return result.data;
       }
-      // no results or one null result
-      if ( (result.data[0].id === '') && (result.data.length <= 1) ) {
-        set(that, 'noResults', true);
-        set(that, 'placeholder', 'No options available');
-      // needs to be reset otherwise
-      } else {
-        set(that, 'noResults', false);
-        set(that, 'placeholder', props.placeholder);
-      }
-      return result.data;
     }).catch(err => {
       console.log('data-filter component error:', err);
-      return {id: 'error'};
+      if ( !that.isDestroyed ) {
+        return {id: 'error'};
+      }
     });
   },
 
@@ -47,6 +49,7 @@ export default Component.extend({
 
   didUpdateAttrs() {
     set(this, 'loading', true);
+    set(this, 'placeholder', 'Searching...');
   }
 
 });

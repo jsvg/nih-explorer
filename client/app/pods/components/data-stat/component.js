@@ -17,12 +17,16 @@ export default Component.extend({
       method: 'GET',
       data: params
     }).then(result => {
-      set(this, 'statVal', result.data[0].attributes.value);
-      set(this, 'isLoading', false);
+      if ( !this.isDestroyed ) {
+        set(this, 'statVal', result.data[0].attributes.value);
+        set(this, 'isLoading', false);
+      }
     }).catch(err => {
       console.log(err);
-      set(this, 'statVal', '-');
-      set(this, 'isLoading', false);
+      if ( !this.isDestroyed ) {
+        set(this, 'statVal', '-');
+        set(this, 'isLoading', false);
+      }
     });
   },
 
