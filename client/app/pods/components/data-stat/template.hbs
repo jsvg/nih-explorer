@@ -1,9 +1,13 @@
 <div class='text-center'>
   <div class='data-stat-val'>
-    {{#if statVal}}
-      {{format-item statVal resultFormat}}
+    {{#if isLoading}}
+      {{fa-icon 'spinner' spin=true}} {{loadingMessage}}
     {{else}}
-      -
+      {{#if statVal}}
+        {{format-item statVal resultFormat}}
+      {{else}}
+        -
+      {{/if}}
     {{/if}}
   </div>
   <div class='data-stat-desc'>

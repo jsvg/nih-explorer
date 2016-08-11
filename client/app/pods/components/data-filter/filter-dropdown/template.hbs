@@ -1,4 +1,4 @@
-{{#if loading}}
+{{#if select.loading}}
   {{#if loadingMessage}}
     <li 
      class='ember-power-select-option ember-power-select-option--loading-message'
@@ -13,10 +13,10 @@
      class='ember-power-select-option'
      role='option'
      aria-disabled={{opt.disabled}}
-     aria-current={{eq opt highlighted}}
+     aria-current={{eq opt select.highlighted}}
      data-option-index='{{index}}'
     >
-     {{yield opt}}
+     {{yield opt select}}
    </li>
   {{/each}}
   {{#if (not allOptionsLoaded)}}

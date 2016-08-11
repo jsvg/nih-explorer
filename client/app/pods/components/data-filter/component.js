@@ -43,6 +43,10 @@ export default Component.extend({
   didReceiveAttrs() {
     this._super(...arguments);
     set(this, 'results', get(this, 'promise')(this));
+  },
+
+  didUpdateAttrs() {
+    set(this, 'loading', true);
   }
 
 });

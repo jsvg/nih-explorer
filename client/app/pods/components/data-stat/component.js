@@ -4,20 +4,30 @@ import set from 'ember-metal/set';
 import service from 'ember-service/inject';
 
 export default Component.extend({
-  aggregator: service(),
-  
-  statVal: null,
-  resource: null,
+  ajax: service(),
 
   didReceiveAttrs() {
-    const api = get(this, 'aggregator'),
+    this._super(...arguments);
+    const ajax = get(this, 'ajax'),
           resource = get(this, 'resource'),
           params = get(this, 'params');
 
-    api.aggregate(resource, params).then(val => {
-      if ( !this.isDestroyed ) {
-        set(this, 'statVal', val);
-      }
+    if ( ! params.q ) { delete params.q; }
+    return ajax.request(resource, {
+      method: 'GET',
+      data: params
+    }).then(result => {
+      set(this, 'statVal', result.data[0].attributes.value);
+      set(this, 'isLoading', false);
+    }).catch(err => {
+      console.log(err);
+      set(this, 'statVal', '-');
+      set(this, 'isLoading', false);
     });
+  },
+
+  didUpdateAttrs() {
+    this._super(...arguments);
+    set(this, 'isLoading', true);
   }
 });
