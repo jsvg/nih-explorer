@@ -1,31 +1,30 @@
 import Component from 'ember-component';
-import { later, once } from 'ember-runloop';
+import { later, once, next } from 'ember-runloop';
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
 
 export default Component.extend({
   tagName: 'div',
   classNames: ['loading-slider'],
-  classNameBindings: 'expanding',
-  duration: 300,
-  speed: 800,
   color: '#2CFF00',
+
+  didInsertElement() {
+    this.$().html('<span>');
+  },
 
   didReceiveAttrs() {
     if ( get(this, 'isLoading') ) {
-      console.log('loading die');
-      once(this, function() {
-        console.log('loading once die');
-        this.animate();
-      });
+      once(this, 'animate');
     } else {
-      console.log('stop die');
       set(this, 'isLoaded', true);
     }
   },
 
-  didInsertElement() {
-    this.$().html('<span>');
+  didUpdateAttrs() {
+    if ( get(this, 'isLoading') && !get(this, 'isLoaded') ) {
+      this.$().empty();
+      next(this, 'animate');
+    }
   },
 
   animate() {
@@ -34,45 +33,54 @@ export default Component.extend({
         innerWidth = 0,
         outerWidth = this.$().width(),
         stepWidth = Math.round(outerWidth / 50);
-    const self = this,
-        inner = this.$('<span>'),
-        outer = this.$(),
-        duration = get(this, 'duration'),
-        color = get(this, 'color');
+    const inner = this.$('<span>'),
+          outer = this.$(),
+          color = get(this, 'color');
 
+    outer.show(); // in case bar was faded out previously
     outer.append(inner);
     inner.css('background-color', color);
 
     const interval = window.setInterval(() => {
-      //console.log('int', elapsedTime);
       elapsedTime = elapsedTime + 10;
-      inner.width(innerWidth = innerWidth + stepWidth);
-
-      // slow the animation if we used more than 75% the estimated duration
-      // or 66% of the animation width
-      if (elapsedTime > (duration * 0.75) || innerWidth > (outerWidth * 0.66)) {
-        // don't stop the animation completely
+      innerWidth = innerWidth + stepWidth;
+      inner.width(innerWidth);
+      let percentComplete = innerWidth/outerWidth;
+      
+      // slow animation when past 60%
+      if ( percentComplete > 0.6 && !get(this, 'isLoaded') ) {
+        // easing step down to 1px
         if (stepWidth > 1) {
           stepWidth = stepWidth * 0.95;
+        // then gradually reduce to a halt
+        } else {
+          stepWidth = Math.pow(stepWidth, (1/3));
+        }
+        // halt at 99% completion
+        if ( percentComplete > 0.99 ) {
+          stepWidth = 0;
         }
       }
 
+      // activity has finished, accelerate to completion
+      if ( get(this, 'isLoaded') ) {
+        if (stepWidth < 10) {
+          stepWidth = 10;
+        }
+        stepWidth = stepWidth + stepWidth;
+      }
+
+      // activity is done, roll up animation
       if (innerWidth > outerWidth) {
         later(() => {
-          outer.empty();
+          outer.fadeOut({
+            duration: 600,
+            done() { outer.empty(); }
+          });
           window.clearInterval(interval);
         }, 50);
       }
 
-      // the activity has finished
-      if (get(self, 'isLoaded')) {
-        // start with a sizable pixel step
-        if (stepWidth < 10) {
-          stepWidth = 10;
-        }
-        // accelerate to completion
-        stepWidth = stepWidth + stepWidth;
-      }
     }, 10);
   }
 });
