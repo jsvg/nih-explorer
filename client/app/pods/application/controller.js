@@ -23,13 +23,9 @@ export default Controller.extend({
       set(this, 'searchVar', null);
       set(this, 'placeholder', 'searching...');
       if ( !q ) {
-        this.transitionToRoute('search', transitionParams).then(() => {
-          set(this, 'placeholder', 'Search NIH spending...');
-        });
+        this.transitionToRoute('search', transitionParams);
       } else {
         this.transitionToRoute('search', transitionParams).then(() => {
-          // reset search bar
-          set(this, 'placeholder', 'Search NIH spending...');
           // reset query param filters
           const searchRouteCtrlr = get(this,'searchCtrlr');
           searchRouteCtrlr.set('offset', 0);

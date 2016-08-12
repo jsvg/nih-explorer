@@ -1,0 +1,14 @@
+.loading-slider {
+  height: 2px;
+  left: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99999;
+
+  span {
+    height: 2px;
+    position: inherit;
+  }
+}

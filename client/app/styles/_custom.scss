@@ -67,3 +67,102 @@
   color: #e22626;
   line-height: 100px;
 }
+
+
+// Loading notice styles
+// ------------------------------------------
+
+.loading-notice {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  margin: 0 auto;
+  width: calc(100% - 275px);
+  height: 100%;
+  text-align: center;
+
+  .wrapper {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: $gray-lighter;
+    padding: 20px;
+    width: 140px;
+  }
+
+  &.apploading {
+    left: 0;
+    width: 100%;
+  }
+
+  .loading-text {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: $brand-success;
+    font-weight: 300;
+  }
+
+  // adapted from @tobiasahlin's spinkit: http://tobiasahlin.com/spinkit/
+  .spinner {
+    margin: 0 auto 10px;
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 10px;
+
+    > div {
+      display: inline-block;
+      -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+      animation: stretchdelay 1.2s infinite ease-in-out;
+      margin-left: 3px;
+      border-radius: 50px;
+      background-color: $brand-primary;
+      width: 6px;
+      height: 100%;
+
+      &:first-child { margin-left: 0; }
+    }
+
+    .rect2 {
+      -webkit-animation-delay: -1.1s;
+      animation-delay: -1.1s;
+    }
+
+    .rect3 {
+      -webkit-animation-delay: -1s;
+      animation-delay: -1s;
+    }
+
+    .rect4 {
+      -webkit-animation-delay: -.9s;
+      animation-delay: -.9s;
+    }
+
+    .rect5 {
+      -webkit-animation-delay: -.8s;
+      animation-delay: -.8s;
+    }
+  }
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(.4); }
+  20% { -webkit-transform: scaleY(1); }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    -webkit-transform: scaleY(.4);
+    transform: scaleY(.4);
+  }
+
+  20% {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+}

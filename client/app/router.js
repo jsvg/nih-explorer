@@ -11,6 +11,7 @@ Router.map(function() {
     this.route('viz');
   });
   this.route('collections');
+  this.route('loading');
 });
 
 export default Router;
