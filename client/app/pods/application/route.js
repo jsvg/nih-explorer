@@ -19,9 +19,9 @@ export default Route.extend({
  */
 Route.reopen({
   beforeModel() {
-    // rapid toggle of property triggers 
-    // didUpdateAttrs() on loading-slider
-    this.controllerFor('application').set('isLoading', false);
+    // rapid toggle of property triggers
+    // didUpdateAttrs() on loading-slider - happening in bg on component
+	this.controllerFor('application').set('isLoading', false);
     this.controllerFor('application').set('isLoading', true);
   },
   actions: {
@@ -29,6 +29,7 @@ Route.reopen({
       $('#apploading').fadeOut('fast');
       this.controllerFor('application').set('isLoading', false);
     },
+	//transition is a promise that fulfills when loading state is done of any request
     loading(transition, originRoute) {
       const ctrllr = this.controllerFor('application');
       ctrllr.set('isLoading', true);
