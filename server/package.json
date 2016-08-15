@@ -26,6 +26,7 @@
     "bragi": "^0.1.3",
     "compression": "^1.6.2",
     "express": "^4.13.4",
+    "express-csv": "^0.6.0",
     "fortune": "^4.0.5",
     "fortune-json-api": "^2.0.3",
     "fortune-mongodb": "^1.1.2",
