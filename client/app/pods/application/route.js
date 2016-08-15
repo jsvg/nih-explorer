@@ -1,14 +1,6 @@
 import Route from 'ember-route';
 import $ from 'jquery';
 export default Route.extend({
-  /**
-   * Remove loading animation in index.html
-   * after static assets have been downloaded
-   */
-  afterModel() {
-    $('#apploading').remove();
-  },
-
   actions: {
     didTransition() {
       this._super(...arguments);
@@ -21,10 +13,22 @@ export default Route.extend({
 /**
  * Attach loading actions to all routes
  * toggle isLoading property controlls
- * loading-slider component
+ * loading-slider component,
+ * and remove loading animation
+ * from index.html after static assets DLd
  */
 Route.reopen({
+  beforeModel() {
+    // rapid toggle of property triggers 
+    // didUpdateAttrs() on loading-slider
+    this.controllerFor('application').set('isLoading', false);
+    this.controllerFor('application').set('isLoading', true);
+  },
   actions: {
+    didTransition() {
+      $('#apploading').fadeOut('fast');
+      this.controllerFor('application').set('isLoading', false);
+    },
     loading(transition, originRoute) {
       const ctrllr = this.controllerFor('application');
       ctrllr.set('isLoading', true);

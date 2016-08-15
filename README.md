@@ -11,7 +11,7 @@ Consists of three components:
 * An Ember.js web app to provide an ambitious means of exploring of the funding data
 
 ### Demo
-![](http://g.recordit.co/VQBMLhT1BB.gif)
+![](http://g.recordit.co/hrkevEFTSH.gif)
 
 ### Approach
 The UX and design approach adopts principles of human-centered design and rapid prototyping. The goal is to consider the technical challenges presented by the novelty of developing an application that is meant to be complex in design and intuitive by nature. Feature ideas flow backwards from the considerations of user desires and pain points (largely speculative in this case).
