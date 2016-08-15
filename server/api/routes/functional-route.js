@@ -54,8 +54,11 @@ module.exports = new Router().get('/:resource', (req, res) => {
     const cursor = db.collection(resource)
       .aggregate(params.aggregationParams, aggOptions);
     cursor.toArray().then((docs) => {
-      // add headers to file
+      // add headers to file, then set headers
       docs.unshift(Object.keys(docs[0]));
+      res.setHeader('Content-disposition', 'attachment; filename=export.csv');
+      res.setHeader('Content-type', 'text/csv');
+
       res.csv(docs);
     }).catch((err) => {
       log('error', 'issue during export', err);
