@@ -30,7 +30,18 @@
           editCollection=(route-action 'editCollection')
           exportCollection=(route-action 'exportCollection')
           deleteCollection=(route-action 'deleteCollection')
+		  toggleModal=(route-action 'toggleModal')
         }}
+		{{clxn-delve-modal
+			isShowingModal=isShowingModal
+		}}
+		{{!clxn-delve-modal
+		  isShowingModal=isShowingModal
+		  clxnObject=clxnObject
+
+		  see search-table-modal for how to pass object from one compoennt to another
+		  in particular, action selectGrant in search-table/template and its corresponding search/index/template
+		}}
       {{else}}
         <div class='col-xs-8 col-xs-offset-2 text-center'>
           <em>No collections created yet.</em>

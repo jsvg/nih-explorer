@@ -22,6 +22,11 @@ export default Route.extend({
     return queryParams;
   },
 
+  setupController(controller) {
+	  this._super(...arguments);
+	  controller.set('isShowingModal', false);
+  },
+
   actions: {
     viewCollection(collection) {
       const queryParams = get(this, 'extractQueryParams')(collection);
@@ -48,6 +53,12 @@ export default Route.extend({
       get(this, 'ajax').delete(url).then(() => {
         this.refresh(); // trigger model refresh and subsequent component update
       });
-    }
+  },
+
+  	toggleModal(){
+		const isShowingModal = this.controllerFor('collections').get('isShowingModal');
+		this.controllerFor('collections').set('isShowingModal', !isShowingModal);
+		console.log('entering toggleModal()');
+  	}
   }
 });
