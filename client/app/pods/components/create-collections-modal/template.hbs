@@ -1,4 +1,4 @@
-{{#bs-modal open=isShowingModal size='sm' header=false body=false footer=false openAction='resetName'}}
+{{#bs-modal open=isShowingModal size='sm' header=false body=false footer=false openAction=(action (toggle 'name' this null))}}
   {{#bs-modal-header}}
     Create collection
   {{/bs-modal-header}}
@@ -7,7 +7,7 @@
       <div class='col-xs-10 col-xs-offset-1 text-center'>
         <div class='create-clxns-modal-input-label'><strong>Collection name</strong></div>
         {{#bs-form
-          action=(action this.attrs.storeCollection name)
+          action=(action storeCollection name)
         }}
           {{bs-form-element
             controlType='text'
@@ -23,7 +23,7 @@
           type='primary'
           size='sm'
           disabled=(not name)
-          action=(action this.attrs.storeCollection name)
+          action=(action storeCollection name)
         }}
           Store collection
         {{/bs-button}}

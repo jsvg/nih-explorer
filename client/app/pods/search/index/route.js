@@ -2,28 +2,33 @@ import Route from 'ember-route';
 import $ from 'jquery';
 
 export default Route.extend({
-  activate() {
-    this.controllerFor('search').set('isSearchIndexRoute', true);
-  },
-  deactivate() {
-    this.controllerFor('search').set('offset', 0);
-    this.controllerFor('search').set('isSearchIndexRoute', false);
-  },
+  /**
+   * Set initial modal state to not show
+   * and make search route model's pagination
+   * links in JSON response available for table
+   */
   setupController(controller) {
     this._super(...arguments);
-    const paginationJsonData = this.controllerFor('search').get('meta.pagination');
-    controller.set('isShowingModal', false);
-    controller.set('paginationLinks', paginationJsonData);
+    const paginationLinks = this.controllerFor('search').get('meta.pagination');
+    controller.setProperties({
+      isShowingModal: false,
+      paginationLinks
+    });
   },
+
   actions: {
-    /* line-item grant modals */
-    showModalAndSetGrant(grant) {
-      this.controller.set('modalGrant', grant);
-      this.controller.set('isShowingModal', true);
-    },
     /**
-     * pagination function used by table
-     * reset by filterSelection()
+     * Sets modalGrant to grant
+     * of clicked table row
+     */
+    setModalGrant(grant) {
+      this.controller.set('modalGrant', grant);
+    },
+
+    /**
+     * Pagination function used by table
+     * prev and next buttons. Reset by 
+     * filterSelection() in parent route
      */
     paginator(cursorPosition) {
       this.controllerFor('search').set('offset', Number(cursorPosition));

@@ -9,7 +9,7 @@
         <div class='tag'>
           {{#if q}}
             Current search: <strong>{{q}}</strong>
-            <span class='ember-power-select-clear-btn search-clear-btn' {{action 'clearSearch'}}>×</span>
+            <span class='ember-power-select-clear-btn search-clear-btn' {{action (toggle 'q' this null)}}>×</span>
           {{else}}
             No active search - all grants in view
           {{/if}}
@@ -71,7 +71,7 @@
       {{#each filterProps as |filter|}}
         {{data-filter
           properties=filter
-          changeAction=(action 'filterSelection' filter.filterAttr)
+          chooseItem=(action 'filterSelection' filter.filterAttr)
         }}
       {{/each}}
 

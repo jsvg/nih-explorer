@@ -1,26 +1,43 @@
 // search
 import BaseFilterStateProperties from 'client/mixins/data-filter-options';
 import Controller from 'ember-controller';
-import computed from 'ember-computed';
-import get from 'ember-metal/get';
+import computed, { alias } from 'ember-computed';
+import get, { getProperties } from 'ember-metal/get';
 import set from 'ember-metal/set';
 import service from 'ember-service/inject';
 import RSVP from 'rsvp';
 
-export default Controller.extend(BaseFilterStateProperties, {
-  ajax: service(),
-  aggregator: service(),
+const QUERY_PARAMS_MAP = {
+  q: null,
+  offset: 0,
+  fundingMechanism: null,
+  activity: null,
+  icName: null,
+  orgCountry: null,
+  nihSpendingCats: null,
+  applicationType: null,
+  edInstType: null,
+  coreProjectNum: null,
+  programOfficerName: null,
+  piNames: null,
+  orgDept: null,
+  orgState: null,
+  orgName: null
+};
 
-  isShowingFilterModal: false,
-  isShowingCreateCollectionsModal: false,
+const QUERY_PARAMS = Object.keys(QUERY_PARAMS_MAP);
+
+export default Controller.extend(QUERY_PARAMS_MAP, BaseFilterStateProperties, {
+  queryParams: QUERY_PARAMS,
+  ajax: service(),
 
   /**
    * Dynamically generated data-filter properties
-   * based on URL state (aggParamBase) as well as
+   * based on URL state (currectQueryParams) as well as
    * state of baseFilterSet contained in data-filter-options mixin
    */
-  filterProps: computed('baseFilterSet.@each.activated', 'aggParamBase', function() {
-    const currentParams = get(this, 'aggParamBase');
+  filterProps: computed('baseFilterSet.@each.activated', 'currectQueryParams', function() {
+    const currentParams = get(this, 'currectQueryParams');
     let baseSet = get(this, 'baseFilterSet');
     baseSet.forEach(filter => {
       set(filter, 'currentParams', currentParams);
@@ -34,33 +51,22 @@ export default Controller.extend(BaseFilterStateProperties, {
    * used to query on behalf of data-stat components
    * resultant objects used by aggregator service
    */
-  grantCountParams: computed('aggParamBase', function() {
-    const aggParamBase = get(this, 'aggParamBase');
-    return Object.assign({aggBy: 'count'}, aggParamBase);
+  currectQueryParams: computed(...QUERY_PARAMS, function() {
+    const filters = getProperties(this, ...this.queryParams);
+    return Object.freeze(filters);
   }),
-  sumCostParams: computed('aggParamBase', function() {
-    const aggParamBase = get(this, 'aggParamBase');
-    return Object.assign({
-      aggBy: 'count',
-      aggMethod: 'sum',
-      aggOn: 'totalCost'
-    }, aggParamBase);
+  aggParamsBase: computed('currectQueryParams', function() {
+    return Object.assign({aggBy: 'count'}, get(this, 'currectQueryParams'));
   }),
-  avgCostParams: computed('aggParamBase', function() {
-    const aggParamBase = get(this, 'aggParamBase');
-    return Object.assign({
-      aggBy: 'count',
-      aggMethod: 'avg',
-      aggOn: 'totalCost'
-    }, aggParamBase);
+  grantCountParams: alias('aggParamsBase'),
+  sumCostParams: computed('aggParamsBase', function() {
+    return Object.assign({aggMethod: 'sum', aggOn: 'totalCost'}, get(this, 'aggParamsBase'));
   }),
-  stdCostParams: computed('aggParamBase', function() {
-    const aggParamBase = get(this, 'aggParamBase');
-    return Object.assign({
-      aggBy: 'count',
-      aggMethod: 'stdDevSamp',
-      aggOn: 'totalCost'
-    }, aggParamBase);
+  avgCostParams: computed('aggParamsBase', function() {
+    return Object.assign({aggMethod: 'avg', aggOn: 'totalCost'}, get(this, 'aggParamsBase'));
+  }),
+  stdCostParams: computed('aggParamsBase', function() {
+    return Object.assign({aggMethod: 'stdDevSamp', aggOn: 'totalCost'}, get(this, 'aggParamsBase'));
   }),
 
   actions: {
@@ -80,36 +86,21 @@ export default Controller.extend(BaseFilterStateProperties, {
     filterSelection(target, val) {
       const setTo = val ? val.id : null;
       // changing a filter returns to first page
-      if ( get(this, 'offset') > 0 ) {
-        set(this, 'offset', 0);
-      }
+      //if ( get(this, 'offset') > 0 ) {
+      //  set(this, 'offset', 0);
+      //}
       set(this, target, setTo);
-    },
-
-    /* for sidebar nav buttons */
-    changeRoute(route) {
-      if ( route === 'table' ) {
-        this.transitionToRoute('search.index').then(()=> { get(this, 'isSearchIndexRoute'); });
-      } else if ( route === 'viz' ) {
-        this.transitionToRoute('search.viz').then(()=> { get(this, 'isSearchIndexRoute'); });
-      }
-    },
-
-    /* triggered by button to clear search */
-    clearSearch() {
-      set(this, 'q', null);
     },
 
     /* creates a collection based on url state and name given from component */
     createCollection(name) {
       // note: eventually uuid will be defined by user session management
-      const filterBase = get(this, 'aggParamBase'),
+      const filterBase = get(this, 'currectQueryParams'),
+            ajax = get(this, 'ajax'),
             uuid = 1;
-      
+
       // properties will be attached to this object for POSTing
-      const collection = {};
-      collection.uuid = uuid;
-      collection.name = name;
+      const collection = { uuid, name };
 
       /**
        * Clean up the filterBase for only relevant values,
@@ -125,30 +116,22 @@ export default Controller.extend(BaseFilterStateProperties, {
       collection.filterParams = filterParams;
 
       /**
-       * Fetch aggregated meta values for easy caching on server,
-       * high degree of async here
-       */
-      const agg = get(this, 'aggregator');
-      let aggAsync = (prop, params) => {
-        return new RSVP.Promise((resolve) => {
-          agg.aggregate('grants', params).then(res => {
-            resolve(collection[prop] = res);
-          });
-        });
-      };
-
-      /**
        * Trigger parallel promises that, only when complete,
        * allow POST ajax action, and then transition to
        * collections route
        */
+      let aggAsyncRequest = (prop, params) => {
+        return ajax.aggregate('grants', params).then(res => {
+          collection[prop] = res;
+          return collection;
+        });
+      };
       RSVP.Promise.all([
-        aggAsync('itemCount', get(this, 'grantCountParams')),
-        aggAsync('sumCost', get(this, 'sumCostParams')),
-        aggAsync('avgCost', get(this, 'avgCostParams'))
+        aggAsyncRequest('itemCount', get(this, 'grantCountParams')),
+        aggAsyncRequest('sumCost', get(this, 'sumCostParams')),
+        aggAsyncRequest('avgCost', get(this, 'avgCostParams'))
       ]).then(() => {
-        // POST call
-        get(this, 'ajax').post('/collections', { data: collection }).then(() => {
+        ajax.post('/collections', { data: collection }).then(() => {
           this.transitionToRoute('collections');
         });
       });

@@ -1,3 +1,4 @@
+// Collections
 import config from 'client/config/environment';
 import Route from 'ember-route';
 import get from 'ember-metal/get';

@@ -10,8 +10,8 @@
       disabled=noResults
       loadingMessage='loading...'
       optionsComponent='data-filter.filter-dropdown'
-      selected=(find-by promiseResults 'id' properties.selectedValue)
-      onchange=(action changeAction)
+      selected=(find-by 'id' properties.selectedValue promiseResults)
+      onchange=(action chooseItem)
       as |result|
     }}
       {{#if result.id}}

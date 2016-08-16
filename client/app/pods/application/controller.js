@@ -1,3 +1,4 @@
-// can't be deleted, not sure why
+// Application controller must be kept
+// for Route.reopen logic
 import Controller from 'ember-controller';
 export default Controller.extend({});
