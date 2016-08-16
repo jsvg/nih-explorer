@@ -13,6 +13,7 @@ export default Component.extend({
           params = get(this, 'params');
 
     if ( ! params.q ) { delete params.q; }
+    if ( params.offset ) { delete params.offset; }
     return ajax.request(resource, {
       method: 'GET',
       data: params

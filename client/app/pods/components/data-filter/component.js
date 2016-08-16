@@ -16,6 +16,7 @@ export default Component.extend({
           params = Object.assign({aggBy}, props.currentParams);
 
     if ( ! params.q ) { delete params.q; }
+    if ( params.offset ) { delete params.offset; }
     return ajax.request(props.resource, {
       method: 'GET',
       data: params

@@ -1,8 +1,8 @@
 {{search-table
   grants=model.grants
-  selectGrant=(action 'showModal')
-  paginationData=pagination
-  pageButtonClick=(action 'paginator')
+  selectGrant=(route-action 'showModalAndSetGrant')
+  paginationData=paginationLinks
+  pageButtonClick=(route-action 'paginator')
 }}
 
 {{search-table-modal
