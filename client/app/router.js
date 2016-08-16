@@ -7,9 +7,7 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
-  this.route('search', function() {
-    this.route('viz');
-  });
+  this.route('search', function() {});
   this.route('collections');
 });
 

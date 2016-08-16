@@ -7,6 +7,7 @@
 const Router = require('express').Router,
       inflection = require('inflection'),
       utils = require('../route-utils'),
+      csv = require('express-csv'),
       log = require('bragi').log,
       async = require('async');
 
@@ -35,6 +36,34 @@ module.exports = new Router().get('/:resource', (req, res) => {
     res.json({
       'incoming req': reqQueryParams,
       'mongo': params.aggregationParams
+    });
+    return;
+  }
+
+  /**
+   * Export functionality to send static file
+   */
+  if ( reqQueryParams.export === 'true' ) {
+    for (let paramSet of params.aggregationParams) {
+      if ( Object.keys(paramSet)[0] === '$limit' ) {
+        // hack to prevent result limiting
+        paramSet.$limit = parseInt(1E15);
+      }
+    }
+    const aggOptions = {allowDiskUse: true};
+    const cursor = db.collection(resource)
+      .aggregate(params.aggregationParams, aggOptions);
+    cursor.toArray().then((docs) => {
+      // add headers to file, then set headers
+      docs.unshift(Object.keys(docs[0]));
+      res.setHeader('Content-disposition', 'attachment; filename=export.csv');
+      res.setHeader('Content-type', 'text/csv');
+
+      res.csv(docs);
+    }).catch((err) => {
+      log('error', 'issue during export', err);
+      res.status(500).send(err.message);
+      return;
     });
     return;
   }

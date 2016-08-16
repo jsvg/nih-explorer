@@ -25,12 +25,12 @@
               {{#tooltip-on-component class='custom-popover'}}View result set{{/tooltip-on-component}}
             {{/fa-icon}}
             {{#fa-icon 'cloud-download' click=(action exportCollection collection)}}
-              {{#tooltip-on-component class='custom-popover'}}Export data - coming soon{{/tooltip-on-component}}
+              {{#tooltip-on-component class='custom-popover'}}Export data{{/tooltip-on-component}}
             {{/fa-icon}}
-            {{#fa-icon 'pencil' click=(action editCollection collection)}}
-              {{#tooltip-on-component class='custom-popover'}}Edit collection - coming soon{{/tooltip-on-component}}
+            {{#fa-icon 'share-square' click=(action editCollection collection)}}
+              {{#tooltip-on-component class='custom-popover'}}Share collection - coming soon{{/tooltip-on-component}}
             {{/fa-icon}}
-            {{#fa-icon 'times' click=(action deleteCollection collection)}}
+            {{#fa-icon 'trash' click=(action deleteCollection collection)}}
               {{#tooltip-on-component class='custom-popover'}}Remove collection{{/tooltip-on-component}}
             {{/fa-icon}}
           </div>

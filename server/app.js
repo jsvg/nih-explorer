@@ -7,6 +7,7 @@ const initializeServer = require('./api/initializer'),
       bodyParser = require('body-parser'),
       compression = require('compression'),
       fnRoute = require('./api/routes/functional-route'),
+      getFilterOpts = require('./api/routes/get-filter-options'),
       getClxnRoute = require('./api/routes/get-uuid-collections'),
       deleteClxnRoute = require('./api/routes/delete-uuid-named-collection'),
       postClxnRoute = require('./api/routes/post-uuid-named-collection'),
@@ -18,6 +19,7 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(config.allowPreflight);
 app.use(config.apiNamespace, fnRoute);
+app.use(config.apiNamespace, getFilterOpts);
 app.use(config.apiNamespace, getClxnRoute);
 app.use(config.apiNamespace, deleteClxnRoute);
 app.use(config.apiNamespace, postClxnRoute);

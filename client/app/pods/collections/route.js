@@ -1,6 +1,8 @@
+import config from 'client/config/environment';
 import Route from 'ember-route';
 import get from 'ember-metal/get';
 import service from 'ember-service/inject';
+import $ from 'jquery';
 
 export default Route.extend({
   ajax: service(),
@@ -39,13 +41,9 @@ export default Route.extend({
 
     exportCollection(collection) {
       const queryParams = get(this, 'extractQueryParams')(collection);
-      get(this, 'ajax').request('grants', {
-        method: 'GET',
-        data: queryParams
-      }).then(result => console.log(result));
-      // realistically will happen on server
-      // GET/POST to special node route
-      // responds with static file
+      queryParams.export = true;
+      const url = `${config.apiHost}/${config.apiNamespace}/grants/?${$.param(queryParams)}`;
+      window.open(url, 'Download');
     },
 
     deleteCollection(collection) {
