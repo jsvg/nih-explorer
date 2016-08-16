@@ -8,12 +8,15 @@ export default Route.extend({
 
   actions: {
     search() {
-      const q = this.controller.get('searchVar'),
-            transitionParams = { queryParams: { q } };
-
+      const q = this.controller.get('searchVar');
       this.controller.set('searchVar', null);
-      this.controller.set('placeholder', 'searching...');
-      this.transitionTo('search', transitionParams);
+      if ( q === this.controllerFor('search').get('q') ) {
+        this.controller.set('placeholder', 'Search NIH spending...');
+      } else {
+        this.controller.set('placeholder', 'searching...');
+        this.controllerFor('search').set('offset', 0);
+        this.transitionTo('search', { queryParams: { q } });
+      }
     }
   }
 });
@@ -27,18 +30,21 @@ export default Route.extend({
  */
 Route.reopen({
   beforeModel() {
+    this._super(...arguments);
     // rapid toggle of property triggers
     // didUpdateAttrs() on loading-slider - happening in bg on component
-	this.controllerFor('application').set('isLoading', false);
+    this.controllerFor('application').set('isLoading', false);
     this.controllerFor('application').set('isLoading', true);
   },
   actions: {
     didTransition() {
+      this._super(...arguments);
       $('#apploading').fadeOut('fast');
       this.controllerFor('application').set('isLoading', false);
     },
 	//transition is a promise that fulfills when loading state is done of any request
     loading(transition) {
+      this._super(...arguments);
       const ctrllr = this.controllerFor('application');
       ctrllr.set('isLoading', true);
       transition.promise.finally(() => {

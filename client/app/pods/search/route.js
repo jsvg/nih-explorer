@@ -2,7 +2,6 @@
 import Route from 'ember-route';
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
-import RSVP from 'rsvp';
 
 export default Route.extend({
   queryParams: {
@@ -24,14 +23,10 @@ export default Route.extend({
   },
 
   model(params) {
-    if ( !params.q ) {
-      delete params.q;
-    }
-    return RSVP.hash({
-      grants: get(this, 'store').query('grant', params).then(result => {
-        set(this, 'meta', result.get('meta'));
-        return result;
-      })
+    if ( !params.q ) { delete params.q; }
+    return get(this, 'store').query('grant', params).then(result => {
+      set(this, 'meta', result.get('meta'));
+      return result;
     });
   },
 
@@ -41,10 +36,13 @@ export default Route.extend({
    * for use in template and logic,
    * and reset modal showing property
    */
-  setupController(controller, model) {
+  setupController(controller) {
     this._super(...arguments);
-    controller.set('meta', this.get('meta'));
-    controller.set('isShowingCreateCollectionsModal', false);
+    controller.setProperties({
+      meta: get(this, 'meta'),
+      isShowingFilterModal: false,
+      isShowingCreateCollectionsModal: false
+    });
   },
 
   /**
@@ -53,21 +51,10 @@ export default Route.extend({
   resetController(controller, isExiting) {
     // isExiting would be false if only the route's model was changing
     if (isExiting) {
-      controller.set('q', null);
-      controller.set('offset', 0);
-      controller.set('fundingMechanism', null);
-      controller.set('activity', null);
-      controller.set('icName', null);
-      controller.set('orgCountry', null);
-      controller.set('nihSpendingCats', null);
-      controller.set('applicationType', null);
-      controller.set('edInstType', null);
-      controller.set('coreProjectNum', null);
-      controller.set('programOfficerName', null);
-      controller.set('piNames', null);
-      controller.set('orgDept', null);
-      controller.set('orgState', null);
-      controller.set('orgName', null);
+      this.controller.queryParams.forEach(param => {
+        if ( param === 'offset' ) { this.controller.set(param, 0); } 
+        else { this.controller.set(param, null); }
+      });
     }
   }
 });

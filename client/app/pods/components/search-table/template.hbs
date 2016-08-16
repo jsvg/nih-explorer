@@ -13,7 +13,7 @@
     </thead>
     <tbody>
       {{#each grants as |grant|}}
-        <tr {{action (action selectGrant grant)}}>
+        <tr {{action (action showGrantModal grant)}}>
           <td><div>{{grant.projectTitle}}</div></td>
           <td><div>{{format-item grant.orgName 'title'}}</div></td>
           <td><div>{{format-item grant.icName 'title'}}</div></td>
