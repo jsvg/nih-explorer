@@ -42,9 +42,9 @@ export default Route.extend({
    * and reset modal showing property
    */
   setupController(controller, model) {
+    this._super(...arguments);
     controller.set('meta', this.get('meta'));
     controller.set('isShowingCreateCollectionsModal', false);
-    this._super(controller, model);
   },
 
   /**

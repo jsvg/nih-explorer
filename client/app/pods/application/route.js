@@ -1,11 +1,19 @@
 import Route from 'ember-route';
 import $ from 'jquery';
 export default Route.extend({
+  setupController(controller) {
+    this._super(...arguments);
+    controller.set('placeholder', 'Search NIH spending...');
+  },
+
   actions: {
-    didTransition() {
-      this._super(...arguments);
-      // reset placeholder in search bar
-      this.controllerFor('application').set('placeholder', 'Search NIH spending...');
+    search() {
+      const q = this.controller.get('searchVar'),
+            transitionParams = { queryParams: { q } };
+
+      this.controller.set('searchVar', null);
+      this.controller.set('placeholder', 'searching...');
+      this.transitionTo('search', transitionParams);
     }
   }
 });
@@ -29,11 +37,12 @@ Route.reopen({
       $('#apploading').fadeOut('fast');
       this.controllerFor('application').set('isLoading', false);
     },
-    loading(transition, originRoute) {
+    loading(transition) {
       const ctrllr = this.controllerFor('application');
       ctrllr.set('isLoading', true);
       transition.promise.finally(() => {
         ctrllr.set('isLoading', false);
+        ctrllr.set('placeholder', 'Search NIH spending...');
       });
     }
   }
