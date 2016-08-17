@@ -1,3 +1,4 @@
+{{! search-table }}
 <div id='table'>
   <table class='table table-hover'>
     <thead>
@@ -13,14 +14,30 @@
     </thead>
     <tbody>
       {{#each grants as |grant|}}
-        <tr {{action (action showGrantModal grant)}}>
+        <tr role='button' {{action (action showGrantModal grant)}}>
           <td><div>{{grant.projectTitle}}</div></td>
           <td><div>{{format-item grant.orgName 'title'}}</div></td>
           <td><div>{{format-item grant.icName 'title'}}</div></td>
           <td><div>{{format-item grant.fundingMechanism 'title'}}</div></td>
           <td><div>{{grant.activity}}</div></td>
-          <td><div>{{#if grant.supportYear}}{{grant.supportYear}}Yr{{else}}-{{/if}}</div></td>
-          <td><div>{{#if grant.awardNoticeDate}}{{moment-format grant.awardNoticeDate 'MM/DD/YY'}}{{else}}-{{/if}}</div></td>
+          <td>
+            <div>
+              {{#if grant.supportYear}}
+                {{grant.supportYear}}Yr
+              {{else}}
+                -
+              {{/if}}
+            </div>
+          </td>
+          <td>
+            <div>
+              {{#if grant.awardNoticeDate}}
+                {{moment-format grant.awardNoticeDate 'MM/DD/YY'}}
+              {{else}}
+                -
+              {{/if}}
+            </div>
+          </td>
           <td><div>{{format-item grant.totalCost 'currency'}}</div></td>
           <td><div>{{grant.pubCount}}</div></td>
         </tr>

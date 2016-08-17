@@ -1,3 +1,4 @@
+{{! data-filter.filter-dropdown }}
 {{#if select.loading}}
   {{#if loadingMessage}}
     <li 
@@ -16,8 +17,8 @@
      aria-current={{eq opt select.highlighted}}
      data-option-index='{{index}}'
     >
-     {{yield opt select}}
-   </li>
+      {{yield opt select}}
+    </li>
   {{/each}}
   {{#if (not allOptionsLoaded)}}
     <li 

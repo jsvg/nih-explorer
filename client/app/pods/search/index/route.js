@@ -1,3 +1,4 @@
+// search.index
 import Route from 'ember-route';
 import $ from 'jquery';
 
@@ -9,7 +10,7 @@ export default Route.extend({
    */
   setupController(controller) {
     this._super(...arguments);
-    const paginationLinks = this.controllerFor('search').get('meta.pagination');
+    let paginationLinks = this.controllerFor('search').get('meta.pagination');
     controller.setProperties({
       isShowingModal: false,
       paginationLinks
@@ -27,7 +28,7 @@ export default Route.extend({
 
     /**
      * Pagination function used by table
-     * prev and next buttons. Reset by 
+     * prev and next buttons. Reset by
      * filterSelection() in parent route
      */
     paginator(cursorPosition) {

@@ -23,15 +23,15 @@ export default Route.extend({
   },
 
   model(params) {
-    if ( !params.q ) { delete params.q; }
-    return get(this, 'store').query('grant', params).then(result => {
+    if (!params.q) { delete params.q; }
+    return get(this, 'store').query('grant', params).then((result) => {
       set(this, 'meta', result.get('meta'));
       return result;
     });
   },
 
-  /*
-   * Small override in order to 
+  /**
+   * Small override in order to
    * pass meta property to controller
    * for use in template and logic,
    * and reset modal showing property
@@ -51,9 +51,12 @@ export default Route.extend({
   resetController(controller, isExiting) {
     // isExiting would be false if only the route's model was changing
     if (isExiting) {
-      this.controller.queryParams.forEach(param => {
-        if ( param === 'offset' ) { this.controller.set(param, 0); } 
-        else { this.controller.set(param, null); }
+      this.controller.queryParams.forEach((param) => {
+        if (param === 'offset') {
+          this.controller.set(param, 0);
+        } else {
+          this.controller.set(param, null);
+        }
       });
     }
   }

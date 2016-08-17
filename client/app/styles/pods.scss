@@ -1,10 +1,10 @@
-@import 'app/pods/components/loading-slider/style';
-@import 'app/pods/components/search-table/style';
-@import 'app/pods/components/search-table-modal/style';
-@import 'app/pods/components/search-filter-modal/style';
-@import 'app/pods/components/create-collections-modal/style';
-@import 'app/pods/components/data-filter/style';
-@import 'app/pods/components/data-stat/style';
+@import 'app/pods/application/loading-slider/style';
+@import 'app/pods/search/create-collections-modal/style';
+@import 'app/pods/search/search-filter-modal/style';
+@import 'app/pods/search/data-filter/style';
+@import 'app/pods/search/data-stat/style';
+@import 'app/pods/search/index/search-table/style';
+@import 'app/pods/search/index/search-table-modal/style';
 @import 'app/pods/application/style';
 @import 'app/pods/search/style';
 @import 'app/pods/collections/style';

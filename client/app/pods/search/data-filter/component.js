@@ -1,4 +1,6 @@
+// data-filter
 import Component from 'ember-component';
+import { assert } from 'ember-metal/utils';
 import { reads } from 'ember-computed';
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
@@ -10,22 +12,22 @@ export default Component.extend({
   placeholder: reads('properties.placeholder'),
 
   promise(that) {
-    const ajax = get(that, 'ajax'),
-          props = get(that, 'properties'),
-          aggBy = props.filterAttr,
-          params = Object.assign({aggBy}, props.currentParams);
+    let ajax = get(that, 'ajax'),
+      props = get(that, 'properties'),
+      aggBy = props.filterAttr,
+      params = Object.assign({ aggBy }, props.currentParams);
 
-    if ( ! params.q ) { delete params.q; }
-    if ( params.offset ) { delete params.offset; }
+    if (!params.q) { delete params.q; }
+    if (params.offset) { delete params.offset; }
     return ajax.request(props.resource, {
       method: 'GET',
       data: params
-    }).then(result => {
-      if ( !that.isDestroyed ) {
+    }).then((result) => {
+      if (!that.isDestroyed) {
         set(that, 'promiseResults', result.data);
 
         // no results or one null result
-        if ( (result.data[0].id === '') && (result.data.length <= 1) ) {
+        if (result.data[0].id === '' && result.data.length <= 1) {
           set(that, 'noResults', true);
           set(that, 'placeholder', 'No options available');
         // needs to be reset otherwise
@@ -35,10 +37,10 @@ export default Component.extend({
         }
         return result.data;
       }
-    }).catch(err => {
-      console.log('data-filter component error:', err);
-      if ( !that.isDestroyed ) {
-        return {id: 'error'};
+    }).catch((err) => {
+      assert('data-filter component error:', err);
+      if (!that.isDestroyed) {
+        return { id: 'error' };
       }
     });
   },
@@ -52,5 +54,4 @@ export default Component.extend({
     set(this, 'loading', true);
     set(this, 'placeholder', 'Searching...');
   }
-
 });

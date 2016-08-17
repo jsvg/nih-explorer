@@ -1,7 +1,9 @@
+// c3-viz
 import Component from 'ember-component';
 import get from 'ember-metal/get';
 import set from 'ember-metal/set';
 import { getProperties } from 'ember-metal/get';
+import { assert } from 'ember-metal/utils';
 import { debounce, later, scheduleOnce } from 'ember-runloop';
 import c3 from 'c3';
 
@@ -11,11 +13,11 @@ export default Component.extend({
 
   // triggered when data is updated by didUpdateAttrs
   _reload() {
-    const chart = get(this, 'c3chart');
+    let chart = get(this, 'c3chart');
 
     // if data should not be appended
     // e.g. when using a pie or donut chart
-    if ( get(this, 'unloadDataBeforeChange') ) {
+    if (get(this, 'unloadDataBeforeChange')) {
       chart.unload();
       // default animation is 350ms
       // t/f data must by loaded after unload animation (400)
@@ -40,19 +42,18 @@ export default Component.extend({
   // triggered when component added by didInsertElement
   _setupc3() {
     // get all base c3 properties
-    const chartConfig = getProperties(this, 
-      ['data','axis','regions','bar','pie','donut','gauge',
-      'grid','legend','tooltip','subchart','zoom','point',
-      'line','area','size','padding','color','transition']);
+    let chartConfig = getProperties(this,
+      ['data', 'axis', 'regions', 'bar', 'pie', 'donut', 'gauge',
+      'grid', 'legend', 'tooltip', 'subchart', 'zoom', 'point',
+      'line', 'area', 'size', 'padding', 'color', 'transition']);
 
     // bind c3 chart to component's DOM element
-    chartConfig.bindto = get(this, 'element'); 
+    chartConfig.bindto = get(this, 'element');
 
     // emit events to controller
-    callbacks.call(this);
     function callbacks() {
-      const that = this;
-      const c3events = [
+      let that = this;
+      let c3events = [
         'oninit',
         'onrendered',
         'onmouseover',
@@ -66,14 +67,15 @@ export default Component.extend({
         };
       });
     }
+    callbacks.call(this);
 
     // render the initial chart
     set(this, 'c3chart', c3.generate(chartConfig));
   },
 
-  /***
+  /**
    * Component lifecycle hooks to control rendering actions
-   ***/
+   */
 
   didReceiveAttrs() {
     // if DOM is not ready when component is inserted,
@@ -83,7 +85,7 @@ export default Component.extend({
     try {
       scheduleOnce('afterRender', this, this._setupc3);
     } catch(err) {
-      console.log(err);
+      assert(err);
     }
   },
 

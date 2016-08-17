@@ -37,12 +37,14 @@ export default Controller.extend(QUERY_PARAMS_MAP, BaseFilterStateProperties, {
    * state of baseFilterSet contained in data-filter-options mixin
    */
   filterProps: computed('baseFilterSet.@each.activated', 'currectQueryParams', function() {
-    const currentParams = get(this, 'currectQueryParams');
-    let baseSet = get(this, 'baseFilterSet');
-    baseSet.forEach(filter => {
+    let currentParams = get(this, 'currectQueryParams'),
+      baseSet = get(this, 'baseFilterSet');
+
+    baseSet.forEach((filter) => {
       set(filter, 'currentParams', currentParams);
       set(filter, 'selectedValue', currentParams[filter.filterAttr]);
     });
+
     return baseSet.filterBy('activated', true);
   }),
 
@@ -52,65 +54,69 @@ export default Controller.extend(QUERY_PARAMS_MAP, BaseFilterStateProperties, {
    * resultant objects used by aggregator service
    */
   currectQueryParams: computed(...QUERY_PARAMS, function() {
-    const filters = getProperties(this, ...this.queryParams);
+    let filters = getProperties(this, ...this.queryParams);
     return Object.freeze(filters);
   }),
   aggParamsBase: computed('currectQueryParams', function() {
-    return Object.assign({aggBy: 'count'}, get(this, 'currectQueryParams'));
+    return Object.assign({ aggBy: 'count' }, get(this, 'currectQueryParams'));
   }),
   grantCountParams: alias('aggParamsBase'),
   sumCostParams: computed('aggParamsBase', function() {
-    return Object.assign({aggMethod: 'sum', aggOn: 'totalCost'}, get(this, 'aggParamsBase'));
+    return Object.assign({ aggMethod: 'sum', aggOn: 'totalCost' }, get(this, 'aggParamsBase'));
   }),
   avgCostParams: computed('aggParamsBase', function() {
-    return Object.assign({aggMethod: 'avg', aggOn: 'totalCost'}, get(this, 'aggParamsBase'));
+    return Object.assign({ aggMethod: 'avg', aggOn: 'totalCost' }, get(this, 'aggParamsBase'));
   }),
   stdCostParams: computed('aggParamsBase', function() {
-    return Object.assign({aggMethod: 'stdDevSamp', aggOn: 'totalCost'}, get(this, 'aggParamsBase'));
+    // eslint-disable-next-line max-len
+    return Object.assign({ aggMethod: 'stdDevSamp', aggOn: 'totalCost' }, get(this, 'aggParamsBase'));
   }),
 
   actions: {
-    /* toggles filter activation state @ search-filter-modal component */
+    /**
+     * Toggles filter activation state @
+     * search-filter-modal component
+     */
     toggleActivation(filterProps) {
       // reset filter before turning it inactive
-      if ( get(this, filterProps.filterAttr) ) {
+      if (get(this, filterProps.filterAttr)) {
         set(this, filterProps.filterAttr, null);
       }
       set(filterProps, 'activated', !filterProps.activated);
     },
 
-    /** 
-     * Generalized action for updating 
+    /**
+     * Generalized action for updating
      * query param based on filter action
      */
     filterSelection(target, val) {
-      const setTo = val ? val.id : null;
+      let setTo = val ? val.id : null;
       // changing a filter returns to first page
-      //if ( get(this, 'offset') > 0 ) {
-      //  set(this, 'offset', 0);
-      //}
+      if (get(this, 'offset') > 0) {
+        set(this, 'offset', 0);
+      }
       set(this, target, setTo);
     },
 
     /* creates a collection based on url state and name given from component */
     createCollection(name) {
       // note: eventually uuid will be defined by user session management
-      const filterBase = get(this, 'currectQueryParams'),
-            ajax = get(this, 'ajax'),
-            uuid = 1;
+      let filterBase = get(this, 'currectQueryParams'),
+        ajax = get(this, 'ajax'),
+        uuid = 1;
 
       // properties will be attached to this object for POSTing
-      const collection = { uuid, name };
+      let collection = { uuid, name };
 
       /**
        * Clean up the filterBase for only relevant values,
        * and attach those values to collection object
        */
-      const filterParams = {};
-      for ( let key in filterBase ) {
-        if ( !filterBase.hasOwnProperty(key) ) { continue; }
-        if ( !filterBase[key] ) { continue; }
-        if ( (key === 'offset') || (key === 'limit') ) { continue; }
+      let filterParams = {};
+      for (let key in filterBase) {
+        if (!filterBase.hasOwnProperty(key)) { continue; }
+        if (!filterBase[key]) { continue; }
+        if (key === 'offset' || key === 'limit') { continue; }
         filterParams[key] = filterBase[key];
       }
       collection.filterParams = filterParams;
@@ -121,7 +127,7 @@ export default Controller.extend(QUERY_PARAMS_MAP, BaseFilterStateProperties, {
        * collections route
        */
       let aggAsyncRequest = (prop, params) => {
-        return ajax.aggregate('grants', params).then(res => {
+        return ajax.aggregate('grants', params).then((res) => {
           collection[prop] = res;
           return collection;
         });

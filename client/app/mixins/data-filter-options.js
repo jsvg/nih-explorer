@@ -1,5 +1,5 @@
 /**
- * Mixin that provides necessary variables to allow for 
+ * Mixin that provides necessary variables to allow for
  * filtering on data elements; use mixin in controller to
  * automatically setup query params
  */

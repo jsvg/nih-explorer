@@ -1,3 +1,4 @@
+// application
 import Route from 'ember-route';
 import $ from 'jquery';
 export default Route.extend({
@@ -8,9 +9,9 @@ export default Route.extend({
 
   actions: {
     search() {
-      const q = this.controller.get('searchVar');
+      let q = this.controller.get('searchVar');
       this.controller.set('searchVar', null);
-      if ( q === this.controllerFor('search').get('q') ) {
+      if (q === this.controllerFor('search').get('q')) {
         this.controller.set('placeholder', 'Search NIH spending...');
       } else {
         this.controller.set('placeholder', 'searching...');
@@ -31,7 +32,7 @@ export default Route.extend({
 Route.reopen({
   beforeModel() {
     this._super(...arguments);
-    // rapid toggle of property triggers 
+    // rapid toggle of property triggers
     // didUpdateAttrs() on loading-slider
     this.controllerFor('application').set('isLoading', false);
     this.controllerFor('application').set('isLoading', true);

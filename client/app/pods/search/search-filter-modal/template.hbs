@@ -1,4 +1,4 @@
-{{! modal time }}
+{{! search-filter-modal }}
 {{#bs-modal open=isShowingModal header=false body=false footer=false}}
   {{#bs-modal-header}}
     {{! should eventually be a drop down w options for data filters & data stats }}
@@ -15,7 +15,7 @@
           <div class='filter-col-body'>
             {{#each filterState as |filter|}}
               {{#if (not filter.activated)}}
-                <div class='filter-item text-center' {{action toggleFilter filter}}>
+                <div class='filter-item text-center' role='button' {{action toggleFilter filter}}>
                   {{filter.filterTitle}}
                 </div>
               {{/if}}
@@ -30,7 +30,7 @@
           <div class='filter-col-body'>
             {{#each filterState as |filter|}}
               {{#if filter.activated}}
-                <div class='filter-item text-center' {{action toggleFilter filter}}>
+                <div class='filter-item text-center' role='button' {{action toggleFilter filter}}>
                   {{filter.filterTitle}}
                 </div>
               {{/if}}

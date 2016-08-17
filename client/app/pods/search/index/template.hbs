@@ -1,13 +1,13 @@
 {{! search/index}}
 
-{{search-table
+{{search.index.search-table
   grants=model
   showGrantModal=(action (pipe (route-action 'setModalGrant') (toggle 'isShowingModal' this)))
   pageButtonClick=(route-action 'paginator')
   paginationData=paginationLinks
 }}
 
-{{search-table-modal
+{{search.index.search-table-modal
   isShowingModal=isShowingModal
   modalGrant=modalGrant
 }}

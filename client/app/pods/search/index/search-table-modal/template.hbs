@@ -1,4 +1,5 @@
-{{! modal time }}
+{{! search-table-modal }}
+<!-- template-lint block-indentation=false -->
 {{#bs-modal open=isShowingModal header=false body=false footer=false}}
   {{#bs-modal-header}}<div class='modal-title modalTitle'>{{modalGrant.projectTitle}}</div>{{/bs-modal-header}}
   {{#bs-modal-body}}
@@ -30,7 +31,9 @@
               <small><strong>Name (DUNS): </strong>
                 {{#if modalGrant.orgName}}
                   {{format-item modalGrant.orgName 'title'}}
-                  {{#if modalGrant.orgDuns}}({{modalGrant.orgDuns}}){{/if}}
+                  {{#if modalGrant.orgDuns}}
+                    ({{modalGrant.orgDuns}})
+                  {{/if}}
                 {{else}}N/A{{/if}}
               </small><br>
               <small><strong>Type: </strong>{{#if modalGrant.edInstType}}{{format-item modalGrant.edInstType 'title'}}{{else}}N/A{{/if}}</small><br>

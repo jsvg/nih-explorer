@@ -1,3 +1,4 @@
+// data-filter.filter-dropdown
 import $ from 'jquery';
 import Component from 'ember-component';
 import computed from 'ember-computed';
@@ -7,47 +8,48 @@ import set from 'ember-metal/set';
 import A from 'ember-array/utils';
 
 export default Component.extend({
-  isTouchDevice: (!!this.window && 'ontouchstart' in this.window),
   tagName: 'ul',
   attributeBindings: ['role', 'aria-controls'],
   role: 'listbox',
-
+  isTouchDevice: computed(function() {
+    return Boolean(this.window) && 'ontouchstart' in this.window;
+  }),
 
   // Lifecycle hooks
   didInsertElement() {
     this._super(...arguments);
 
-    const select = get(this, 'select');
+    let select = get(this, 'select');
 
-    const findOptionAndPerform = (action, e) => {
-      const optionItem = $(e.target).closest('[data-option-index]');
-      
+    let findOptionAndPerform = (action, e) => {
+      let optionItem = $(e.target).closest('[data-option-index]');
+
       if (!optionItem) { return; }
       if (!optionItem.data()) { return; }
       if (optionItem.data().optionIndex === 'loadMore') { return; }
       if (!optionItem || !(0 in optionItem)) { return; }
       if (optionItem.closest('[aria-disabled=true]').length) { return; }
 
-      const optionIndex = optionItem[0].getAttribute('data-option-index');
+      let optionIndex = optionItem[0].getAttribute('data-option-index');
       action(this._optionFromIndex(optionIndex), e);
     };
-    
+
     // click option
-    this.element.addEventListener('mouseup', e => {
+    this.element.addEventListener('mouseup', (e) => {
       return findOptionAndPerform(select.actions.choose, e);
     });
-    
+
     // hover option
-    this.element.addEventListener('mouseover', e => {
+    this.element.addEventListener('mouseover', (e) => {
       return findOptionAndPerform(select.actions.highlight, e);
     });
 
     // scroll
-    this.element.addEventListener('scroll', e => {
+    this.element.addEventListener('scroll', (e) => {
       return e;
     });
 
-    if ( get(this, 'isTouchDevice') ) {
+    if (get(this, 'isTouchDevice')) {
       this._addTouchEvents();
     }
 
@@ -57,9 +59,9 @@ export default Component.extend({
   allOptionsLoaded: false,
   optionLimit: 10,
   optionsSet: computed('optionLimit', 'options', function() {
-    const optionsLimit = get(this, 'optionLimit'),
-          options = get(this, 'options');
-    if ( options.length < (optionsLimit+10) ) {
+    let optionsLimit = get(this, 'optionLimit'),
+      options = get(this, 'options');
+    if (options.length < optionsLimit + 10) {
       set(this, 'allOptionsLoaded', true);
     }
     return options.slice(0, optionsLimit);
@@ -74,13 +76,13 @@ export default Component.extend({
     this.element.addEventListener('touchstart', () => {
       this.element.addEventListener('touchmove', touchMoveHandler);
     });
-    this.element.addEventListener('touchend', e => {
-    let optionItem = $(e.target).closest('[data-option-index]');
+    this.element.addEventListener('touchend', (e) => {
+      let optionItem = $(e.target).closest('[data-option-index]');
 
-    if (!optionItem || !(0 in optionItem)) { return; }
+      if (!optionItem || !(0 in optionItem)) { return; }
 
       e.preventDefault();
-      if ( this.hasMoved ) {
+      if (this.hasMoved) {
         this.hasMoved = false;
         return;
       }
@@ -110,12 +112,12 @@ export default Component.extend({
 
   actions: {
     loadMore() {
-      const optionsLimit = get(this, 'optionLimit'),
-            options = get(this, 'options');
-      if ( options.length < (optionsLimit+10) ) {
+      let optionsLimit = get(this, 'optionLimit'),
+        options = get(this, 'options');
+      if (options.length < optionsLimit + 10) {
         set(this, 'allOptionsLoaded', true);
       }
-      set(this, 'optionLimit', get(this, 'optionLimit')+10);
+      set(this, 'optionLimit', get(this, 'optionLimit') + 10);
     }
   }
 });

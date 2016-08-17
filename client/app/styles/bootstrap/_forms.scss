@@ -44,24 +44,24 @@ label {
 // address browser inconsistencies.
 
 // Override content-box in Normalize (* isn't specific enough)
-input[type="search"] {
+input[type='search'] {
   @include box-sizing(border-box);
 }
 
 // Position radios and checkboxes better
-input[type="radio"],
-input[type="checkbox"] {
+input[type='radio'],
+input[type='checkbox'] {
   margin: 4px 0 0;
   margin-top: 1px \9; // IE8-9
   line-height: normal;
 }
 
-input[type="file"] {
+input[type='file'] {
   display: block;
 }
 
 // Make range inputs behave like textual form controls
-input[type="range"] {
+input[type='range'] {
   display: block;
   width: 100%;
 }
@@ -73,9 +73,9 @@ select[size] {
 }
 
 // Focus for file, radio, and checkbox
-input[type="file"]:focus,
-input[type="radio"]:focus,
-input[type="checkbox"]:focus {
+input[type='file']:focus,
+input[type='radio']:focus,
+input[type='checkbox']:focus {
   @include tab-focus;
 }
 
@@ -96,20 +96,20 @@ output {
 //
 // select
 // textarea
-// input[type="text"]
-// input[type="password"]
-// input[type="datetime"]
-// input[type="datetime-local"]
-// input[type="date"]
-// input[type="month"]
-// input[type="time"]
-// input[type="week"]
-// input[type="number"]
-// input[type="email"]
-// input[type="url"]
-// input[type="search"]
-// input[type="tel"]
-// input[type="color"]
+// input[type='text']
+// input[type='password']
+// input[type='datetime']
+// input[type='datetime-local']
+// input[type='date']
+// input[type='month']
+// input[type='time']
+// input[type='week']
+// input[type='number']
+// input[type='email']
+// input[type='url']
+// input[type='search']
+// input[type='tel']
+// input[type='color']
 
 .form-control {
   display: block;
@@ -171,7 +171,7 @@ textarea.form-control {
 // be added to `.form-control` as it's not specific enough. For details, see
 // https://github.com/twbs/bootstrap/issues/11586.
 
-input[type="search"] {
+input[type='search'] {
   -webkit-appearance: none;
 }
 
@@ -186,10 +186,10 @@ input[type="search"] {
 // Note that as of 8.3, iOS doesn't support `datetime` or `week`.
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
-  input[type="date"],
-  input[type="time"],
-  input[type="datetime-local"],
-  input[type="month"] {
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'],
+  input[type='month'] {
     &.form-control {
       line-height: $input-height-base;
     }
@@ -236,10 +236,10 @@ input[type="search"] {
     cursor: pointer;
   }
 }
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
+.radio input[type='radio'],
+.radio-inline input[type='radio'],
+.checkbox input[type='checkbox'],
+.checkbox-inline input[type='checkbox'] {
   position: absolute;
   margin-left: -20px;
   margin-top: 4px \9;
@@ -271,8 +271,8 @@ input[type="search"] {
 // Some special care is needed because <label>s don't inherit their parent's `cursor`.
 //
 // Note: Neither radios nor checkboxes can be readonly.
-input[type="radio"],
-input[type="checkbox"] {
+input[type='radio'],
+input[type='checkbox'] {
   &[disabled],
   &.disabled,
   fieldset[disabled] & {
@@ -474,7 +474,7 @@ input[type="checkbox"] {
 
   // Kick in the inline
   @media (min-width: $screen-sm-min) {
-    // Inline-block all the things for "inline"
+    // Inline-block all the things for 'inline'
     .form-group {
       display: inline-block;
       margin-bottom: 0;
@@ -527,8 +527,8 @@ input[type="checkbox"] {
         padding-left: 0;
       }
     }
-    .radio input[type="radio"],
-    .checkbox input[type="checkbox"] {
+    .radio input[type='radio'],
+    .checkbox input[type='checkbox'] {
       position: relative;
       margin-left: 0;
     }
