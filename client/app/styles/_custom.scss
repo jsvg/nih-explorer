@@ -73,11 +73,13 @@
 // ------------------------------------------
 
 .loading-notice {
-  position: absolute;
+  position: fixed;
+  overflow: hidden;
+  background: $body-bg;
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 99;
+  z-index: 999999;
   margin: 0 auto;
   width: calc(100% - 275px);
   height: 100%;
@@ -86,12 +88,16 @@
   .wrapper {
     position: relative;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-70%);
     margin: 0 auto;
-    border-radius: 10px;
+    border-radius: 1px;
+    border: 1px solid darken($gray-lighter, 15%);
+    -moz-box-shadow:    inset 0 0 10px darken($gray-lighter, 10%);
+    -webkit-box-shadow: inset 0 0 10px darken($gray-lighter, 10%);
+    box-shadow:         inset 0 0 10px darken($gray-lighter, 10%);
     background-color: $gray-lighter;
     padding: 20px;
-    width: 140px;
+    width: 250px;
   }
 
   &.apploading {
@@ -103,15 +109,15 @@
     margin-bottom: 0;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: $brand-success;
+    color: $gray;
     font-weight: 300;
   }
 
   // adapted from @tobiasahlin's spinkit: http://tobiasahlin.com/spinkit/
   .spinner {
     margin: 0 auto 10px;
-    width: 50px;
-    height: 40px;
+    width: 150px;
+    height: 60px;
     text-align: center;
     font-size: 10px;
 
@@ -120,8 +126,7 @@
       -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
       animation: stretchdelay 1.2s infinite ease-in-out;
       margin-left: 3px;
-      border-radius: 50px;
-      background-color: $brand-primary;
+      background-color: $brand;
       width: 6px;
       height: 100%;
 

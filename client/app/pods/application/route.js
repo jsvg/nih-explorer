@@ -44,11 +44,10 @@ Route.reopen({
     },
     loading(transition) {
       this._super(...arguments);
-      const ctrllr = this.controllerFor('application');
-      ctrllr.set('isLoading', true);
+      this.controllerFor('application').set('isLoading', true);
       transition.promise.finally(() => {
-        ctrllr.set('isLoading', false);
-        ctrllr.set('placeholder', 'Search NIH spending...');
+        this.controllerFor('application').set('isLoading', false);
+        this.controllerFor('application').set('placeholder', 'Search NIH spending...');
       });
     }
   }

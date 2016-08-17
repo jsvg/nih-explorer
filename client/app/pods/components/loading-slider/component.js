@@ -6,7 +6,7 @@ import set from 'ember-metal/set';
 export default Component.extend({
   tagName: 'div',
   classNames: ['loading-slider'],
-  color: '#2CFF00',
+  color: 'white',
 
   didInsertElement() {
     this.$().html('<span>');
