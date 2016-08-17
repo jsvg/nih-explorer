@@ -1,6 +1,104 @@
 
-{{#bs-modal open=isShowingModal}}
+{{#bs-modal open=isShowingModal size='lg' header=false ody=false footer=false}}
+	{{#bs-modal-header}}
+		Collection Details
+	{{/bs-modal-header}}
+	{{#bs-modal-body}}
+		<div class="container-fluid">
+			<div class="modalSectionTitle">Workflow<i class="fa fa-info"></i></div>
+				<div class="well well-sm">
+					<div class="row row-meta">
+						<div class="col-md-5">
+							<small><strong>Query:</strong></small>
+						</div>
+						<div class="col-md-2">
+							<i class="fa fa-long-arrow-right"></i>
+						</div>
+						<div class="col-md-5">
+							<small><strong>Filters:</strong></small>
+							<ol>
+								<!-- use ol if we decide to rank these somehow: either 1)order user clicked if possible or 2) order of importance determined by client or us -->
 
- I WORK
+								<!-- list format ~ search-table-modal -->
+								<li>Funded by
+									{{!#if collection.fundingMechanism}}
+										{{!collection.fundingMechanism}}
+									{{!/if}}
+								</li>
 
+								<!-- with filter input before filter name -->
+								{{!#if collection.funding_mechanism}}
+									<li>Activity Code{{!collection.activity_code}}</li>
+								{{!/if}}
+
+								<li>{{!collection.icName}}</li>
+								<li>{{!collection.org}}</li>
+								<li>Stats
+									<ol>
+									<li>largest grant</li>
+									<li>2nd largest</li>
+									<li>3rd largest</li>
+									</ol>
+								</li>
+							</ol>
+						</div>
+						<!-- <div class="col-md-4">
+							<aside><small><strong>Grant Count:</strong></small></aside>
+							<aside><small><strong>Sum Cost:</strong></small></aside>
+							<aside><small><strong>Average Cost:</strong></small></aside>
+						</div> -->
+					</div>
+				</div>
+
+			<!-- <div class="modalSectionTitle">Statistics</div>
+				<div class="well well-sm">
+					<div class="modalSubSectionTitle">Largest Grants</div>
+						<div class="col-md-4">
+							<ol>
+								<li></li>
+								<li></li>
+								<li></li>
+							</ol>
+						</div>
+						<div class="col-md-4">
+							<div class="modalSubSectionTitle">Largest Grants</div>
+							<div class="col-md-4">
+								<ol>
+									<li>largest grant</li>
+									<li>2nd largest</li>
+									<li>3rd largest</li>
+								</ol>
+							</div>
+						</div>
+				</div> -->
+			<div class="modalSectionTitle">Context<i class="fa fa-pie-chart"></i></div>
+				<div class="well well-sm">
+					<p>
+					data viz here
+					</p>
+				</div>
+			<div class='modalSectionTitle'>Notes<i class="fa fa-sticky-note-o"></i></div>
+			{{#bs-form}}
+			  {{bs-form-element
+				controlType='text'
+				placeholder=inputPlaceholder
+				label='Collection name'
+				invisibleLabel=true
+				value=name
+				autofocus=true
+				required=true
+			  }}
+			{{/bs-form}}
+
+			{{#bs-button
+			  type='primary'
+			  size='sm'
+			}}
+				Save to Collection
+			{{/bs-button}}
+
+		</div>
+
+
+	{{/bs-modal-body}}
 {{/bs-modal}}
