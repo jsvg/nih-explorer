@@ -95,7 +95,7 @@
                   {{#each modalGrant.publications as |pub|}}
                     {{#if pub}}
                       <li>
-                        <small>{{format-item pub.title 'title'}} <em>({{format-item pub.journal 'title'}})</em></small> 
+                        <small>{{format-item pub.title 'title'}} <em>({{format-item pub.journal 'title'}})</em></small>
                         {{fa-icon 'file-text-o' click=(action 'goToPubMed' pub.id)}}
                         {{! CREATE OUTLINKS TO http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4592450/ }}
                       </li>

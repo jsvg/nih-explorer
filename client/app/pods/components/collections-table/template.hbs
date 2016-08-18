@@ -11,7 +11,7 @@
   </thead>
   <tbody>
     {{#each collections as |collection|}}
-      <tr {{action (action toggleModal)}}>
+      <tr {{action (action toggleModal collection)}}>
         <td><div>{{input type='checkbox'}}</div></td>
         <td><div>{{collection.name}}</div></td>
         <td><div>{{format-item collection.itemCount 'cleanNum'}}</div></td>

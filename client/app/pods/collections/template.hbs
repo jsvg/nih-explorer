@@ -30,10 +30,11 @@
           editCollection=(route-action 'editCollection')
           exportCollection=(route-action 'exportCollection')
           deleteCollection=(route-action 'deleteCollection')
-		  toggleModal=(action (toggle 'isShowingModal' this))
+		  toggleModal=(action (pipe (route-action 'setClxnDelveModal') (toggle 'isShowingModal' this)))
         }}
 		{{clxn-delve-modal
 			isShowingModal=isShowingModal
+			collectionData=modalCollection
 		}}
 
 		{{!clxn-delve-modal

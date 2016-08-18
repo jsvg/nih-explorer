@@ -14,16 +14,16 @@ export default Route.extend({
   },
 
   extractQueryParams(collection) {
-    const queryParams = {};
-    for(var key in collection) {
-      // gets all filterParams[*] from collection object
-      if( /filterParams/.test(key) ) {
-        let filterName = key.match(/\[(.*)\]/)[1];
-        queryParams[filterName] = collection[key];
-      }
-    }
-    return queryParams;
-  },
+	  const queryParams = {};
+	  for(var key in collection) {
+		// gets all filterParams[*] from collection object
+		if( /filterParams/.test(key) ) {
+		  let filterName = key.match(/\[(.*)\]/)[1];
+		  queryParams[filterName] = collection[key];
+		}
+	  }
+	  return queryParams;
+	},
 
   setupController(controller) {
 	  this._super(...arguments);
@@ -31,13 +31,28 @@ export default Route.extend({
   },
 
   actions: {
+	setClxnDelveModal(collection) {
+		this.controller.set('modalCollection', collection);
+		console.log(collection);
+	//   const clxnFilters = get (this, 'extractQueryParams')(collection);
+	// console.log(queryParams);
+	},
+
     viewCollection(collection) {
       const queryParams = get(this, 'extractQueryParams')(collection);
       this.transitionTo('search', { queryParams });
     },
 
+	viewWorkflow(collection){
+		// const clxnName = this.controller.set('statistic1', collection.name);
+		// console.log(clxnName);
+	},
+
+	extractClxnMeta(collection){
+		// todo get meta statistics for clxn such as top 3 largest grants
+	},
     editCollection(collection) {
-      console.log('todo', collection);
+    //   console.log('todo', collection);
     },
 
     exportCollection(collection) {

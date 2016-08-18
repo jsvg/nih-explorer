@@ -1,7 +1,14 @@
 i{
-	padding-left:1.5%;
+	padding-right:1.5%;
 }
 
 .row-meta{
-	
+	position: relative;
+	i{
+		float: center;
+		position:absolute;
+		top:50%;
+		left:50%;
+		// margin: -6.5px 0 0 -6.5px;
+	}
 }
