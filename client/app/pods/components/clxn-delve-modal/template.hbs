@@ -8,39 +8,13 @@
 			<div class="modalSectionTitle"><i class="fa fa-info"></i>Workflow</div>
 				<div class="well well-sm">
 					<div class="row row-meta">
-						<div class="col-md-5 col-sm-5">
-							<small>
-								<strong>Query:</strong>
-								{{#each asadfKeto as |a|}}
-									<p>{{a}}: {{get asdf a}}</p>
-								{{/each}}
-							</small>
-							{{collectionData}}
-						</div>
-						<div class="col-md-2 col-sm-2">
-							<i class="fa fa-plus "></i>
-						</div>
-						<div class="col-md-5 col-sm-5">
-							<small><strong>Filters:</strong></small>
-							<ol>
-								<!-- use ol if we decide to rank these somehow: either 1)order user clicked if possible or 2) order of importance determined by client or us -->
 
-								<!-- list format ~ search-table-modal -->
-								<li>Funded by
-									{{!#if collection.fundingMechanism}}
-										{{!collection.fundingMechanism}}
-									{{!/if}}
-								</li>
+							{{#each asadfKeto as |a|}}
+								<div class="col-md-8 col-sm-8 col-xs-8">
+									<small><strong>{{a}}</strong>: {{get asdf a}}</small>
+								</div>
+							{{/each}}
 
-								<!-- with filter input before filter name -->
-								{{!#if collection.funding_mechanism}}
-									<li>Activity Code{{!collection.activity_code}}</li>
-								{{!/if}}
-
-								<li>{{!collection.icName}}</li>
-								<li>{{!collection.org}}</li>
-							</ol>
-						</div>
 						<!-- <div class="col-md-4">
 							<aside><small><strong>Grant Count:</strong></small></aside>
 							<aside><small><strong>Sum Cost:</strong></small></aside>
@@ -81,18 +55,21 @@
 				{{#bs-form}}
 				  {{bs-form-element
 					controlType='text'
-					placeholder='Type your notes here'
-					label='Collection name'
+					placeholder=notesPlaceholder
+					label='Notes'
 					invisibleLabel=true
-					value=name
+					value=notes
 					autofocus=true
 					required=true
+					action=(action 'saveNote' name)
 				  }}
 				{{/bs-form}}
 
 				{{#bs-button
 				  type='primary'
 				  size='sm'
+				  disabled=(not notes)
+				  action=(action 'saveNote' notes)
 				}}
 					Save to Collection
 				{{/bs-button}}
