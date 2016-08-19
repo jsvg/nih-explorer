@@ -33,9 +33,6 @@ export default Route.extend({
   actions: {
 	setClxnDelveModal(collection) {
 		this.controller.set('modalCollection', collection);
-		console.log(collection);
-	//   const clxnFilters = get (this, 'extractQueryParams')(collection);
-	// console.log(queryParams);
 	},
 
     viewCollection(collection) {
