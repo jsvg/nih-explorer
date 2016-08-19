@@ -44,11 +44,11 @@
 						</div>
 				</div> -->
 			<div class="modalSectionTitle"><i class="fa fa-pie-chart"></i>Context</div>
-				<div class="well well-sm">
-					<p>
-					data viz here
-					</p>
-				</div>
+			<div class="well well-sm">
+				<p>
+				data viz here
+				</p>
+			</div>
 			<div class='modalSectionTitle'><i class="fa fa-sticky-note-o"></i>Notes</div>
 			<div class="well well-lg">
 				<div class="notes-textarea">
@@ -67,16 +67,14 @@
 				</div>
 
 				{{#bs-button
-				  type='primary'
-				  size='sm'
-				  disabled=(not notes)
-				  action=(action 'saveNote' notes)
-				}}
+					type='primary'
+					size='sm'
+					disabled=(not notes)
+					action=(action 'saveNote' notes)
+					}}
 					Save to Collection
-				{{/bs-button}}
+					{{/bs-button}}
 			</div>
-
 		</div>
-
 	{{/bs-modal-body}}
 {{/bs-modal}}
