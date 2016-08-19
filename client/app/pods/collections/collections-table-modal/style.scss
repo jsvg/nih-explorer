@@ -1,0 +1,20 @@
+.collections-table-modal {
+  .notesArea {
+    padding-top: 4px;
+  }
+  
+  i {
+    padding-right: 1.5%;
+  }
+
+  .row-meta {
+    position: relative;
+
+    i {
+      float: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+  }
+}
