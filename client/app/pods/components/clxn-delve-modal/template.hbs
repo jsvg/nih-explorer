@@ -51,19 +51,21 @@
 					</p>
 				</div>
 			<div class='modalSectionTitle'><i class="fa fa-sticky-note-o"></i>Notes</div>
-				<div class="well well-sm">
-				{{#bs-form}}
-				  {{bs-form-element
-					controlType='text'
-					placeholder=notesPlaceholder
-					label='Notes'
-					invisibleLabel=true
-					value=notes
-					autofocus=true
-					required=true
-					action=(action 'saveNote' name)
-				  }}
-				{{/bs-form}}
+			<div class="well well-lg">
+				<div class="notes-textarea">
+					{{#bs-form}}
+					  {{bs-form-element
+						controlType='text'
+						placeholder=notesPlaceholder
+						label='Notes'
+						invisibleLabel=true
+						value=notes
+						autofocus=true
+						required=true
+						action=(action 'saveNote' notes)
+					  }}
+					{{/bs-form}}
+				</div>
 
 				{{#bs-button
 				  type='primary'
