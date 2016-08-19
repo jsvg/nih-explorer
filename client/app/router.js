@@ -10,6 +10,7 @@ const emberRouter = Router.extend({
 Router.map(function() {
   this.route('search', function() {});
   this.route('collections');
+  this.route('multi-test');
 });
 
 export default emberRouter;

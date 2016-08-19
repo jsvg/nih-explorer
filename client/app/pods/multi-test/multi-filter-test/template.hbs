@@ -1,0 +1,17 @@
+{{#power-select-multiple
+  allowClear=true
+  dropdownClass='slide-fade'
+  searchField='id'
+  placeholder=placeholder
+  disabled=noResults
+  loadingMessage='loading...'
+  optionsComponent='search.data-filter.filter-dropdown'
+  options=options
+  selected=selected
+  onchange=(action onchange)
+  as |result|
+}}
+  {{#if result.id}}
+    {{format-item result.id itemFormat}} <span class='badge'>{{format-item result.attributes.value 'cleanNum'}}</span>
+  {{/if}}
+{{/power-select-multiple}}

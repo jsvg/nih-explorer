@@ -1,0 +1,12 @@
+{{#power-select-multiple
+  selected=selected
+  options=promise
+  closeOnSelect=false
+  searchField='id'
+  triggerComponent='multi-test.real-deal.rd-trig'
+  onchange=(action (mut selected))
+  
+  as |result|
+}}
+  {{result.id}}: {{result.attributes.value}}
+{{/power-select-multiple}}

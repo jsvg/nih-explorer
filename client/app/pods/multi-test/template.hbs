@@ -1,0 +1,19 @@
+<div class='row'>
+  <div class='col-xs-6'>
+    <p>Organization State</p>
+    {{multi-test.real-deal
+      currentFilters=urlQueryParams
+      filterKey='orgState'
+      asdf=(route-action 'selectionMade')
+    }}
+    {{!onclose=(route-action 'selectionMade')}}
+  </div>
+</div>
+
+<hr />
+
+<ul>
+  {{#each model as |g|}}
+    <li>{{g.attributes.org-state}}: {{format-item g.attributes.ic-name 'title'}}</li>
+  {{/each}}
+</ul>

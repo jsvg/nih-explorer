@@ -1,4 +1,4 @@
-/*jshint node:true*/
+/* jshint node:true */
 /* global require, module */
 var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
@@ -8,14 +8,14 @@ module.exports = function(defaults) {
       includePaths: ['app']
     },
     'ember-font-awesome': {
-      useScss: true,
+      useScss: true
     },
     'ember-bootstrap': {
       'importBootstrapCSS': false,
       'importBootstrapFont': false
     },
     'ember-composable-helpers': {
-      only: ['toggle','pipe', 'find-by']
+      //only: ['toggle', 'pipe', 'find-by']
     }
   });
 
