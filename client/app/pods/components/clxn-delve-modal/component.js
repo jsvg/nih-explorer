@@ -1,18 +1,27 @@
 import Component from 'ember-component';
 import get from 'ember-metal/get';
 import computed from 'ember-computed';
+import getProperties from 'ember-metal/get';
+import set from 'ember-metal/set';
+import service from 'ember-service/inject';
 
 export default Ember.Component.extend({
-	asdf: computed('collectionData', function() {
+	ajax: service(),
+	notesPlaceholder: 'Type your notes here',
+
+	clxnFiltersUsed: computed('collectionData', function() {
 		let clxn = get(this, 'collectionData');
 		let filters = this.extractQueryParams(clxn);
-		console.log(filters);
 		return filters;
 	}),
-	asadfKeto: computed('asdf', function() {
-		return Object.keys(get(this,'asdf'));
+
+	asdfKeys: computed('clxnFiltersUsed', function() {
+		return Object.keys(get(this,'clxnFiltersUsed'));
 	}),
-	notesPlaceholder: 'Type your notes here',
+
+	renameFilterNames(filters){
+
+	},
 
 	extractQueryParams(collection) {
 		const queryParams = {};
@@ -25,4 +34,12 @@ export default Ember.Component.extend({
 			}
 		return queryParams;
 	},
+
+	actions:{
+		saveNote(note){
+			console.log(note);
+			//capture input in variable DONE
+			//send note to backend to be stored in collection
+		}
+	}
 });
