@@ -1,9 +1,12 @@
 // application
 import Route from 'ember-route';
+import get from 'ember-metal/get';
 import $ from 'jquery';
+
 export default Route.extend({
   setupController(controller) {
     this._super(...arguments);
+    controller.set('showNav', get(this, 'showNav'));
     controller.set('placeholder', 'Search NIH spending...');
   },
 

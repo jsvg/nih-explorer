@@ -3,37 +3,40 @@
   isLoading=isLoading
 }}
 
-<nav class='navbar navbar-default navbar-static-top'>
-  <div class='container'>
+{{! only show navbar if not in the application's home page (index route) }}
+{{#if (not-eq currentRoute 'index')}}
+  <nav class='navbar navbar-default navbar-static-top'>
+    <div class='container'>
 
-    <div class='navbar-header'>
-      {{link-to 'NIH Explorer' 'search' class='navbar-brand'}}
+      <div class='navbar-header'>
+        {{link-to 'NIH Explorer' 'search' class='navbar-brand'}}
+      </div>
+
+      <div class='collapse navbar-collapse'>
+        {{! left }}
+        <ul class='nav navbar-nav'>
+          {{#bs-form class='navbar-form navbar-left' action=(route-action 'search') novalidate=true}}
+            {{bs-form-element
+              controlType='text'
+              placeholder=placeholder
+              value=searchVar}}
+          {{/bs-form}}
+        </ul>
+
+        {{! right }}
+        <ul class='nav navbar-nav navbar-right'>
+          {{#bs-dropdown tagName='li'}}
+            {{#bs-dropdown-toggle tagName='a'}}F. Collins <span class='caret'></span>{{/bs-dropdown-toggle}}
+            {{#bs-dropdown-menu}}
+              <li>{{#link-to 'index'}}Home{{/link-to}}</li>
+              <li>{{#link-to 'collections'}}Collections{{/link-to}}</li>
+            {{/bs-dropdown-menu}}
+          {{/bs-dropdown}}
+        </ul>
+      </div>
     </div>
-
-    <div class='collapse navbar-collapse'>
-      {{! left }}
-      <ul class='nav navbar-nav'>
-        {{#bs-form class='navbar-form navbar-left' action=(route-action 'search') novalidate=true}}
-          {{bs-form-element
-            controlType='text'
-            placeholder=placeholder
-            value=searchVar}}
-        {{/bs-form}}
-      </ul>
-
-      {{! right }}
-      <ul class='nav navbar-nav navbar-right'>
-        {{#bs-dropdown tagName='li'}}
-          {{#bs-dropdown-toggle tagName='a'}}F. Collins <span class='caret'></span>{{/bs-dropdown-toggle}}
-          {{#bs-dropdown-menu}}
-            <li>{{#link-to 'index'}}Home{{/link-to}}</li>
-            <li>{{#link-to 'collections'}}Collections{{/link-to}}</li>
-          {{/bs-dropdown-menu}}
-        {{/bs-dropdown}}
-      </ul>
-    </div>
-  </div>
-</nav>
+  </nav>
+{{/if}}
 
 <main class='container'>
   {{outlet}}

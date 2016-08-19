@@ -22,12 +22,16 @@ $brand-warning:         #d9534f !default;
 $brand-danger:          #D9831F !default;
 $brand:                 lighten($brand-primary, 1%) !default; //darken(#800000, 3%) !default;
 
+//** Background color for `<body>`.
+$body-bg:               lighten(#ecf0f5, 4%); // override of #FCFCFC !default;
+
+
 //== Power Select
 
 // Backgrounds
 $ember-power-select-background-color: #ffffff !default;
 $ember-power-select-disabled-background-color: #eeeeee !default;
-$ember-power-select-multiple-selection-background-color: #e4e4e4 !default;
+$ember-power-select-multiple-selection-background-color: darken($body-bg, 5%) !default;
 $ember-power-select-highlighted-background: $brand-primary !default;
 $ember-power-select-selected-background: #dddddd !default;
 
@@ -36,7 +40,7 @@ $ember-power-select-text-color: inherit !default;
 $ember-power-select-placeholder-color: #999999 !default;
 $ember-power-select-highlighted-color: #ffffff !default;
 $ember-power-select-disabled-option-color: #999999 !default;
-$ember-power-select-multiple-selection-color: #333333 !default;
+$ember-power-select-multiple-selection-color: $gray-dark !default;
 
 // Borders
 $ember-power-select-border-color: #ddd !default;
@@ -57,7 +61,7 @@ $ember-power-select-dropdown-left-border: $ember-power-select-dropdown-border !d
 
 $ember-power-select-dropdown-contiguous-border: none !default;
 
-$ember-power-select-multiple-option-border-color: gray !default;
+$ember-power-select-multiple-option-border-color: darken($gray-lighter, 5%) !default;
 $ember-power-select-multiple-option-border: 1px solid $ember-power-select-multiple-option-border-color !default;
 
 // Borders radius
@@ -80,12 +84,15 @@ $ember-power-select-clear-btn-margin: 25px !default;
 $ember-power-select-option-padding: 8px !default;
 $ember-power-select-number-of-visible-options: 7 !default;
 $ember-power-select-focus-outline: null !default;
-$ember-power-select-trigger-ltr-padding: 0 16px 0 8px !default;
+$ember-power-select-trigger-ltr-padding: 0 16px 0 0 !default;
 $ember-power-select-trigger-rtl-padding: 0 8px 0 16px !default;
 $ember-power-select-multiple-option-padding: 0 4px !default;
 
-
 // Custom
+.ember-power-select-multiple-option {
+  // fix multi-select margin to be pixel-perfect
+  margin: 2px 0 2px 2px !important;
+}
 .ember-power-select-load-more {
   border-top: 1px solid $ember-power-select-border-color;
   line-height: 2;
@@ -95,8 +102,6 @@ $ember-power-select-multiple-option-padding: 0 4px !default;
 //
 //## Settings for some of the most global styles.
 
-//** Background color for `<body>`.
-$body-bg:               lighten(#ecf0f5, 4%); // override of #FCFCFC !default;
 //** Global text color on `<body>`.
 $text-color:            $gray-dark !default;
 

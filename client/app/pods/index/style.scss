@@ -1,0 +1,141 @@
+.jumbotron-wrapper {
+  // img courtesy of gratisography.com
+  background: url('images/background.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  bottom: 0;
+  display: block;
+  float: right;
+  height: 100%;
+  position: fixed;
+  right: 0;
+  width: 100%;
+}
+
+.jumbotron {
+  background-color: rgba($body-bg, .5);
+  border: 1px solid darken($brand, 25%);
+  box-shadow: 1px 3px 5px rgba(darken($brand, 15%), .5);
+  display: relative;
+  margin: 5% 10%;
+
+  .hero-text > h4 {
+    font-size: 200%;
+    font-variant: small-caps;
+    letter-spacing: 2px;
+    margin-bottom: 3%;
+  }
+
+  .material-input {
+    margin: 5%;
+
+    // input wrapper
+    .group {
+      margin-bottom: 5%;
+      position: relative;
+    }
+
+    // input
+    input {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid $gray;
+      display: block;
+      font-size: 16px;
+      padding: 10px 10px 10px 5px;
+      width: 100%;
+
+      // active state - label above form
+      &:focus ~ label,
+      &:valid ~ label {
+        color: $brand-success;
+        font-size: 12px;
+        top: -20px;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:focus ~ .highlight {
+        -moz-animation: inputHighlighter .3s ease;
+        -webkit-animation: inputHighlighter .3s ease;
+        animation: inputHighlighter .3s ease;
+      }
+
+      &:focus ~ .bar:before {
+        width: 0;
+      }
+      &:focus ~ .bar:after {
+        width: 100%;
+      }
+    }
+
+    // label
+    label {
+      color: $gray; 
+      font-size: 14px;
+      font-weight: lighter;
+      left: 10px;
+      pointer-events: none;
+      position: absolute;
+      top: 12px;
+      transition: .2s ease all; 
+      -moz-transition: .2s ease all; 
+      -webkit-transition: .2s ease all;
+    }
+
+    // botton bars
+    .bar {
+      position: relative;
+      display: block;
+      width: 100%;
+
+      &:before,
+      &:after {
+        background: $brand-success;
+        bottom: -1px;
+        content: '';
+        height: 2px;
+        position: absolute;
+        transition: .2s ease all;
+        -moz-transition: .2s ease all;
+        -webkit-transition: .2s ease all;
+        width: 0;
+      }
+
+      &:before {
+        right: 100%;
+      }
+
+      &:after {
+        left: 0%;
+      }
+    }
+
+    // highlighter
+    .highlight {
+      height: 60%;
+      left: 0;
+      opacity: .5;
+      pointer-events: none;
+      position: absolute;
+      top: 25%;
+      width: 100px;
+    }
+  }
+}
+
+// animations
+@-webkit-keyf222rames inputHighlighter,
+@-moz-keyframes inputHighlighter,
+@keyframes inputHighlighter {
+  from {
+    background: $brand;
+  }
+
+  to {
+    background: transparent;
+    width: 0;
+  }
+}

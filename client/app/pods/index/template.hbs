@@ -1,12 +1,19 @@
 {{! index }}
-<div class='jumbotron'>
-  <div class='text-center'>
-    <h4>Explore NIH scientific spending trends</h4>
+<div class='jumbotron-wrapper'>
+  <div class='jumbotron'>
+
+    <div class='hero-text text-center'>
+      <h4>Explore NIH scientific spending trends</h4>
+    </div>
+
+    <div class='material-input'>
+      <div class='group'>      
+        {{input type='text' required=true value=searchVar enter=(route-action 'indexSearch')}}
+        <span class='highlight'></span>
+        <span class='bar'></span>
+        <label>Search for anything in NIH grants data</label>
+      </div>
+    </div>
+
   </div>
-  {{#bs-form action=(route-action 'indexSearch') submitOnEnter=true}}
-    {{bs-form-element
-      controlType='text'
-      placeholder='Search for anything in NIH grants data'
-      value=searchVar}}
-  {{/bs-form}}
 </div>
