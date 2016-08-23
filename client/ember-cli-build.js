@@ -15,7 +15,7 @@ module.exports = function(defaults) {
       'importBootstrapFont': false
     },
     'ember-composable-helpers': {
-      only: ['toggle','pipe', 'find-by']
+      only: ['toggle', 'pipe', 'find-by']
     }
   });
 
