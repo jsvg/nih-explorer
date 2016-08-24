@@ -41,21 +41,8 @@ export default Route.extend({
       this.transitionTo('search', { queryParams });
     },
 
-<<<<<<< HEAD
-    editCollection() {
-      // todo
-=======
-	viewWorkflow(collection){
-		// const clxnName = this.controller.set('statistic1', collection.name);
-		// console.log(clxnName);
-	},
-
-	extractClxnMeta(collection){
-		// todo get meta statistics for clxn such as top 3 largest grants
-	},
     editCollection(collection) {
-    //   console.log('todo', collection);
->>>>>>> 379d36b0040dab1ec50b738df259d7de98577542
+    //todo
     },
 
     exportCollection(collection) {
