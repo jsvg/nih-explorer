@@ -1,7 +1,11 @@
 import router from './router';
-import number from './number';
+import modals from './modalState';
+import grants from './grants';
+import queryParams from './urlParams';
 
 export default {
   router,
-  number
+  modals,
+  grants,
+  queryParams
 };
