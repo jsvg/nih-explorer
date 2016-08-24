@@ -30,10 +30,6 @@
           editCollection=(route-action 'editCollection')
           exportCollection=(route-action 'exportCollection')
           deleteCollection=(route-action 'deleteCollection')
-          toggleModal=(action (pipe 
-            (route-action 'setCollectionsTableModal')
-            (toggle 'isShowingModal' this)
-          ))
         }}
       {{else}}
         <div class='col-xs-8 col-xs-offset-2 text-center'>
@@ -44,8 +40,3 @@
     </div>
   </div>
 </div>
-
-{{collections.collections-table-modal
-  isShowingModal=isShowingModal
-  collectionData=modalCollection
-}}

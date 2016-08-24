@@ -26,16 +26,7 @@ export default Route.extend({
     return queryParams;
   },
 
-  setupController(controller) {
-    this._super(...arguments);
-    controller.set('isShowingModal', false);
-  },
-
   actions: {
-    setCollectionsTableModal(collection) {
-      this.controller.set('modalCollection', collection);
-    },
-
     viewCollection(collection) {
       let queryParams = get(this, 'extractQueryParams')(collection);
       this.transitionTo('search', { queryParams });
