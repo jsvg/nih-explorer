@@ -14,26 +14,48 @@ export default Route.extend({
   },
 
   extractQueryParams(collection) {
-    let queryParams = {};
-    for (let key in collection) {
-      // gets all filterParams[*] from collection object
-      if (/filterParams/.test(key)) {
-        // eslint-disable-next-line ember-suave/prefer-destructuring
-        let filterName = key.match(/\[(.*)\]/)[1];
-        queryParams[filterName] = collection[key];
-      }
-    }
-    return queryParams;
+
+	  const queryParams = {};
+	  for(var key in collection) {
+		// gets all filterParams[*] from collection object
+		if( /filterParams/.test(key) ) {
+		  let filterName = key.match(/\[(.*)\]/)[1];
+		  queryParams[filterName] = collection[key];
+		}
+	  }
+	  return queryParams;
+	},
+
+  setupController(controller) {
+	  this._super(...arguments);
+	  controller.set('isShowingModal', false);
   },
 
   actions: {
+	setClxnDelveModal(collection) {
+		this.controller.set('modalCollection', collection);
+	},
+
     viewCollection(collection) {
       let queryParams = get(this, 'extractQueryParams')(collection);
       this.transitionTo('search', { queryParams });
     },
 
+<<<<<<< HEAD
     editCollection() {
       // todo
+=======
+	viewWorkflow(collection){
+		// const clxnName = this.controller.set('statistic1', collection.name);
+		// console.log(clxnName);
+	},
+
+	extractClxnMeta(collection){
+		// todo get meta statistics for clxn such as top 3 largest grants
+	},
+    editCollection(collection) {
+    //   console.log('todo', collection);
+>>>>>>> 379d36b0040dab1ec50b738df259d7de98577542
     },
 
     exportCollection(collection) {
@@ -48,6 +70,6 @@ export default Route.extend({
       get(this, 'ajax').delete(url).then(() => {
         this.refresh(); // trigger model refresh and subsequent component update
       });
-    }
+  	}
   }
 });

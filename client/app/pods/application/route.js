@@ -36,7 +36,7 @@ Route.reopen({
   beforeModel() {
     this._super(...arguments);
     // rapid toggle of property triggers
-    // didUpdateAttrs() on loading-slider
+    // didUpdateAttrs() on loading-slider - happening in bg on component
     this.controllerFor('application').set('isLoading', false);
     this.controllerFor('application').set('isLoading', true);
   },
@@ -46,6 +46,7 @@ Route.reopen({
       $('#apploading').fadeOut('fast');
       this.controllerFor('application').set('isLoading', false);
     },
+	//transition is a promise that fulfills when loading state is done of any request
     loading(transition) {
       this._super(...arguments);
       this.controllerFor('application').set('isLoading', true);
